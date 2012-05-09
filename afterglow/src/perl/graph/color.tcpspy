@@ -1,0 +1,7 @@
+color="yellow" if (field()=~/^192\.168\.1\.115/);
+color="yellow" if (field()=~/^192\.168\.80\.204/);
+color.source="red"
+color.event="red"
+#color.target="blue" if ($fields[2]<1024)
+color.target="green" if ($fields[2] eq "www")
+color.target="lightred"

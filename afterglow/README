@@ -1,0 +1,56 @@
+AfterGlow - 1.6
+---------------
+
+AfterGlow is a collection of scripts which facilitate the process of generating graphs. 
+AfterGlow 1.x was written in Perl and can be used to visualize CSV files as event graphs (also called link graphs). AfterGlow 2.0 and later is written in Java. It can be used to visualize the same CSV files as TreeMaps. Future versions will merge the two versions and allow the generation of event graphs with the Java version as well. 
+AfterGlow 1.x is reading a CSV file and transforms it into a graph language file that can be read by the AT&T graphviz library to then generate an image.
+AfterGlow 2.0 is DEPRECATED! No more supported. Dead. Sorry!
+AfterGlow 2.0 is utilizing the infovis graphing libraries as a basis.
+
+As a bonus, a tcpdump and sendmail log parser is includedn in the AfterGlow distro. This will allow you to visualize network traffic and email logs right away!
+
+PreRequisites
+-------------
+
+For AfterGlow 1.x you will need the AT&T Graphviz library installed:
+
+http://www.graphviz.org
+
+Running
+-------
+
+AfterGlow 1.x:
+
+tcpdump -vttttnnelr file.pcap |tcpdump2csv.pl "sip dip ttl" \
+afterglow.pl -c color.properties -p 2 | neato -Tgif -o test.gif
+
+Files
+-----
+
+data			contains example data to visualize
+src			    contains all the source code of AfterGlow
+src/perl		AfterGlow 1.x, Parser, and Database Scripts
+src/perl/graph		The AfterGlow 1.x code to visualize CSV files
+src/perl/parsers	A collection of parsers to generate CSV files from raw input
+src/perl/charts	    A collection of scripts you can use with ChartDirector
+src/perl/loganalysis	    A number of small tools that are helpful for log analysis
+
+License
+-------
+
+Copyright (c) 2010 by Raffael Marty
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+

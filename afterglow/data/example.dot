@@ -1,0 +1,7 @@
+digraph structs {
+"0.0.0.0" -> "Asset inserted" ;
+"0.0.0.0" -> "DatabaseTableSchema deleted" ;
+"0.0.0.0" [shape=point, fillcolor=red, label="0.0.0.0"]
+"Asset inserted" [shape=point, fillcolor=red, label="Asset inserted"]
+"DatabaseTableSchema deleted" [shape=point, fillcolor=red, label="DatabaseTableSchema deleted"]
+}
