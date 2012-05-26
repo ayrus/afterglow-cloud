@@ -7,20 +7,26 @@
 #
 # Usage:
 # 	afterglow.sh "path_to_csv_file" "path_to_colour_property_file" "arguments"
-#				"path_to_resulting_output_file"
+#				"path_to_resulting_output_file" "path_to_afterglow.pl"
 #
 # Note: Paths can be absolute or relative.
 # 		For a list of 'arguments' please see [1].
 #
-# Example usage: ./afterglow.sh "data/firewall.csv" "sample.properties" "-d -e 1.5" "images/firewall.gif"
+# Example usage: ./afterglow.sh "data/firewall.csv" "sample.properties" "-d -e 1.5" "images/firewall.gif" "afterglow/src/afterglow.pl"
 #
-# The script returns 0 on success; 1 otherwise.
+# Exit status:
+#	0: On successful image creation.
+#	1: Error creating an output image.
+#	2: No valid data file supplied.
+#	3: No valid property file supplied.
+#	4: Perl is not installed $PATH.
+#	5: Neato [2] is not installed $PATH.
+#	6: Afterglow.pl [1] is not present.
 #
 # References:
 #	[1] http://afterglow.sourceforge.net/
 # 	[2] http://www.graphviz.org/Documentation.php
 ###
-
 
 #Path to a CSV data file.
 dataFile="$1"
@@ -34,13 +40,53 @@ args="$3"
 #Path to create the output file, including its name and extension.
 outputFile="$4"
 
+#Complete path to afterglow.pl, including its name and extension.
+afPath="$5"
 
-perl afterglow.pl -i "$dataFile" -c "$propertyFile" "$args" | neato -Tgif -o "$outputFile"
+#Sanitize inputs -- Check if datafile is present.
+	if [ ! -e "$dataFile" ]
+	then
+		echo "No valid data file." >&2
+		exit 2
+	fi
+
+#Check if property file is valid.
+	if [ ! -e "$propertyFile" ]
+	then
+		echo "No valid property file." >&2
+		exit 3
+	fi
+
+#Check if perl is installed anywhere on $PATH.
+	out=`which perl`
+	if [ $? -eq 1 ]
+	then
+		echo "Perl seems to be missing." >&2
+		exit 4
+	fi
+
+#Check if neato is installed anywhere on $PATH.
+	out=`which neato`
+	if [ $? -eq 1 ]
+	then
+		echo "Neato seems to be missing." >&2
+		exit 5
+	fi
+	
+#Check if afterglow.pl is present.
+	if [ ! -e "$afPath" ]
+	then
+		echo "Afterglow.pl is not present in the directory given." >&2
+		exit 6
+	fi
+
+#Everything looks good for now; render the graph.
+perl "$afPath" -i "$dataFile" -c "$propertyFile" "$args" | neato -Tgif -o "$outputFile"
 
 #Check if the output was successfuly rendered.
 	if [ -e "$outputFile" ]
 	then
-		echo "0"	
+		exit 0	
 	else
-		echo "1"
+		exit 1
 	fi
