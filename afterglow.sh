@@ -88,5 +88,6 @@ perl "$afPath" -i "$dataFile" -c "$propertyFile" "$args" | neato -Tgif -o "$outp
 	then
 		exit 0	
 	else
+		echo "Error creating an output image." >&2
 		exit 1
 	fi
