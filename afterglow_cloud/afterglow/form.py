@@ -36,21 +36,24 @@ class renderForm(forms.Form):
     textLabel = forms.CharField(min_length = 7, max_length = 7)
     
     #Flag: '-b' Number of lines to skip reading. 
-    skipLines = forms.IntegerField(min_value = 0)
+    skipLines = forms.IntegerField(min_value = 0, initial=0)
 
     #Flag: '-l' Maximum number of lines to read.
-    maxLines = forms.IntegerField(min_value = 1, max_value = 999999)
+    maxLines = forms.IntegerField(min_value = 1, max_value = 999999, 
+                                  initial=999999)
     
     #Flag: '-o' Minimum count for a node to be displayed.
-    omitThreshold = forms.IntegerField()
+    omitThreshold = forms.IntegerField(initial=0)
     
     #Flag: '-f' Source fan out threshold - Filter nodes on the number of edges
     #originating from source nodes.
-    sourceFanOut = forms.IntegerField()
+    sourceFanOut = forms.IntegerField(intial=0)
     
     #Flag: '-f' Event fan out threshold - Filter nodes on the number of edges
     #originating from event nodes (trivially true only for three node graphs). 
-    eventFanOut = forms.IntegerField()
+    eventFanOut = forms.IntegerField(intial=0)
+    
+    propertyConfig = forms.CharField(widget=forms.Textarea)
     
     def clean_textLabel(self):
         ''' Validate the textLabel input to see if it has a valid HEX colour
@@ -63,3 +66,14 @@ class renderForm(forms.Form):
             raise forms.ValidationError("Not valid HEX colour format");
         
         return textLabel
+    
+    def clean_dataFile(self):
+        ''' Validate the uploaded data file to see if its MIME type is
+        "text/csv" (as only CSV files are supported). If not raise an error. '''
+        
+        dataFile = self.cleaned_data['dataFile']
+        
+        if dataFile.content_type not in ["text/csv"]:
+            raise forms.ValidationError("Filetype has to be CSV.");
+        
+        return dataFile
