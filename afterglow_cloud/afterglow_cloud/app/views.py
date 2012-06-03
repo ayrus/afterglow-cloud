@@ -1,6 +1,6 @@
 from django.shortcuts import render_to_response, HttpResponseRedirect
 from django.template import RequestContext
-from afterglow.form import renderForm
+from afterglow_cloud.app.form import renderForm
 from hashlib import md5
 from datetime import datetime
 from subprocess import call
