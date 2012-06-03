@@ -47,11 +47,11 @@ class renderForm(forms.Form):
     
     #Flag: '-f' Source fan out threshold - Filter nodes on the number of edges
     #originating from source nodes.
-    sourceFanOut = forms.IntegerField(intial=0)
+    sourceFanOut = forms.IntegerField(initial=0)
     
     #Flag: '-f' Event fan out threshold - Filter nodes on the number of edges
     #originating from event nodes (trivially true only for three node graphs). 
-    eventFanOut = forms.IntegerField(intial=0)
+    eventFanOut = forms.IntegerField(initial=0)
     
     propertyConfig = forms.CharField(widget=forms.Textarea)
     

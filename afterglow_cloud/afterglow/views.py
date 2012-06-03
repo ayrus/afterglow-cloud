@@ -3,6 +3,7 @@ from django.template import RequestContext
 from afterglow.form import renderForm
 from hashlib import md5
 from datetime import datetime
+from subprocess import call
 
 def index(request):
     
@@ -28,6 +29,15 @@ def processForm(request):
             
             param = _buildParameters(request.POST)
             
+            dataFile = "user_data/" + requestID + ".csv"
+            propertyFile = "user_config/" + requestID + ".property"
+            outputFile = "user_output/" + requestID + ".gif"
+            afPath = "../afterglow/src/afterglow.pl"
+            
+            #--deal with errors
+            print _renderGraph(dataFile, propertyFile, outputFile, afPath, 
+                               param)
+            
             return HttpResponseRedirect('/contact/thanks/')
     else:
         form = renderForm()
@@ -39,7 +49,7 @@ def _writeDataFile(f, requestID):
     
     fileName = requestID + '.csv'
     
-    with open('user_data/' + fileName, 'wb+') as dest:
+    with open('user_data/' + fileName, 'wb+') as dest: #------
         for chunk in f.chunks():
             dest.write(chunk)
             
@@ -49,7 +59,7 @@ def _writeConfigFile(data, requestID):
     
     fileName = requestID + '.property'
     
-    with open('user_config/' + fileName, 'wb') as dest:
+    with open('user_config/' + fileName, 'wb') as dest: #------
         dest.write(data)
         
     return 0
@@ -94,3 +104,8 @@ def _buildParameters(options):
         param += "-g " + options['eventFanOut'] + " "       
         
     return param
+
+def _renderGraph(dataFile, propertyFile, outputFile, afPath, afArgs):
+    
+    return call("../afterglow.sh " + dataFile + " " + propertyFile + " " + 
+                outputFile + " " + afPath + " " + afArgs, shell=True)
