@@ -31,14 +31,15 @@ def processForm(request):
             
             dataFile = "user_data/" + requestID + ".csv"
             propertyFile = "user_config/" + requestID + ".property"
-            outputFile = "user_output/" + requestID + ".gif"
+            outputFile = "afterglow_cloud/app/static/" + requestID + ".gif"
             afPath = "../afterglow/src/afterglow.pl"
             
             #--deal with errors
             print _renderGraph(dataFile, propertyFile, outputFile, afPath, 
                                param)
             
-            return HttpResponseRedirect('/contact/thanks/')
+            return render_to_response('render.html', locals(), 
+                                      context_instance=RequestContext(request))
     else:
         form = renderForm()
         
