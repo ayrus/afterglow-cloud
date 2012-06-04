@@ -642,7 +642,7 @@ if ($url) {
 
 # Default, global variables
 if (!$gdf) {
-    print "node [shape=ellipse, style=filled, penwidth=0, fontsize=10, width=$maxNodeSize, height=$maxNodeSize, fontcolor=$labelColor $options];\n";
+    print "node [shape=ellipse, style=filled, penwidth=0, fontsize=10, width=$maxNodeSize, height=$maxNodeSize, fontcolor=\"$labelColor\" $options];\n";
     print "edge [len=$edgelen];\n";
 }
 

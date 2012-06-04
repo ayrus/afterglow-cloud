@@ -7,7 +7,8 @@ from subprocess import call
 
 def index(request):
     
-    return render_to_response('index.html')
+  
+  return render_to_response('index.html')
 
 def processForm(request):
     
@@ -15,8 +16,12 @@ def processForm(request):
         form = renderForm(request.POST, request.FILES)        
         
         if form.is_valid():
+          
             ##proces
-            
+            if hasattr(request, 'session') and hasattr(request.session, 'session_key') and getattr(request.session, 'session_key') is None:
+              
+              request.session.create()
+              
             requestID = md5(request.session.session_key + 
                     str(datetime.now())).hexdigest()       
             
@@ -87,8 +92,8 @@ def _buildParameters(options):
     if 'overrideEdge' in options:
         param += "-e " + options['overrideEdgeLength'] + " "
         
-    #param += "-x "
-
+    param += "-x \"" + options['textLabel'] + "\" "
+    
     if options['skipLines'] is not 0:
         param += "-b " + options['skipLines'] + " " 
     
