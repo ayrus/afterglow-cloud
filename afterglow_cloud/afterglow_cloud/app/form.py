@@ -29,11 +29,13 @@ class renderForm(forms.Form):
     
     #Flag: 'e' Render with 'overrideEdgeLength' length.
     overrideEdge = forms.BooleanField(required=False)
-    overrideEdgeLength = forms.DecimalField(min_value = 0, decimal_places = 2)
+    overrideEdgeLength = forms.DecimalField(min_value = 0, decimal_places = 2, 
+                                            initial=0)
     
     #Flag: '-x' Colour for the text labels used in the graph. Feild is validated
     #by the method clean_textLabel() below.
-    textLabel = forms.CharField(min_length = 7, max_length = 7)
+    textLabel = forms.CharField(min_length = 7, max_length = 7, 
+                                initial="#000000")
     
     #Flag: '-b' Number of lines to skip reading. 
     skipLines = forms.IntegerField(min_value = 0, initial=0)

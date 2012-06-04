@@ -4,12 +4,43 @@
 </head>
 <body>
 
-  <center><b>Rendered Graph</b>: </center>
+    {% if not status %}
+    
+    <center><b>Rendered Graph</b>: </center>
+    
+    <img src="{{ STATIC_URL }}{{ requestID }}.gif" alt=""/>
+    
+    {% else %}
 
-  <img src="{{ STATIC_URL }}{{ requestID }}.gif" alt=""/>
-
-  
-{{ STATIC_URL }}  
-  
+        <center><b>
+    
+        {% ifequal status 1 %}
+            Error: Could not create an output image (1).
+        {% endifequal %}
+    
+        {% ifequal status 2 %}
+            Error: Data file does not exist (2).
+        {% endifequal %}
+        
+        {% ifequal status 3 %}
+            Error: Property file does not exist (3).
+        {% endifequal %}
+        
+        {% ifequal status 4 %}
+            Fatal: Perl is not installed. (4).
+        {% endifequal %}
+        
+        {% ifequal status 5 %}
+            Fatal: Neato is not installed (5).
+        {% endifequal %}
+        
+        {% ifequal status 6 %}
+            Error: Could not find afterglow instance (6).
+        {% endifequal %}
+        
+        </b></center>        
+        
+    {% endif %}        
+        
 </body>
 </html>

@@ -35,7 +35,7 @@ def processForm(request):
             afPath = "../afterglow/src/afterglow.pl"
             
             #--deal with errors
-            print _renderGraph(dataFile, propertyFile, outputFile, afPath, 
+            status = _renderGraph(dataFile, propertyFile, outputFile, afPath, 
                                param)
             
             return render_to_response('render.html', locals(), 
