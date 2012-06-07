@@ -57,6 +57,8 @@ class renderForm(forms.Form):
     
     propertyConfig = forms.CharField(widget=forms.Textarea)
     
+    saveConfigCookie = forms.BooleanField(required=False, initial=True)
+    
     def clean_textLabel(self):
         ''' Validate the textLabel input to see if it has a valid HEX colour
         format. Raise an error if not. '''

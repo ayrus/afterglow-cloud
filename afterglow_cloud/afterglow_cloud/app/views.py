@@ -4,11 +4,12 @@ from afterglow_cloud.app.form import renderForm
 from hashlib import md5
 from datetime import datetime
 from subprocess import call
+from time import time, localtime, strftime
+import os
 
 def index(request):
     
-  
-  return render_to_response('index.html')
+    return render_to_response('index.html')
 
 def processForm(request):
     
@@ -25,7 +26,7 @@ def processForm(request):
             requestID = md5(request.session.session_key + 
                     str(datetime.now())).hexdigest()       
             
-            #--prune older than <4 hours files (to be added).
+            _cleanFiles()
             
             #--handle error here.
             _writeDataFile(request.FILES['dataFile'], requestID)
@@ -43,14 +44,41 @@ def processForm(request):
             status = _renderGraph(dataFile, propertyFile, outputFile, afPath, 
                                param)
             
-            return render_to_response('render.html', locals(), 
+            response = render_to_response('render.html', locals(), 
                                       context_instance=RequestContext(request))
+            
+            if(request.POST['saveConfigCookie']):
+              
+              response.set_cookie("afConfig", _buildCookie(request.POST))
+            
+            return response
     else:
         form = renderForm()
         
     return render_to_response('form.html', locals(), 
                               context_instance=RequestContext(request))
 
+def _cleanFiles():
+  
+  paths = ["afterglow_cloud/app/static/", "user_data/", "user_config/"]
+  
+  for path in paths:
+  
+    absPath = os.path.abspath(path)
+    files = os.listdir(absPath)
+    
+    for oldFile in files:
+      
+      if(oldFile is "README"): #For development -- to be removed.
+        continue
+      
+      oldFilePath = os.path.join(absPath, oldFile)
+      info = os.stat(oldFilePath)
+      
+      if(info.st_ctime < int(time() - 4*60*60)):
+        
+        os.unlink(oldFilePath)
+  
 def _writeDataFile(f, requestID):
     
     fileName = requestID + '.csv'
@@ -109,7 +137,30 @@ def _buildParameters(options):
     if options['eventFanOut'] is not 0:
         param += "-g " + options['eventFanOut'] + " "       
         
-    return param
+    return param  
+  
+def _buildCookie(options):
+
+    cookieString = ""
+    
+    for checkBox in ["twoNodeMode", "printNodeCount", "omitLabelling", "splitNodes"]:
+        
+        if checkBox in options:            
+            cookieString += checkBox + ":1;"
+        else:
+            cookieString += checkBox + ":0;"
+            
+    if "overrideEdge" in options:
+        cookieString += "overrideEdge:1;" + "overrideEdgeLength:" + options['overrideEdgeLength'] + ";"
+    else:
+        cookieString += "overrideEdge:0;overrideEdgeLength:0;"
+        
+    for choice in ["splitMode", "textLabel", "skipLines", "maxLines", "omitThreshold", "sourceFanOut", "eventFanOut"]:
+        
+        cookieString += choice + ":" + options[choice] + ";"
+        
+    return cookieString
+        
 
 def _renderGraph(dataFile, propertyFile, outputFile, afPath, afArgs):
     
