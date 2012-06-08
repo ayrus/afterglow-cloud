@@ -2,9 +2,9 @@ from django.shortcuts import render_to_response, HttpResponseRedirect
 from django.template import RequestContext
 from afterglow_cloud.app.form import renderForm
 from hashlib import md5
-from datetime import datetime
+from datetime import datetime, timedelta
 from subprocess import call
-from time import time, localtime, strftime
+from time import time
 import os
 
 def index(request):
@@ -19,9 +19,11 @@ def processForm(request):
         if form.is_valid():
           
             ##proces
-            if hasattr(request, 'session') and hasattr(request.session, 'session_key') and getattr(request.session, 'session_key') is None:
+            if hasattr(request, 'session') and hasattr(request.session, \
+                                                       'session_key') and \
+               getattr(request.session, 'session_key') is None:
               
-              request.session.create()
+                request.session.create()
               
             requestID = md5(request.session.session_key + 
                     str(datetime.now())).hexdigest()       
@@ -47,13 +49,21 @@ def processForm(request):
             response = render_to_response('render.html', locals(), 
                                       context_instance=RequestContext(request))
             
-            if(request.POST['saveConfigCookie']):
+            if("saveConfigCookie" in request.POST):
               
-              response.set_cookie("afConfig", _buildCookie(request.POST))
+                expiry = datetime.now() + timedelta(days = 3)
+                response.set_cookie(key = "afConfig", 
+                                    value = _buildCookie(request.POST),
+                                    expires = expiry)
             
             return response
     else:
-        form = renderForm()
+
+        if "afConfig" in request.COOKIES: #Some saved config in history.
+            
+            form = renderForm(initial = _readCookie(request.COOKIES['afConfig']))
+        else:
+            form = renderForm()
         
     return render_to_response('form.html', locals(), 
                               context_instance=RequestContext(request))
@@ -69,15 +79,12 @@ def _cleanFiles():
     
     for oldFile in files:
       
-      if(oldFile is "README"): #For development -- to be removed.
-        continue
+        oldFilePath = os.path.join(absPath, oldFile)
+        info = os.stat(oldFilePath)
       
-      oldFilePath = os.path.join(absPath, oldFile)
-      info = os.stat(oldFilePath)
-      
-      if(info.st_ctime < int(time() - 4*60*60)):
+        if(info.st_ctime < int(time() - 4*60*60)):
         
-        os.unlink(oldFilePath)
+            os.unlink(oldFilePath)
   
 def _writeDataFile(f, requestID):
     
@@ -143,7 +150,8 @@ def _buildCookie(options):
 
     cookieString = ""
     
-    for checkBox in ["twoNodeMode", "printNodeCount", "omitLabelling", "splitNodes"]:
+    for checkBox in ["twoNodeMode", "printNodeCount", "omitLabelling", \
+                     "splitNodes"]:
         
         if checkBox in options:            
             cookieString += checkBox + ":1;"
@@ -151,16 +159,42 @@ def _buildCookie(options):
             cookieString += checkBox + ":0;"
             
     if "overrideEdge" in options:
-        cookieString += "overrideEdge:1;" + "overrideEdgeLength:" + options['overrideEdgeLength'] + ";"
+        cookieString += "overrideEdge:1;" + "overrideEdgeLength:" + \
+                     options['overrideEdgeLength'] + ";"
     else:
         cookieString += "overrideEdge:0;overrideEdgeLength:0;"
         
-    for choice in ["splitMode", "textLabel", "skipLines", "maxLines", "omitThreshold", "sourceFanOut", "eventFanOut"]:
+    for choice in ["splitMode", "textLabel", "skipLines", "maxLines", \
+                   "omitThreshold", "sourceFanOut", "eventFanOut"]:
         
         cookieString += choice + ":" + options[choice] + ";"
         
     return cookieString
         
+def _readCookie(cookie):
+    
+    formData = {}
+    
+    cookie = cookie.split(";")
+
+    for checkBox in cookie[:5]:
+        
+        checkBox = checkBox.split(":")
+        
+        formData[checkBox[0]] = bool(int(checkBox[1]))
+    
+    cookie = dict(item.split(":") for item in cookie[5:-1])
+        
+    formData['overrideEdgeLength'] = float(cookie['overrideEdgeLength'])
+    
+    formData['textLabel'] = cookie['textLabel']
+    
+    for intData in ['splitMode', 'skipLines', 'maxLines', 'omitThreshold', \
+                    'sourceFanOut', 'eventFanOut']:
+    
+        formData[intData] = int(cookie[intData])
+    
+    return formData
 
 def _renderGraph(dataFile, propertyFile, outputFile, afPath, afArgs):
     
