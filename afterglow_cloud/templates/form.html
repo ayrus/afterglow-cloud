@@ -4,6 +4,14 @@
 	Render Graph - Afterglow
 {% endblock %}
 
+{% block extra_head %}	
+	   <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/jquery.miniColors.css" />
+
+	   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+	   <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.miniColors.min.js"></script>
+	   <script type="text/javascript" src="{{ STATIC_URL }}js/form.js"></script>
+{% endblock %}
+
 {% block body %}
 
     {% if form.errors %}
@@ -15,10 +23,27 @@
     <form enctype="multipart/form-data" method="post" action="process">
         {% csrf_token %}
 
-        <table>
-            {{ form.as_table }}
-        </table>
-        <input type="submit" value="Submit">
+           <div class="field"> <label>Data:</label>  {{ form.dataFile }} </div>
+	   
+	   <div class="field"> <label>Two node mode:</label> {{ form.twoNodeMode }} </div>
+	   
+	   <div id="settingsLabel"> Settings: </div>
+	   
+	   <div id="mainSettings">
+		      <div class="field"> <label>Print node count:</label>  {{ form.printNodeCount }}  </div> 
+		      
+		      <div class="field"> <label>Omit node labelling:</label>  {{ form.omitLabelling }} </div>
+		      
+		      <div class="field"> <label>Split source and target nodes:</label>  {{ form.splitNodes }} </div>
+		      
+		      <div class="field"> <label>Splitting:</label>  {{ form.splitMode }} </div>
+		      
+		      <div class="field"> <label>Override edge length:</label>  {{ form.overrideEdge }} &nbsp;&nbsp;&nbsp;&nbsp; {{ form.overrideEdgeLength }} </div> 
+		      
+		      <div class="field"> <label>Text label colour:</label>  {{ form.textLabel }} </div>
+	   </div>
+	    
+        <input type="submit" value="Render">
     </form>
 
 {% endblock %}
