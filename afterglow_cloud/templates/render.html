@@ -1,14 +1,16 @@
-<html>
-<head>
-    <title></title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}
+	Rendered Graph - Afterglow
+{% endblock %}
+
+{% block body %}
 
     {% if not status %}
     
     <center><b>Rendered Graph</b>: </center>
     
-    <img src="{{ STATIC_URL }}{{ requestID }}.gif" alt=""/>
+    <img src="{{ STATIC_URL }}rendered/{{ requestID }}.gif" alt=""/>
     
     {% else %}
 
@@ -42,5 +44,4 @@
         
     {% endif %}        
         
-</body>
-</html>
+{% endblock %}

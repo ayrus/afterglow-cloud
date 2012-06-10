@@ -1,8 +1,10 @@
-<html>
-<head>
-    <title></title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}
+	Render Graph - Afterglow
+{% endblock %}
+
+{% block body %}
 
     {% if form.errors %}
         <p style="color: red;">
@@ -11,14 +13,12 @@
     {% endif %}
 
     <form enctype="multipart/form-data" method="post" action="process">
-    
         {% csrf_token %}
-    
+
         <table>
             {{ form.as_table }}
         </table>
         <input type="submit" value="Submit">
     </form>
 
-</body>
-</html>
+{% endblock %}

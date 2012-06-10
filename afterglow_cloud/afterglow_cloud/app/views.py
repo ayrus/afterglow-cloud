@@ -39,7 +39,7 @@ def processForm(request):
             
             dataFile = "user_data/" + requestID + ".csv"
             propertyFile = "user_config/" + requestID + ".property"
-            outputFile = "afterglow_cloud/app/static/" + requestID + ".gif"
+            outputFile = "afterglow_cloud/app/static/rendered/" + requestID + ".gif"
             afPath = "../afterglow/src/afterglow.pl"
             
             #--deal with errors
@@ -70,7 +70,7 @@ def processForm(request):
 
 def _cleanFiles():
   
-  paths = ["afterglow_cloud/app/static/", "user_data/", "user_config/"]
+  paths = ["afterglow_cloud/app/static/rendered/", "user_data/", "user_config/"]
   
   for path in paths:
   
