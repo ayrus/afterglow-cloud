@@ -42,7 +42,146 @@
 		      
 		      <div class="field"> <label>Text label colour:</label>  {{ form.textLabel }} </div>
 	   </div>
+	   
+	   <div id="advancedLabel"> Advanced Settings: </div>
+	   
+	   <div id="advanced">
+		      <div class="field"> <label>Skip Lines:</label>  {{ form.skipLines }}  </div> 
+		      
+		      <div class="field"> <label>Maximum lines:</label>  {{ form.maxLines }}  </div>
+		      
+		      <div class="field"> <label>Omit threshold for each node:</label>  {{ form.omitThreshold }}  </div>
+		      
+		      <div class="field"> <label>Source fan out threshold:</label>  {{ form.sourceFanOut }}  </div>
+		      
+		      <div class="field"> <label>Event fan out threshold:</label>  {{ form.eventFanOut }}  </div>
+	   </div>
 	    
+	   <div id="configLabel">Configuration: </div>
+	   
+	   <div id="config">
+
+		      <div id="alreadyLabel"> Added configurations: </div>
+		      
+		      {{ form.propertyConfig }}
+		      --custom radio
+		      
+		      <fieldset id="fieldColour">
+				 <legend>Add: Colour</legend>
+				 Node: <select name="xColourType" id="xColourType">
+					    <option>All</option>
+					    <option>Source</option>
+					    <option>Event</option>
+					    <option>Target</option>
+				 </select>
+				 
+				 Colour: <input type="text" name="xColourHEX" id="xColourHEX" />
+				 
+				 Condition: <input type="text" name="xColourCondition" id="xColourCondition" />
+				 
+				 <button name="xColourButton" id="xColourButton" onclick="addColour(); return false;">Add</button>
+		      </fieldset>
+		      
+		      <fieldset id="fieldSize">
+				 <legend>Add: Node Sizes</legend>
+				 
+				  Node: <select name="xSizeType" id="xSizeType">
+					    <option>All</option>
+					    <option>Source</option>
+					    <option>Event</option>
+					    <option>Target</option>
+				 </select>
+				 <br/><br/>
+				 Condition: <br/>
+				 
+				 <input type="radio" name="xSizeRadioExp" id="xSizeRadioExp"/> Expression
+				 <input type="text" name="xSizeCondition" id="xSizeCondition"/>				 
+				 
+				 
+				 <input type="radio" name="xSizeRadioPre" id="xSizeRadioPre"/> Predefined
+				 <select name="xSizePreType" id="xSizePreType">
+					    <option>Number of occurrences</option>
+					    <option>Third data column</option>
+					    <option>Fourth data column</option>
+				 </select>				 
+				 
+				 <br/><br/>
+				 
+				 Max node size: <input type="text" name="xSizeMaxSize" id="xSizeMaxSize" />
+				 
+				 Sum values: <input type="checkbox" name="xSizeSum" value="xSizeSum"  />
+				 
+				 <button name="xSizeButton" id="xSizeButton">Add</button>				 
+				 
+		      </fieldset>
+		      
+		      <fieldset id="fieldThreshold">
+		      
+				 <legend>Add: Threshold Filter</legend>		      
+		      
+				  Node: <select name="xThresholdType" id="xThresholdType">
+					    <option>All</option>
+					    <option>Source</option>
+					    <option>Event</option>
+					    <option>Target</option>
+				 </select>
+				 
+				 Threshold: <input type="text" name="xThresholdSize" id="xThresholdSize" />
+				 
+				 <button name="xThresholdButton" id="xThresholdButton">Add</button>
+		      </fieldset>
+
+		      		      
+		      <fieldset id="fieldClustering">
+		      
+				 Node: <select name="xClusteringType" id="xClusteringType">
+					    <option>All</option>
+					    <option>Source</option>
+					    <option>Event</option>
+					    <option>Target</option>
+				 </select>
+				
+				 <br/><br/>
+				 
+				 Condition:
+				 
+				 <br/><br/>
+				 
+				 <input type="radio" name="xClusteringRadioIP" id="xClusteringRadioIP"/> IP Classes
+				 <select name="xClusteringIPType" id="xClusteringIPType">
+					    <option>Class A</option>
+					    <option>Class B</option>
+					    <option>Class C</option>
+					    <option>Class D</option>
+				 </select>
+
+				 <br/>
+				 
+				 
+				 <input type="radio" name="xClusteringRadioExp" id="xClusteringRadioExp"/> Expression
+				 <input type="text" name="xClusteringCondition" id="xClusteringCondition"/>
+				 
+				 <br/>				 
+				 
+				 <button name="xClusteringButton" id="xClusteringButton">Add</button>
+		      
+		      </fieldset>
+		      
+		      <fieldset id="fieldCustom">
+		      
+				<input type="text" name="xCustomCondition" />
+				
+				<button name="xCustomButton" id="xCustomButton">Add</button>
+		      
+		      </fieldset>
+		      
+	   </div>
+	   
+	   <br/><br/>
+	   
+	   <div class="field"> <label>Save configuration:</label>  {{ form.saveConfigCookie }}  </div>	   	   
+	   	   
+	   
         <input type="submit" value="Render">
     </form>
 

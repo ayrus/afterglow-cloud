@@ -1,6 +1,8 @@
 $(document).ready(function(){
 
     $('#id_textLabel').miniColors();
+    
+    $('#xColourHEX').miniColors();
 
     $("#id_overrideEdge").click(function () { 
         toggleShowOverrideInput();
@@ -8,6 +10,10 @@ $(document).ready(function(){
     
     $("#settingsLabel").click(function () { 
         toggleShowMainSettings();
+    });
+    
+    $('#advancedLabel').click(function () {
+        toggleShowAdvanced();
     });
     
 });
@@ -25,4 +31,10 @@ function toggleShowMainSettings(){
     $('#mainSettings').slideToggle(('slow'));   
 }
 
+function toggleShowAdvanced(){
+    $('#advanced').slideToggle(('slow'));
+}
 
+function addColour(){
+    
+}

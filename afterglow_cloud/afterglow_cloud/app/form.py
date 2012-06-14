@@ -55,7 +55,7 @@ class renderForm(forms.Form):
     #originating from event nodes (trivially true only for three node graphs). 
     eventFanOut = forms.IntegerField(initial=0)
     
-    propertyConfig = forms.CharField(widget=forms.Textarea, required=False)
+    propertyConfig = forms.CharField(widget=forms.HiddenInput, required=False, )
     
     saveConfigCookie = forms.BooleanField(required=False, initial=True)
     

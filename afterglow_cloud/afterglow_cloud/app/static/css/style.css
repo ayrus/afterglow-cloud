@@ -18,23 +18,31 @@ label {
 	margin-bottom: 15px;
 }
 
-#settingsLabel{
+#settingsLabel, #advancedLabel, #configLabel, #alreadyLabel{
 	font-size: 19px;
 	font-variant: small-caps;
 	font-weight: bold;
 	margin-bottom: 10px;
 }
 
-#mainSettings{
-	margin-left: 50px;
-	display: none;
+#alreadyLabel{
+	font-size: 18px !important;
 }
 
-#mainSettings label{
+#mainSettings, #advanced, #config{
+	margin-left: 50px;
+	//display: none;
+}
+
+#mainSettings label, #advanced label{
 	width: 20%;
 	font-variant: normal;
 }
 
 #id_overrideEdgeLength{
 	display: none;
+}
+
+#fieldColour{
+	width: 500px;
 }
