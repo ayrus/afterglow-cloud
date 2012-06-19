@@ -46,3 +46,24 @@ label {
 #fieldColour{
 	width: 500px;
 }
+
+#fieldSize{
+	width: 700px;
+	float: left;
+}
+
+#fieldThreshold{
+	width: 350px;
+}
+
+#fieldClustering{
+	width: 400px;
+	float: left;
+}
+
+#fieldCustom{
+	width: 400px;
+}
+.clear{
+	clear: both;
+}

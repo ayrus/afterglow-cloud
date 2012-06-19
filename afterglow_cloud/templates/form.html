@@ -20,7 +20,7 @@
         </p>
     {% endif %}
 
-    <form enctype="multipart/form-data" method="post" action="process">
+    <form enctype="multipart/form-data" method="post" action="process" id="renderMainForm">
         {% csrf_token %}
 
            <div class="field"> <label>Data:</label>  {{ form.dataFile }} </div>
@@ -63,24 +63,35 @@
 
 		      <div id="alreadyLabel"> Added configurations: </div>
 		      
+		      <div id="alreadyAdded"> </div>
+		      
+		      <br/><br/>
+		      
+		      <div id="alreadyAddedHidden"> </div>
+		      
 		      {{ form.propertyConfig }}
+		      
+		      <br/><br/>
+		      
 		      --custom radio
 		      
 		      <fieldset id="fieldColour">
 				 <legend>Add: Colour</legend>
 				 Node: <select name="xColourType" id="xColourType">
-					    <option>All</option>
 					    <option>Source</option>
 					    <option>Event</option>
 					    <option>Target</option>
+					    <option>Edge</option>
 				 </select>
 				 
 				 Colour: <input type="text" name="xColourHEX" id="xColourHEX" />
 				 
 				 Condition: <input type="text" name="xColourCondition" id="xColourCondition" />
 				 
-				 <button name="xColourButton" id="xColourButton" onclick="addColour(); return false;">Add</button>
+				 <button name="xColourButton" id="xColourButton">Add</button>
 		      </fieldset>
+		      
+		      <br/><br/>
 		      
 		      <fieldset id="fieldSize">
 				 <legend>Add: Node Sizes</legend>
@@ -120,7 +131,6 @@
 				 <legend>Add: Threshold Filter</legend>		      
 		      
 				  Node: <select name="xThresholdType" id="xThresholdType">
-					    <option>All</option>
 					    <option>Source</option>
 					    <option>Event</option>
 					    <option>Target</option>
@@ -131,8 +141,14 @@
 				 <button name="xThresholdButton" id="xThresholdButton">Add</button>
 		      </fieldset>
 
+		      <div class="clear"></div>
+		      
+		      <br/><br/>
 		      		      
 		      <fieldset id="fieldClustering">
+		      
+				 <legend>Add: Clustering</legend>					    
+					    
 		      
 				 Node: <select name="xClusteringType" id="xClusteringType">
 					    <option>All</option>
@@ -140,6 +156,8 @@
 					    <option>Event</option>
 					    <option>Target</option>
 				 </select>
+				 
+
 				
 				 <br/><br/>
 				 
@@ -168,13 +186,13 @@
 		      </fieldset>
 		      
 		      <fieldset id="fieldCustom">
-		      
+				 <legend>Add: Custom Line</legend>
 				<input type="text" name="xCustomCondition" />
 				
 				<button name="xCustomButton" id="xCustomButton">Add</button>
 		      
 		      </fieldset>
-		      
+		      <div class="clear"></div>
 	   </div>
 	   
 	   <br/><br/>
