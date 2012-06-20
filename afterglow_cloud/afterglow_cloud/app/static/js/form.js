@@ -110,7 +110,7 @@ function populateProperty(){
         value += document.getElementById("configLine" + i).innerHTML + "\n"; 
     }
     
-    document.getElementById("id_propertyConfig").value = "color.source=\"E81984\"\n";
+    document.getElementById("id_propertyConfig").value = value;
 
     //alert(value);
 }

@@ -19,7 +19,7 @@
 # Written by:    Christian Beedgen (krist@digitalresearch.org)
 #                Raffael Marty (ram@cryptojail.net)
 #
-# Version:    1.6.2
+# Version:    1.6.3
 #
 # URL:        http://afterglow.sourceforge.net
 #
@@ -160,6 +160,9 @@
 #        not care about the oder, but GDF does, so we change the output sequence. We cannot 
 #        reorder the code for nodes and egdes as the nodes depend on variables that are computed
 #        by the edges, so we cache the data
+# 1.6.3  Fixing a couple of issues. 
+#           color.source="#222222" wasn't working
+#           -x "#222222" wasn't working on command line
 #    
 ##############################################################
 
@@ -1653,7 +1656,11 @@ sub getColor {
     for my $var (@$variableColExp) {
         print STDERR " | eval: $var" if $DEBUG;
         print STDERR " | field(): ".field() if $DEBUG;
-        if ($color = eval($var)) { 
+    
+        if ($var =~ /^#[\da-fA-F]{6,8}$/) { 
+            $color = $var;
+            last;
+        } elsif ($color = eval($var)) {
             # check whether the assignment happened in a "catch-all" condition, which can
             # be identified by not having a "if" in the statement.
             # if ($type eq "target") {print STDERR "eval: $var :: $fields[1]\n";}
@@ -1669,20 +1676,19 @@ sub getColor {
         $color="\"$color\"";
     }
     elsif ((!grep(/$color/,@colors))  || (!defined($color))) {
-    #print STDERR "color: $color \n";
 
-    # did we already index this color?
-    if (exists($colorIndex{$color})) {
-        $color=$colorIndex{$color};
-     } else {    
+        # did we already index this color?
+        if (exists($colorIndex{$color})) {
+            $color=$colorIndex{$color};
+         } else {    
 
-        # Only scream if the color was actually set.
-        if ($color) {print STDERR "Not a color: $color\n";}
+            # Only scream if the color was actually set.
+            if ($color) {print STDERR "Not a color: $color\n";}
 
-        $colorIndex{$color}=$colors[$colorIndexCount];    
-        $color=$colors[$colorIndexCount];
-        $colorIndexCount ++;
-    }
+            $colorIndex{$color}=$colors[$colorIndexCount];    
+            $color=$colors[$colorIndexCount];
+            $colorIndexCount ++;
+        }
     }
 
     # add to cache
