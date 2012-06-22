@@ -67,13 +67,14 @@
 		      
 		      <br/><br/>
 		      
+		      [---- Following is raw (backend) preview of configuration. Will be hidden eventually. -----] : <br/>
 		      <div id="alreadyAddedHidden"> </div>
 		      
 		      {{ form.propertyConfig }}
 		      
 		      <br/><br/>
 		      
-		      --custom radio
+		      [---- TO ADD: custom configuration option-----]
 		      
 		      <fieldset id="fieldColour">
 				 <legend>Add: Colour</legend>
@@ -97,7 +98,6 @@
 				 <legend>Add: Node Sizes</legend>
 				 
 				  Node: <select name="xSizeType" id="xSizeType">
-					    <option>All</option>
 					    <option>Source</option>
 					    <option>Event</option>
 					    <option>Target</option>
@@ -105,11 +105,11 @@
 				 <br/><br/>
 				 Condition: <br/>
 				 
-				 <input type="radio" name="xSizeRadio" id="xSizeRadioExp" checked="checked"/> Expression
+				 <input type="radio" name="xSizeRadio" id="xSizeRadioExp" checked="checked" value="exp"/> Expression
 				 <input type="text" name="xSizeCondition" id="xSizeCondition"/>				 
 				 
 				 
-				 <input type="radio" name="xSizeRadio" id="xSizeRadioPre"/> Predefined
+				 <input type="radio" name="xSizeRadio" id="xSizeRadioPre value="pre"/> Predefined
 				 <select name="xSizePreType" id="xSizePreType">
 					    <option>Number of occurrences</option>
 					    <option>Third data column</option>
@@ -120,7 +120,7 @@
 				 
 				 Max node size: <input type="text" name="xSizeMaxSize" id="xSizeMaxSize" />
 				 
-				 Sum values: <input type="checkbox" name="xSizeSum" value="xSizeSum"  />
+				 Sum values: <input type="checkbox" name="xSizeSum" id="xSizeSum"/>
 				 
 				 <button name="xSizeButton" id="xSizeButton">Add</button>				 
 				 
