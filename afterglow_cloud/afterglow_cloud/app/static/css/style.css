@@ -22,16 +22,18 @@ label {
 	font-size: 19px;
 	font-variant: small-caps;
 	font-weight: bold;
+	text-decoration: underline;
 	margin-bottom: 10px;
 }
 
 #alreadyLabel{
 	font-size: 18px !important;
+	text-decoration: none !important;
 }
 
 #mainSettings, #advanced, #config{
 	margin-left: 50px;
-	//display: none;
+	display: none;
 }
 
 #mainSettings label, #advanced label{

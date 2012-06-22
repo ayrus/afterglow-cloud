@@ -19,6 +19,10 @@ $(document).ready(function(){
         toggleShowAdvanced();
     });
     
+    $('#configLabel').click(function () {
+        toggleShowConfig();
+    });
+    
     $('#xColourButton').click(function () {
         addColour();
         
@@ -77,6 +81,10 @@ function toggleShowMainSettings(){
 
 function toggleShowAdvanced(){
     $('#advanced').slideToggle(('slow'));
+}
+
+function toggleShowConfig(){
+    $('#config').slideToggle(('slow'));
 }
 
 function addColour(){
