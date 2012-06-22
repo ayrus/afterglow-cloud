@@ -105,11 +105,11 @@
 				 <br/><br/>
 				 Condition: <br/>
 				 
-				 <input type="radio" name="xSizeRadioExp" id="xSizeRadioExp"/> Expression
+				 <input type="radio" name="xSizeRadio" id="xSizeRadioExp" checked="checked"/> Expression
 				 <input type="text" name="xSizeCondition" id="xSizeCondition"/>				 
 				 
 				 
-				 <input type="radio" name="xSizeRadioPre" id="xSizeRadioPre"/> Predefined
+				 <input type="radio" name="xSizeRadio" id="xSizeRadioPre"/> Predefined
 				 <select name="xSizePreType" id="xSizePreType">
 					    <option>Number of occurrences</option>
 					    <option>Third data column</option>
@@ -151,7 +151,6 @@
 					    
 		      
 				 Node: <select name="xClusteringType" id="xClusteringType">
-					    <option>All</option>
 					    <option>Source</option>
 					    <option>Event</option>
 					    <option>Target</option>
@@ -165,7 +164,7 @@
 				 
 				 <br/><br/>
 				 
-				 <input type="radio" name="xClusteringRadioIP" id="xClusteringRadioIP"/> IP Classes
+				 <input type="radio" name="xClusteringRadio" id="xClusteringRadioIP" value="ip" checked="checked"/> IP Classes
 				 <select name="xClusteringIPType" id="xClusteringIPType">
 					    <option>Class A</option>
 					    <option>Class B</option>
@@ -176,7 +175,7 @@
 				 <br/>
 				 
 				 
-				 <input type="radio" name="xClusteringRadioExp" id="xClusteringRadioExp"/> Expression
+				 <input type="radio" name="xClusteringRadio" id="xClusteringRadioExp" value="exp"/> Expression
 				 <input type="text" name="xClusteringCondition" id="xClusteringCondition"/>
 				 
 				 <br/>				 
@@ -187,7 +186,7 @@
 		      
 		      <fieldset id="fieldCustom">
 				 <legend>Add: Custom Line</legend>
-				<input type="text" name="xCustomCondition" />
+				<input type="text" name="xCustomCondition" id="xCustomCondition"/>
 				
 				<button name="xCustomButton" id="xCustomButton">Add</button>
 		      

@@ -30,6 +30,21 @@ $(document).ready(function(){
         return false;
     });
     
+    $('#xCustomButton').click(function () {
+    
+        addCustom();
+        
+        return false;
+    });    
+    
+    $('#xClusteringButton').click(function (){
+    
+        addClustering();
+        
+        return false;
+    });
+    
+    
     $('#renderMainForm').submit(function () {
         
         populateProperty();    
@@ -100,6 +115,70 @@ function addThreshold(){
     elem.innerHTML = "threshold." + $("#xThresholdType").attr("value").toLowerCase() + "=" + $("#xThresholdSize").attr("value");
 
     document.getElementById("alreadyAddedHidden").appendChild(elem);
+}
+
+function addCustom(){
+    
+    var elem = document.createElement("div");
+    
+    var elemID = configCount++;
+    
+    elem.id = "line" + elemID;
+    
+    elem.innerHTML = "Custom :: " + $("#xCustomCondition").attr("value");
+    
+    document.getElementById("alreadyAdded").appendChild(elem);
+    
+    elem = document.createElement("div");
+    elem.id = "configLine" + elemID;
+    
+    elem.innerHTML = $("#xCustomCondition").attr("value");
+    
+    document.getElementById("alreadyAddedHidden").appendChild(elem);
+    
+}
+
+function addClustering(){
+
+    var elem = document.createElement("div");
+    
+    var elemID= configCount++;
+    
+    elem.id = "line" + elemID;
+    
+    var userHTML = "";
+    var configHTML = "";
+    
+    userHTML = "Cluster :: " + $("#xClusteringType").attr("value");
+    
+    configHTML = "cluster." + $("#xClusteringType").attr("value").toLowerCase() + "=";
+    
+    if ($("input[name='xClusteringRadio']:checked").val() == "ip"){
+        
+        userHTML += " | IP | " + $("#xClusteringIPType").attr("value");
+        
+        configHTML += 'regex_replace("(\\\\d\\+)\\\\.\\\\d\\+")."/8"';
+        
+    }else{
+        
+        userHTML += " | Condition | " + $("#xClusteringCondition").attr("value"); 
+        
+        configHTML += $("#xClusteringCondition").attr("value");
+    
+    }
+    
+    elem.innerHTML = userHTML;
+    
+    document.getElementById("alreadyAdded").appendChild(elem);
+
+    elem = document.createElement("div");
+    
+    elem.id = "configLine" + elemID;
+    
+    elem.innerHTML = configHTML;
+    
+    document.getElementById("alreadyAddedHidden").appendChild(elem);
+    
 }
 
 function populateProperty(){
