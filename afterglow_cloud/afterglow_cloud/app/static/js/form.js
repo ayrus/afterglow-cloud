@@ -87,80 +87,75 @@ function toggleShowConfig(){
     $('#config').slideToggle(('slow'));
 }
 
-function addColour(){
-    
+function appendUserConfigDiv(id, html){
+
     var elem = document.createElement("div");
+    
+    elem.id = "line" + id;
+    
+    elem.innerHTML = html;
+
+    document.getElementById("alreadyAdded").appendChild(elem);
+}
+
+function appendHiddenConfigDiv(id, html){
+
+    var elem = document.createElement("div");
+    
+    elem.id = "configLine" + id;
+    
+    elem.innerHTML = html;
+
+    document.getElementById("alreadyAddedHidden").appendChild(elem);
+}
+
+function addColour(){
     
     var elemID = configCount++;
     
-    elem.id = "line" + elemID;
+    var html = "Colour :: " +  $("#xColourType").attr("value") + " | " + $("#xColourHEX").attr("value") + " | " + $("#xColourCondition").attr("value"); 
     
-    elem.innerHTML = "Colour :: " +  $("#xColourType").attr("value") + " | " + $("#xColourHEX").attr("value") + " | " + $("#xColourCondition").attr("value"); 
+    appendUserConfigDiv(elemID, html);
     
-    document.getElementById("alreadyAdded").appendChild(elem);
-    
-    elem = document.createElement("div");
-    elem.id = "configLine" + elemID;
-    
-    var conf = "color." + $("#xColourType").attr("value").toLowerCase() + "=\"" + $("#xColourHEX").attr("value") + "\"";    
+    html = "color." + $("#xColourType").attr("value").toLowerCase() + "=\"" + $("#xColourHEX").attr("value") + "\"";    
     
     if ($("#xColourCondition").attr("value")){ // not empty -- condition
-        conf += " if (" + $("#xColourCondition").attr("value") + ");";
+        html += " if (" + $("#xColourCondition").attr("value") + ");";
     }
     
-    elem.innerHTML = conf;
-    
-    document.getElementById("alreadyAddedHidden").appendChild(elem);
+    appendHiddenConfigDiv(elemID, html);
 }
 
 function addThreshold(){
     
-    var elem = document.createElement("div");
-    
     var elemID = configCount++;
     
-    elem.id = "line" + elemID;
+    var html = "Threshold :: " + $("#xThresholdType").attr("value") + " | " + $("#xThresholdSize").attr("value");
     
-    elem.innerHTML = "Threshold :: " + $("#xThresholdType").attr("value") + " | " + $("#xThresholdSize").attr("value");
+    appendUserConfigDiv(elemID, html);
     
-    document.getElementById("alreadyAdded").appendChild(elem);
-    
-    elem = document.createElement("div");
-    elem.id = "configLine" + elemID;
-    
-    elem.innerHTML = "threshold." + $("#xThresholdType").attr("value").toLowerCase() + "=" + $("#xThresholdSize").attr("value");
+    html = "threshold." + $("#xThresholdType").attr("value").toLowerCase() + "=" + $("#xThresholdSize").attr("value");
 
-    document.getElementById("alreadyAddedHidden").appendChild(elem);
+    appendHiddenConfigDiv(elemID, html);
 }
 
 function addCustom(){
     
-    var elem = document.createElement("div");
-    
     var elemID = configCount++;
     
-    elem.id = "line" + elemID;
+    var html = "Custom :: " + $("#xCustomCondition").attr("value");
     
-    elem.innerHTML = "Custom :: " + $("#xCustomCondition").attr("value");
+    appendUserConfigDiv(elemID, html);
     
-    document.getElementById("alreadyAdded").appendChild(elem);
+    html = $("#xCustomCondition").attr("value");
     
-    elem = document.createElement("div");
-    elem.id = "configLine" + elemID;
-    
-    elem.innerHTML = $("#xCustomCondition").attr("value");
-    
-    document.getElementById("alreadyAddedHidden").appendChild(elem);
+    appendHiddenConfigDiv(elemID, html);
     
 }
 
 function addClustering(){
-
-    var elem = document.createElement("div");
     
-    var elemID= configCount++;
-    
-    elem.id = "line" + elemID;
+    var elemID = configCount++;
     
     var userHTML = "";
     var configHTML = "";
@@ -183,17 +178,9 @@ function addClustering(){
     
     }
     
-    elem.innerHTML = userHTML;
-    
-    document.getElementById("alreadyAdded").appendChild(elem);
+    appendUserConfigDiv(elemID, userHTML);
 
-    elem = document.createElement("div");
-    
-    elem.id = "configLine" + elemID;
-    
-    elem.innerHTML = configHTML;
-    
-    document.getElementById("alreadyAddedHidden").appendChild(elem);
+    appendHiddenConfigDiv(elemID, configHTML);
     
 }
 
@@ -202,64 +189,49 @@ function addSize(){
     if(!maxNodeSizeSet && $("#xSizeMaxSize").attr("value")){ //If the max node size hasn't been set yet.
     
         maxNodeSizeSet = true;
-        
-        var elem = document.createElement("div");
     
         var elemID = configCount++;
     
-        elem.id = "line" + elemID;
+        var html = "Max Node Size :: " + $("#xSizeMaxSize").attr("value");
         
-        elem.innerHTML = "Max Node Size :: " + $("#xSizeMaxSize").attr("value");
+        appendUserConfigDiv(elemID, html);
         
-        document.getElementById("alreadyAdded").appendChild(elem);
+        html = "maxnodesize=" + $("#xSizeMaxSize").attr("value");
         
-        elem = document.createElement("div");
-        
-        elem.id = "configLine" + elemID;
-        
-        elem.innerHTML = "maxnodesize=" + $("#xSizeMaxSize").attr("value");
-        
-        document.getElementById("alreadyAddedHidden").appendChild(elem);
+        appendHiddenConfigDiv(elemID, html);
         
         $("#xSizeMaxSize").prop('disabled', true);
     
     }
     
-    var elem = document.createElement("div");
-    
     var elemID = configCount++;
     
-    elem.id = "line" + elemID;
-    
-    var configElem = document.createElement("div");
-    
-    configElem.id = "configLine" + elemID;
-    
     var userHTML;
+    
+    var configHTML;
     
     
     if ($("input[name='xSizeRadio']:checked").val() == "exp"){
         
-        userHTML = "Size :: " + $("#xSizeType").attr("value") + " | Expression - " +  $("#xSizeCondition").attr("value") + " | Sum - ";
+        userHTML = "Size :: " + $("#xSizeType").attr("value") + " | Expression - " +  $("#xSizeCondition").attr("value");
         
-        configElem.innerHTML = "size." + $("#xSizeType").attr("value").toLowerCase() + "=" + $("#xSizeCondition").attr("value");
+        configHTML = "size." + $("#xSizeType").attr("value").toLowerCase() + "=" + $("#xSizeCondition").attr("value");
     
     }else{
     
     }
     
-    document.getElementById("alreadyAddedHidden").appendChild(configElem);
+    appendUserConfigDiv(elemID, userHTML);
     
+    appendHiddenConfigDiv(elemID, configHTML);
     
     
     
     elemID = configCount++;
+
+    userHTML = "Sum :: " + $("#xSizeType").attr("value") + " | ";
     
-    configElem = document.createElement("div");
-    
-    configElem.id = "configLine" + elemID;
-    
-    var configHTML = "sum." + $("#xSizeType").attr("value").toLowerCase() + "=";
+    configHTML = "sum." + $("#xSizeType").attr("value").toLowerCase() + "=";
     
     
     if($('#xSizeSum').is(':checked')){
@@ -275,15 +247,10 @@ function addSize(){
         configHTML += "0";
     }
     
+    appendUserConfigDiv(elemID, userHTML);
     
-    elem.innerHTML = userHTML;
-
-    configElem.innerHTML = configHTML;    
+    appendHiddenConfigDiv(elemID, configHTML);
     
-    document.getElementById("alreadyAdded").appendChild(elem);
-    
-    document.getElementById("alreadyAddedHidden").appendChild(configElem);
-
 }
 
 function populateProperty(){
