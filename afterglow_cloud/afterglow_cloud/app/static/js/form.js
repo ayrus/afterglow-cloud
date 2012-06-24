@@ -1,5 +1,6 @@
 var configCount = 0;
 var maxNodeSizeSet = false;
+var maxNodeSizeElem;
 
 $(document).ready(function(){
 
@@ -95,6 +96,12 @@ function appendUserConfigDiv(id, html){
     
     html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"removeConfigLine(this.parentNode.id)\";>Remove</a>";
     
+    html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"changeUp(this.parentNode.id)\";>Up</a>";
+    
+    html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"changeDown(this.parentNode.id)\";>Down</a>";
+    
+    //html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"alert(this.parentNode.id)\";>XX</a>";
+    
     elem.innerHTML = html;
 
     document.getElementById("alreadyAdded").appendChild(elem);
@@ -115,6 +122,16 @@ function removeConfigLine(id){
 
     id = id.split("")[4];
     
+    //Check if maxnodesize config is being removed and activate the form if so.
+    
+    if(maxNodeSizeElem == id){
+    
+        $("#xSizeMaxSize").prop('disabled', false);
+        
+        maxNodeSizeSet = false;
+    }
+    
+    
     //Remove the user displayed config:
     
     var child = document.getElementById("line" + id);   
@@ -132,6 +149,83 @@ function removeConfigLine(id){
     parent.removeChild(child);
 }
 
+function changeUp(id){
+
+    id = parseInt(id.split("")[4]);
+    
+    for(var i=id-1; i>=0; i--){
+
+        if ($("#line" + i).length > 0){
+        
+            var closestUserID = "line" + i;
+            
+            var closestConfigID = "configLine" + i;
+            
+            var userID = "line" + id;
+            
+            var configID = "configLine" + id;
+
+            //Swap user UI end IDs.
+           
+            document.getElementById(userID).id = closestUserID;
+            
+            document.getElementById(closestUserID).id = userID;
+            
+            document.getElementById("alreadyAdded").insertBefore(document.getElementById(closestUserID), document.getElementById(userID)); 
+            
+            //Swap raw-config end IDs.
+            
+            document.getElementById(configID).id = closestConfigID;
+            
+            document.getElementById(closestConfigID).id = configID;
+            
+            break;
+        
+        }
+    }
+
+}
+
+function changeDown(id){
+
+    id = parseInt(id.split("")[4]);
+    
+    
+    for(var i=id+1; i<=configCount; i++){
+    
+        //alert("x"+i);
+
+        if ($("#line" + i).length > 0){
+        
+            var closestUserID = "line" + i;
+            
+            var closestConfigID = "configLine" + i;
+            
+            var userID = "line" + id;
+            
+            var configID = "configLine" + id;
+
+            //Swap user UI end IDs.
+            
+            document.getElementById(closestUserID).id = userID;
+            
+            document.getElementById(userID).id = closestUserID;
+            
+            document.getElementById("alreadyAdded").insertBefore(document.getElementById(userID), document.getElementById(closestUserID)); 
+            
+            //Swap raw-config end IDs.
+            
+            document.getElementById(closestConfigID).id = configID;
+            
+            document.getElementById(configID).id = closestConfigID;
+            
+            break;
+        
+        }
+    }
+
+}
+
 function addColour(){
     
     var elemID = configCount++;
@@ -143,7 +237,7 @@ function addColour(){
     html = "color." + $("#xColourType").attr("value").toLowerCase() + "=\"" + $("#xColourHEX").attr("value") + "\"";    
     
     if ($("#xColourCondition").attr("value")){ // not empty -- condition
-        html += " if (" + $("#xColourCondition").attr("value") + ");";
+        html += " if (" + $("#xColourCondition").attr("value") + ")";
     }
     
     appendHiddenConfigDiv(elemID, html);
@@ -217,6 +311,8 @@ function addSize(){
     
         var html = "Max Node Size :: " + $("#xSizeMaxSize").attr("value");
         
+        maxNodeSizeElem = elemID;
+        
         appendUserConfigDiv(elemID, html);
         
         html = "maxnodesize=" + $("#xSizeMaxSize").attr("value");
@@ -280,8 +376,11 @@ function populateProperty(){
 
     var value = "";
     
-    for (var i = 0; i < configCount; i++){
-        value += document.getElementById("configLine" + i).innerHTML + "\n"; 
+    for (var i = 0; i <= configCount; i++){
+    
+        if ($("#configLine" + i).length > 0){ //if exists.
+            value += document.getElementById("configLine" + i).innerHTML + "\n"; 
+        }
     }
     
     document.getElementById("id_propertyConfig").value = value;
