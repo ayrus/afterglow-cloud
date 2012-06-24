@@ -93,6 +93,8 @@ function appendUserConfigDiv(id, html){
     
     elem.id = "line" + id;
     
+    html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"removeConfigLine(this.parentNode.id)\";>Remove</a>";
+    
     elem.innerHTML = html;
 
     document.getElementById("alreadyAdded").appendChild(elem);
@@ -107,6 +109,27 @@ function appendHiddenConfigDiv(id, html){
     elem.innerHTML = html;
 
     document.getElementById("alreadyAddedHidden").appendChild(elem);
+}
+
+function removeConfigLine(id){
+
+    id = id.split("")[4];
+    
+    //Remove the user displayed config:
+    
+    var child = document.getElementById("line" + id);   
+    
+    var parent = child.parentNode;
+    
+    parent.removeChild(child);
+    
+    //Remove the raw config from the hidden field:
+    
+    child = document.getElementById("configLine" + id);
+    
+    parent = child.parentNode;
+    
+    parent.removeChild(child);
 }
 
 function addColour(){
