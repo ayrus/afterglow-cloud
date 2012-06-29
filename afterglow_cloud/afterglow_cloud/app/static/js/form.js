@@ -225,44 +225,6 @@ function getPreviousSibling(node){
 
 }
 
-/* refactor */
-function changeUp(id){
-
-    id = parseInt(id.split("")[4]);
-    
-    for(var i=id-1; i>=0; i--){
-
-        if ($("#line" + i).length > 0){
-        
-            var closestUserID = "line" + i;
-            
-            var closestConfigID = "configLine" + i;
-            
-            var userID = "line" + id;
-            
-            var configID = "configLine" + id;
-
-            //Swap user UI end IDs.
-           
-            document.getElementById(userID).id = closestUserID;
-            
-            document.getElementById(closestUserID).id = userID;
-            
-            //Swap raw-config end IDs.
-            
-            document.getElementById(configID).id = closestConfigID;
-            
-            document.getElementById(closestConfigID).id = configID;
-            
-            document.getElementById("alreadyAdded").insertBefore(document.getElementById(closestUserID), document.getElementById(userID)); 
-            
-            break;
-        
-        }
-    }
-
-}
-
 function changeOrder(id, type){
 
     var node = document.getElementById(id);
@@ -271,6 +233,7 @@ function changeOrder(id, type){
     
     if (type == "down"){
         var next = getNextSibling(node);
+        
     }else{
         var next = getPreviousSibling(node);
     }
@@ -293,53 +256,23 @@ function changeOrder(id, type){
             
         //Swap raw-config end IDs.
         
-        //alert(closestConfigID);
-        
         temp = document.getElementById(configID);
         
         document.getElementById(closestConfigID).id = configID;
         
         temp.id = closestConfigID;
         
-        document.getElementById("alreadyAdded").insertBefore(document.getElementById(userID), document.getElementById(closestUserID)); 
-                
-    }
-    
-/*    
-    
-    for(var i=id+1; i<=configCount; i++){
-    
-        //alert("x"+i);
-
-        if ($("#line" + i).length > 0){
+        if(type == "down"){        
         
-            var closestUserID = "line" + i;
+            document.getElementById("alreadyAdded").insertBefore(document.getElementById(userID), document.getElementById(closestUserID));
             
-            var closestConfigID = "configLine" + i;
-            
-            var userID = "line" + id;
-            
-            var configID = "configLine" + id;
-
-            //Swap user UI end IDs.
-            
-            document.getElementById(closestUserID).id = userID;
-            
-            document.getElementById(userID).id = closestUserID;
-            
-            document.getElementById("alreadyAdded").insertBefore(document.getElementById(userID), document.getElementById(closestUserID)); 
-            
-            //Swap raw-config end IDs.
-            
-            document.getElementById(closestConfigID).id = configID;
-            
-            document.getElementById(configID).id = closestConfigID;
-            
-            break;
+        }else{
+        
+            document.getElementById("alreadyAdded").insertBefore(document.getElementById(closestUserID), document.getElementById(userID));
         
         }
+                
     }
-*/
 }
 
 function addColour(){
