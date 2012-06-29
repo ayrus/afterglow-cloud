@@ -1,6 +1,5 @@
 var configCount = 0;
 var maxNodeSizeSet = false;
-var maxNodeSizeElem;
 
 $(document).ready(function(){
 
@@ -94,11 +93,11 @@ function appendUserConfigDiv(id, html){
     
     elem.id = "line" + id;
     
-    html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"removeConfigLine(this.parentNode.id)\";>Remove</a>";
+    html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"removeConfigLine(this.parentNode.id)\">Remove</a>";
     
-    html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"changeUp(this.parentNode.id)\";>Up</a>";
+    html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"changeUp(this.parentNode.id)\">Up</a>";
     
-    html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"changeDown(this.parentNode.id)\";>Down</a>";
+    html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"changeDown(this.parentNode.id)\">Down</a><br/><br/>";
     
     //html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"alert(this.parentNode.id)\";>XX</a>";
     
@@ -124,12 +123,12 @@ function removeConfigLine(id){
     
     //Check if maxnodesize config is being removed and activate the form if so.
     
-    if(maxNodeSizeElem == id){
+    //if(maxNodeSizeElem == id){
     
-        $("#xSizeMaxSize").prop('disabled', false);
+    //    $("#xSizeMaxSize").prop('disabled', false);
         
-        maxNodeSizeSet = false;
-    }
+    //    maxNodeSizeSet = false;
+    //}
     
     
     //Remove the user displayed config:
@@ -171,13 +170,13 @@ function changeUp(id){
             
             document.getElementById(closestUserID).id = userID;
             
-            document.getElementById("alreadyAdded").insertBefore(document.getElementById(closestUserID), document.getElementById(userID)); 
-            
             //Swap raw-config end IDs.
             
             document.getElementById(configID).id = closestConfigID;
             
             document.getElementById(closestConfigID).id = configID;
+            
+            document.getElementById("alreadyAdded").insertBefore(document.getElementById(closestUserID), document.getElementById(userID)); 
             
             break;
         
@@ -230,14 +229,26 @@ function addColour(){
     
     var elemID = configCount++;
     
-    var html = "Colour :: " +  $("#xColourType").attr("value") + " | " + $("#xColourHEX").attr("value") + " | " + $("#xColourCondition").attr("value"); 
+    var html = "Colour :: " +  $("#xColourType").attr("value") + " | " + $("#xColourHEX").attr("value") + " | ";
+    
+    if ($("input[name='xColourRadio']:checked").val() == "if"){ // not empty -- condition
+        html += " IF | " + $("#xColourIfCondition").attr("value");
+    }else if($("input[name='xColourRadio']:checked").val() == "custom"){
+        html += " Custom | " + $("#xColourCustomCondition").attr("value");
+    }
+    
+    
+    html += "   <span class=\"colourBox\" style=\"background-color: " + $("#xColourHEX").attr("value") + ";\"> &nbsp;&nbsp;&nbsp;&nbsp; </span>"; 
     
     appendUserConfigDiv(elemID, html);
+
     
     html = "color." + $("#xColourType").attr("value").toLowerCase() + "=\"" + $("#xColourHEX").attr("value") + "\"";    
     
-    if ($("#xColourCondition").attr("value")){ // not empty -- condition
-        html += " if (" + $("#xColourCondition").attr("value") + ")";
+    if ($("input[name='xColourRadio']:checked").val() == "if"){ // not empty -- condition
+        html += " if (" + $("#xColourIfCondition").attr("value") + ")";
+    }else if($("input[name='xColourRadio']:checked").val() == "custom"){
+        html += " " + $("#xColourCustomCondition").attr("value");
     }
     
     appendHiddenConfigDiv(elemID, html);
@@ -311,7 +322,7 @@ function addSize(){
     
         var html = "Max Node Size :: " + $("#xSizeMaxSize").attr("value");
         
-        maxNodeSizeElem = elemID;
+        //maxNodeSizeElem = elemID;
         
         appendUserConfigDiv(elemID, html);
         

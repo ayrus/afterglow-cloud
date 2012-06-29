@@ -87,7 +87,15 @@
 				 
 				 Colour: <input type="text" name="xColourHEX" id="xColourHEX" />
 				 
-				 Condition: <input type="text" name="xColourCondition" id="xColourCondition" />
+				 Condition: <br/><br/>
+				 
+				 <input type="radio" name="xColourRadio" id="xColourRadioNone" checked="checked" value="none"/> None<br/>
+				 
+				 <input type="radio" name="xColourRadio" id="xColourRadioIf" value="if"/> IF Condition 
+				 <input type="text" name="xColourIfCondition" id="xColourIfCondition" /><br/>
+				 
+				 <input type="radio" name="xColourRadio" id="xColourRadioCustom" value="custom"/> Custom condition 
+				 <input type="text" name="xColourCustomCondition" id="xColourCustomCondition" />
 				 
 				 <button name="xColourButton" id="xColourButton">Add</button>
 		      </fieldset>

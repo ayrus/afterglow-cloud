@@ -74,6 +74,13 @@ a:hover{
 #fieldCustom{
 	width: 400px;
 }
+
 .clear{
 	clear: both;
+}
+
+.colourBox{
+	width: 20px;
+	height: 15px;
+	border: 1px solid #A4A400;
 }
