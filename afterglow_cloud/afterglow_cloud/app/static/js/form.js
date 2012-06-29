@@ -359,8 +359,11 @@ function addColour(){
     
     appendUserConfigDiv(elemID, html);
 
-    
-    html = "color." + $("#xColourType").attr("value").toLowerCase() + "=\"" + $("#xColourHEX").attr("value") + "\"";    
+    if($("#xColourType").attr("value") == "All"){
+        html = "color=\"" + $("#xColourHEX").attr("value") + "\"";
+    }else{
+        html = "color." + $("#xColourType").attr("value").toLowerCase() + "=\"" + $("#xColourHEX").attr("value") + "\"";    
+    }
     
     if ($("input[name='xColourRadio']:checked").val() == "if"){ // not empty -- condition
         html += " if (" + $("#xColourIfCondition").attr("value") + ")";
@@ -379,7 +382,14 @@ function addThreshold(){
     
     appendUserConfigDiv(elemID, html);
     
-    html = "threshold." + $("#xThresholdType").attr("value").toLowerCase() + "=" + $("#xThresholdSize").attr("value");
+    if($("#xThresholdType").attr("value") == "All"){
+
+        html = "threshold=" + $("#xThresholdSize").attr("value");
+    
+    }else{
+    
+        html = "threshold." + $("#xThresholdType").attr("value").toLowerCase() + "=" + $("#xThresholdSize").attr("value");
+    }
 
     appendHiddenConfigDiv(elemID, html);
 }
@@ -407,7 +417,17 @@ function addClustering(){
     
     userHTML = "Cluster :: " + $("#xClusteringType").attr("value");
     
-    configHTML = "cluster." + $("#xClusteringType").attr("value").toLowerCase() + "=";
+    if($("#xClusteringType").attr("value") == "All"){
+    
+        configHTML = "cluster=";        
+    
+    }else{
+    
+        configHTML = "cluster." + $("#xClusteringType").attr("value").toLowerCase() + "=";    
+    
+    }
+    
+    
     
     if ($("input[name='xClusteringRadio']:checked").val() == "ip"){
         
@@ -435,7 +455,17 @@ function addSize(){
     
     var userHTML = "Size :: " + $("#xSizeType").attr("value");
     
-    var configHTML = "size." + $("#xSizeType").attr("value").toLowerCase() + "=";
+    var configHTML;
+
+    if($("#xSizeType").attr("value") == "All"){
+    
+        configHTML = "size=";
+    
+    }else{
+    
+        configHTML = "size." + $("#xSizeType").attr("value").toLowerCase() + "=";
+    
+    }
     
     
     if ($("input[name='xSizeRadio']:checked").val() == "exp"){
