@@ -55,11 +55,16 @@ a:hover{
 
 #fieldColour{
 	width: 500px;
+	float: left;
 }
 
 #fieldSize{
 	width: 700px;
 	float: left;
+}
+
+#fieldGlobals{
+	width: 500px;
 }
 
 #fieldThreshold{

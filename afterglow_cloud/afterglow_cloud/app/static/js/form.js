@@ -1,5 +1,8 @@
 var configCount = 0;
 var maxNodeSizeSet = false;
+var sumSourceSet = false;
+var sumEventSet = false;
+var sumTargetSet = false;
 
 $(document).ready(function(){
 
@@ -56,6 +59,20 @@ $(document).ready(function(){
         return false;
     });
     
+    $('#xMaxNodeSizeButton').click(function (){
+    
+        addMaxNodeSize();
+        
+        return false;
+    });
+    
+    $('#xSumButton').click(function (){
+    
+        addSum();
+        
+        return false;
+    });
+    
     
     $('#renderMainForm').submit(function () {
         
@@ -95,9 +112,9 @@ function appendUserConfigDiv(id, html){
     
     html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"removeConfigLine(this.parentNode.id)\">Remove</a>";
     
-    html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"changeUp(this.parentNode.id)\">Up</a>";
+    html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"changeOrder(this.parentNode.id, 'up')\">Up</a>";
     
-    html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"changeDown(this.parentNode.id)\">Down</a><br/><br/>";
+    html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"changeOrder(this.parentNode.id, 'down')\">Down</a><br/><br/>";
     
     //html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"alert(this.parentNode.id)\";>XX</a>";
     
@@ -121,15 +138,49 @@ function removeConfigLine(id){
 
     id = id.split("")[4];
     
-    //Check if maxnodesize config is being removed and activate the form if so.
+    //Check if any global config is being removed and re-enable the form if so.
+
+    var flag = $("#line" + id).find('#maxNodeSizeFlag').length;
     
-    //if(maxNodeSizeElem == id){
+    if (flag){
     
-    //    $("#xSizeMaxSize").prop('disabled', false);
+        maxNodeSizeSet = false;
         
-    //    maxNodeSizeSet = false;
-    //}
+        $("#xSizeMaxSize").prop('disabled', false);
+        
+        $("#xMaxNodeSizeButton").prop('disabled', false);
     
+    }
+    
+    flag = $("#line" + id).find('#sumSourceFlag').length;
+    
+    if (flag){
+    
+        sumSourceSet = false;
+        
+        $("#xSumOptionSource").prop('disabled', false);
+    
+    }
+    
+    flag = $("#line" + id).find('#sumEventFlag').length;
+    
+    if (flag){
+    
+        sumEventSet = false;
+        
+        $("#xSumOptionEvent").prop('disabled', false);
+    
+    }
+    
+    flag = $("#line" + id).find('#sumTargetFlag').length;
+    
+    if (flag){
+    
+        sumTargetSet = false;
+        
+        $("#xSumOptionTarget").prop('disabled', false);
+    
+    }
     
     //Remove the user displayed config:
     
@@ -148,6 +199,33 @@ function removeConfigLine(id){
     parent.removeChild(child);
 }
 
+function getNextSibling(node){
+
+    var next = node.nextSibling;
+
+    while (next != null && next.nodeType != 1){
+    
+        next = next.nextSibling;
+    }
+    
+    return next;
+}
+
+function getPreviousSibling(node){
+
+    var previous = node.previousSibling;
+    
+    while (previous != null && previous.nodeType != 1){
+    
+        previous = previous.previousSibling;
+    
+    }
+    
+    return previous;
+
+}
+
+/* refactor */
 function changeUp(id){
 
     id = parseInt(id.split("")[4]);
@@ -185,10 +263,49 @@ function changeUp(id){
 
 }
 
-function changeDown(id){
+function changeOrder(id, type){
 
+    var node = document.getElementById(id);
+    
     id = parseInt(id.split("")[4]);
     
+    if (type == "down"){
+        var next = getNextSibling(node);
+    }else{
+        var next = getPreviousSibling(node);
+    }
+    
+    var userID = "line" + id;
+            
+    var configID = "configLine" + id;
+    
+    if (next){
+    
+        var closestUserID = next.id;
+        
+        var closestConfigID = "configLine" + parseInt(next.id.split("")[4]);
+
+        var temp = document.getElementById(userID);
+        
+        document.getElementById(closestUserID).id = userID;
+            
+        temp.id = closestUserID;
+            
+        //Swap raw-config end IDs.
+        
+        //alert(closestConfigID);
+        
+        temp = document.getElementById(configID);
+        
+        document.getElementById(closestConfigID).id = configID;
+        
+        temp.id = closestConfigID;
+        
+        document.getElementById("alreadyAdded").insertBefore(document.getElementById(userID), document.getElementById(closestUserID)); 
+                
+    }
+    
+/*    
     
     for(var i=id+1; i<=configCount; i++){
     
@@ -222,7 +339,7 @@ function changeDown(id){
         
         }
     }
-
+*/
 }
 
 function addColour(){
@@ -313,73 +430,156 @@ function addClustering(){
 }
 
 function addSize(){
- 
-    if(!maxNodeSizeSet && $("#xSizeMaxSize").attr("value")){ //If the max node size hasn't been set yet.
     
-        maxNodeSizeSet = true;
+    var elemID = configCount++;
     
-        var elemID = configCount++;
+    var userHTML = "Size :: " + $("#xSizeType").attr("value");
     
-        var html = "Max Node Size :: " + $("#xSizeMaxSize").attr("value");
+    var configHTML = "size." + $("#xSizeType").attr("value").toLowerCase() + "=";
+    
+    
+    if ($("input[name='xSizeRadio']:checked").val() == "exp"){
         
-        //maxNodeSizeElem = elemID;
+        userHTML += " | Expression - " +  $("#xSizeCondition").attr("value");
+        
+        configHTML +=  $("#xSizeCondition").attr("value");
+    
+    }else{
+
+        if($("#xSizePreType").attr("value") == "num"){
+        
+            userHTML += " | Number of Occurences";
+            
+            configHTML += "$" + $("#xSizeType").attr("value").toLowerCase() + "Count{$" + $("#xSizeType").attr("value").toLowerCase() + "Name};";
+        
+        }else if($("#xSizePreType").attr("value") == "third"){
+        
+            userHTML += " | Third Data Column";
+            
+            configHTML += "$fields[2]"
+        
+        }else{
+        
+            userHTML += " | Fourth Data Column";
+            
+            configHTML += "$fields[3]"
+        
+        }
+    
+    }
+    
+    appendUserConfigDiv(elemID, userHTML);
+    
+    appendHiddenConfigDiv(elemID, configHTML);
+    
+}
+
+function addMaxNodeSize(){
+
+    if (!maxNodeSizeSet){
+    
+        var html = "Max Node Size :: " +  $("#xSizeMaxSize").attr("value");
+        
+        var elemID = configCount++;        
         
         appendUserConfigDiv(elemID, html);
         
         html = "maxnodesize=" + $("#xSizeMaxSize").attr("value");
         
+        var elem = document.createElement("div");
+        
+        elem.id = "maxNodeSizeFlag";
+        
+        elem.style.display = "none";
+        
+        document.getElementById("line" + elemID).appendChild(elem);
+        
+        
         appendHiddenConfigDiv(elemID, html);
         
+        maxNodeSizeSet = true;
+        
         $("#xSizeMaxSize").prop('disabled', true);
+        
+        $("#xMaxNodeSizeButton").prop('disabled', true);
     
     }
+
+}
+
+function addSum(){
+
+    var html;
     
     var elemID = configCount++;
     
-    var userHTML;
+    if($("#xSumType").attr("value") == "Source" && !sumSourceSet){
     
-    var configHTML;
-    
-    
-    if ($("input[name='xSizeRadio']:checked").val() == "exp"){
+        html = "Sum Source :: True";
         
-        userHTML = "Size :: " + $("#xSizeType").attr("value") + " | Expression - " +  $("#xSizeCondition").attr("value");
+        appendUserConfigDiv(elemID, html);
         
-        configHTML = "size." + $("#xSizeType").attr("value").toLowerCase() + "=" + $("#xSizeCondition").attr("value");
+        var elem = document.createElement("div");
+        
+        elem.id = "sumSourceFlag";
+        
+        elem.style.display = "none";
+        
+        document.getElementById("line" + elemID).appendChild(elem);
+        
+        html = "sum.source=1;"
+        
+        appendHiddenConfigDiv(elemID, html);
+        
+        $("#xSumOptionSource").prop('disabled', true);
+        
+        sumSourceSet = true;
     
-    }else{
+    }else if($("#xSumType").attr("value") == "Event" && !sumEventSet){
+    
+        html = "Sum Event :: True";
+        
+        appendUserConfigDiv(elemID, html);
+        
+        var elem = document.createElement("div");
+        
+        elem.id = "sumEventFlag";
+        
+        elem.style.display = "none";
+        
+        document.getElementById("line" + elemID).appendChild(elem);
+        
+        html = "sum.event=1;"
+        
+        appendHiddenConfigDiv(elemID, html);
+        
+        $("#xSumOptionEvent").prop('disabled', true);
+        
+        sumEventSet = true;
+    
+    }else if(!sumTargetSet){
+    
+        html = "Sum Target :: True";
+        
+        appendUserConfigDiv(elemID, html);
+        
+        var elem = document.createElement("div");
+        
+        elem.id = "sumTargetFlag";
+        
+        elem.style.display = "none";
+        
+        document.getElementById("line" + elemID).appendChild(elem);
+        
+        html = "sum.target=1;"
+        
+        appendHiddenConfigDiv(elemID, html);
+        
+        $("#xSumOptionTarget").prop('disabled', true);
+        
+        sumTargetSet = true;
     
     }
-    
-    appendUserConfigDiv(elemID, userHTML);
-    
-    appendHiddenConfigDiv(elemID, configHTML);
-    
-    
-    
-    elemID = configCount++;
-
-    userHTML = "Sum :: " + $("#xSizeType").attr("value") + " | ";
-    
-    configHTML = "sum." + $("#xSizeType").attr("value").toLowerCase() + "=";
-    
-    
-    if($('#xSizeSum').is(':checked')){
-        
-        userHTML += "True";
-        
-        configHTML += "1";
-    
-    }else{
-    
-        userHTML += "False";    
-    
-        configHTML += "0";
-    }
-    
-    appendUserConfigDiv(elemID, userHTML);
-    
-    appendHiddenConfigDiv(elemID, configHTML);
     
 }
 

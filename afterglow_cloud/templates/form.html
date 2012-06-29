@@ -76,6 +76,8 @@
 		      
 		      [---- TO ADD: custom configuration option-----]
 		      
+		      <br/><br/>
+		      
 		      <fieldset id="fieldColour">
 				 <legend>Add: Colour</legend>
 				 Node: <select name="xColourType" id="xColourType">
@@ -100,6 +102,23 @@
 				 <button name="xColourButton" id="xColourButton">Add</button>
 		      </fieldset>
 		      
+		      <fieldset id="fieldThreshold">
+		      
+				 <legend>Add: Threshold Filter</legend>		      
+		      
+				  Node: <select name="xThresholdType" id="xThresholdType">
+					    <option>Source</option>
+					    <option>Event</option>
+					    <option>Target</option>
+				 </select>
+				 
+				 Threshold: <input type="text" name="xThresholdSize" id="xThresholdSize" />
+				 
+				 <button name="xThresholdButton" id="xThresholdButton">Add</button>
+		      </fieldset>
+
+		      <div class="clear"></div>
+		      
 		      <br/><br/>
 		      
 		      <fieldset id="fieldSize">
@@ -119,36 +138,38 @@
 				 
 				 <input type="radio" name="xSizeRadio" id="xSizeRadioPre value="pre"/> Predefined
 				 <select name="xSizePreType" id="xSizePreType">
-					    <option>Number of occurrences</option>
-					    <option>Third data column</option>
-					    <option>Fourth data column</option>
+					    <option value="num">Number of occurrences</option>
+					    <option value="third">Third data column</option>
+					    <option value="fourth">Fourth data column</option>
 				 </select>				 
 				 
-				 <br/><br/>
+				 <!-- 
 				 
-				 Max node size: <input type="text" name="xSizeMaxSize" id="xSizeMaxSize" />
-				 
-				 Sum values: <input type="checkbox" name="xSizeSum" id="xSizeSum"/>
+				 Sum values: <input type="checkbox" name="xSizeSum" id="xSizeSum"/> -->
 				 
 				 <button name="xSizeButton" id="xSizeButton">Add</button>				 
 				 
 		      </fieldset>
 		      
-		      <fieldset id="fieldThreshold">
-		      
-				 <legend>Add: Threshold Filter</legend>		      
-		      
-				  Node: <select name="xThresholdType" id="xThresholdType">
-					    <option>Source</option>
-					    <option>Event</option>
-					    <option>Target</option>
+		      <fieldset id="fieldGlobals">
+				 <legend>Add: Global settings</legend>
+				 
+				 Max node size: <input type="text" name="xSizeMaxSize" id="xSizeMaxSize" />
+				 
+				 <button name="xMaxNodeSizeButton" id="xMaxNodeSizeButton">Add</button>
+				 
+				 <br/><br/>
+				 
+				 Sum Nodes: <select name="xSumType" id="xSumType">
+					    <option id="xSumOptionSource">Source</option>
+					    <option id="xSumOptionEvent">Event</option>
+					    <option id="xSumOptionTarget">Target</option>
 				 </select>
 				 
-				 Threshold: <input type="text" name="xThresholdSize" id="xThresholdSize" />
+				 <button name="xSumButton" id="xSumButton">Add</button>
 				 
-				 <button name="xThresholdButton" id="xThresholdButton">Add</button>
 		      </fieldset>
-
+		      
 		      <div class="clear"></div>
 		      
 		      <br/><br/>
