@@ -73,6 +73,24 @@ $(document).ready(function(){
         return false;
     });
     
+    $('input[name=xConfigType]').change(function() {
+    
+        if($('input[name=xConfigType]:checked').val() == "manual"){
+        
+            $("#customConfig").hide();
+            
+            $("#manualConfig").fadeToggle(400);
+        
+        }else{
+        
+            $("#manualConfig").hide();
+        
+            $("#customConfig").fadeToggle(400);
+        }
+    
+    });
+
+    
     
     $('#renderMainForm').submit(function () {
         
@@ -550,11 +568,19 @@ function populateProperty(){
 
     var value = "";
     
-    for (var i = 0; i <= configCount; i++){
+    if($('input[name=xConfigType]:checked').val() == "manual"){
     
-        if ($("#configLine" + i).length > 0){ //if exists.
-            value += document.getElementById("configLine" + i).innerHTML + "\n"; 
+        value = $("#xManualConfig").attr("value");
+    
+    }else{
+    
+        for (var i = 0; i <= configCount; i++){
+        
+            if ($("#configLine" + i).length > 0){ //if exists.
+                value += document.getElementById("configLine" + i).innerHTML + "\n"; 
+            }
         }
+        
     }
     
     document.getElementById("id_propertyConfig").value = value;
