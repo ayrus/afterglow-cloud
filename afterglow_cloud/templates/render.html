@@ -6,21 +6,20 @@
 
 {% block body %}
 
-    {% if not status %}
-    
-    <center><b>Rendered Graph</b>: </center>
-    
-    <img src="{{ STATIC_URL }}rendered/{{ requestID }}.gif" alt=""/>
-    
-    {% else %}
+	{% if not status %}
 
-        <center><b>
-    
-        {% ifequal status 1 %}
-            Error: Could not create an output image (1).
-        {% endifequal %}
-    
-        {% ifequal status 2 %}
+		<center><b>Rendered Graph</b>: </center>
+		<img src="{{ STATIC_URL }}rendered/{{ requestID }}.gif" alt=""/>
+	
+	{% else %}
+
+		<center><b>
+
+		{% ifequal status 1 %}
+			Error: Could not create an output image (1).
+		{% endifequal %}
+
+		{% ifequal status 2 %}
             Error: Data file does not exist (2).
         {% endifequal %}
         

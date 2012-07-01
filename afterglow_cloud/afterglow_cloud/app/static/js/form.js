@@ -8,7 +8,7 @@ $(document).ready(function(){
 
     $('#id_textLabel').miniColors();
     
-    $('#xColourHEX').miniColors();
+	$('#xColourHEX').miniColors();
 
     $("#id_overrideEdge").click(function () { 
         toggleShowOverrideInput();
