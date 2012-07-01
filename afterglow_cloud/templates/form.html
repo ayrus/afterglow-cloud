@@ -15,46 +15,44 @@
 {% block body %}
 
     {% if form.errors %}
-        <p style="color: red;">
             Please correct the error{{ form.errors|pluralize }} below.
-        </p>
     {% endif %}
 
     <form enctype="multipart/form-data" method="post" action="process" id="renderMainForm">
         {% csrf_token %}
 
-           <div class="field"> <label>Data:</label>  {{ form.dataFile }} </div>
+           <div class="field"> {{ form.dataFile.errors }} <label>Data:</label>  {{ form.dataFile }} </div>
 	   
-	   <div class="field"> <label>Two node mode:</label> {{ form.twoNodeMode }} </div>
+	   <div class="field"> {{ form.twoNodeMode.errors }} <label>Two node mode:</label> {{ form.twoNodeMode }} </div>
 	   
 	   <div id="settingsLabel"> Settings: </div>
 	   
 	   <div id="mainSettings">
-		      <div class="field"> <label>Print node count:</label>  {{ form.printNodeCount }}  </div> 
+		      <div class="field"> {{ form.printNodeCount.errors }} <label>Print node count:</label>  {{ form.printNodeCount }}  </div> 
 		      
-		      <div class="field"> <label>Omit node labelling:</label>  {{ form.omitLabelling }} </div>
+		      <div class="field"> {{ form.omitLabelling.errors }} <label>Omit node labelling:</label>  {{ form.omitLabelling }} </div>
 		      
-		      <div class="field"> <label>Split source and target nodes:</label>  {{ form.splitNodes }} </div>
+		      <div class="field"> {{ form.splitNodes.errors }} <label>Split source and target nodes:</label>  {{ form.splitNodes }} </div>
 		      
-		      <div class="field"> <label>Splitting:</label>  {{ form.splitMode }} </div>
+		      <div class="field"> {{ form.splitMode.errors }} <label>Splitting:</label>  {{ form.splitMode }} </div>
 		      
-		      <div class="field"> <label>Override edge length:</label>  {{ form.overrideEdge }} &nbsp;&nbsp;&nbsp;&nbsp; {{ form.overrideEdgeLength }} </div> 
+		      <div class="field"> {{ form.overrideEdge.errors }} <label>Override edge length:</label>  {{ form.overrideEdge }} &nbsp;&nbsp;&nbsp;&nbsp; {{ form.overrideEdgeLength }} </div> 
 		      
-		      <div class="field"> <label>Text label colour:</label>  {{ form.textLabel }} </div>
+		      <div class="field"> {{ form.textLabel.errors }} <label>Text label colour:</label>  {{ form.textLabel }} </div>
 	   </div>
 	   
 	   <div id="advancedLabel"> Advanced Settings: </div>
 	   
 	   <div id="advanced">
-		      <div class="field"> <label>Skip Lines:</label>  {{ form.skipLines }}  </div> 
+		      <div class="field"> {{ form.skipLines.errors }} <label>Skip Lines:</label>  {{ form.skipLines }}  </div> 
 		      
-		      <div class="field"> <label>Maximum lines:</label>  {{ form.maxLines }}  </div>
+		      <div class="field"> {{ form.maxLines.errors }} <label>Maximum lines:</label>  {{ form.maxLines }}  </div>
 		      
-		      <div class="field"> <label>Omit threshold for each node:</label>  {{ form.omitThreshold }}  </div>
+		      <div class="field"> {{ form.omitThreshold.errors }} <label>Omit threshold for each node:</label>  {{ form.omitThreshold }}  </div>
 		      
-		      <div class="field"> <label>Source fan out threshold:</label>  {{ form.sourceFanOut }}  </div>
+		      <div class="field"> {{ form.sourceFanOut.errors }} <label>Source fan out threshold:</label>  {{ form.sourceFanOut }}  </div>
 		      
-		      <div class="field"> <label>Event fan out threshold:</label>  {{ form.eventFanOut }}  </div>
+		      <div class="field"> {{ form.eventFanOut.errors }} <label>Event fan out threshold:</label>  {{ form.eventFanOut }}  </div>
 	   </div>
 	    
 	   <div id="configLabel">Configuration: </div>
@@ -154,10 +152,6 @@
 						       <option value="third">Third data column</option>
 						       <option value="fourth">Fourth data column</option>
 					    </select>				 
-					    
-					    <!-- 
-					    
-					    Sum values: <input type="checkbox" name="xSizeSum" id="xSizeSum"/> -->
 					    
 					    <button name="xSizeButton" id="xSizeButton">Add</button>				 
 					    

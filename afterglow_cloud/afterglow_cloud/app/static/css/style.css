@@ -93,3 +93,19 @@ a:hover{
 #manualConfig{
 	display: none;
 }
+
+ul.errorlist {
+	margin: 0;
+        padding: 0;
+	width: 500px;
+}
+    
+.errorlist li {
+        background-color: #E34242;
+        color: white;
+        font-size: 12px;
+	font-weight: bold;
+        margin: 0 0 3px;
+        padding: 4px 5px;
+	display: block;
+}
