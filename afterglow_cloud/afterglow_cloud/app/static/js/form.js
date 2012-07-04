@@ -146,14 +146,12 @@ function appendUserConfigDiv(id, html){
     
     elem.id = "line" + id;
     
-    html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"removeConfigLine(this.parentNode.id)\">Remove</a>";
+    html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"removeConfigLine(this.parentNode.id)\" class=\"removeLink\" alt=\"Remove line\">&nbsp;&nbsp;&nbsp;&nbsp;</a>";
     
-    html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"changeOrder(this.parentNode.id, 'up')\">Up</a>";
+    html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"changeOrder(this.parentNode.id, 'up')\" class=\"upLink\" alt=\"Move Up\">&nbsp;&nbsp;&nbsp;&nbsp;</a>";
     
-    html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"changeOrder(this.parentNode.id, 'down')\">Down</a><br/><br/>";
-    
-    //html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"alert(this.parentNode.id)\";>XX</a>";
-    
+    html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"changeOrder(this.parentNode.id, 'down')\" class=\"downLink\" alt=\"Move Down\">&nbsp;&nbsp;&nbsp;&nbsp;</a>";
+   
     elem.innerHTML = html;
 
     document.getElementById("alreadyAdded").appendChild(elem);
@@ -655,8 +653,8 @@ function validateEdgeLength(){
 	
 			showParent("overrideEdgeE");
 
-			$('#mainSettings').show();   
-
+			$('#mainSettings').show();
+			
 			return false;
 		}
 

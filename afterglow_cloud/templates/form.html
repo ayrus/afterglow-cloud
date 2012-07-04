@@ -158,8 +158,11 @@
 
 			<br/><br/>
 
-			Config Type: <input type="radio" name="xConfigType" checked="checked" value="custom"/> Custom
-			<input type="radio" name="xConfigType" value="manual"/> Manual
+			<div id="configType">
+				<span id="configTypeText">Config Type:</span>
+				<input type="radio" name="xConfigType" checked="checked" value="custom" class="configTypeRadio"/>Custom
+				<input type="radio" name="xConfigType" value="manual" class="configTypeRadio"/>Manual
+			</div>
 
 			<br/><br/>
 
@@ -174,41 +177,59 @@
 				<fieldset id="fieldColour">
 
 					<legend>Add: Colour</legend>
-					Node: <select name="xColourType" id="xColourType">
-						<option>Source</option>
-						<option>Event</option>
-						<option>Target</option>
-						<option>Edge</option>
-						<option>All</option>
-					</select>
-
-					Colour: <input type="text" name="xColourHEX" id="xColourHEX" />
-
-					Condition: <br/><br/>
-					<input type="radio" name="xColourRadio" id="xColourRadioNone" checked="checked" value="none"/> None<br/>
-					<input type="radio" name="xColourRadio" id="xColourRadioIf" value="if"/> IF Condition
-					<input type="text" name="xColourIfCondition" id="xColourIfCondition" /><br/>
-					<input type="radio" name="xColourRadio" id="xColourRadioCustom" value="custom"/> Custom condition
-					<input type="text" name="xColourCustomCondition" id="xColourCustomCondition" />
-
-					<button name="xColourButton" id="xColourButton">Add</button>
+					
+					<div class="field">
+						<label>Node:</label>
+						<select name="xColourType" id="xColourType">
+							<option>Source</option>
+							<option>Event</option>
+							<option>Target</option>
+							<option>Edge</option>
+							<option>All</option>
+						</select>
+					</div>
+					
+					<div class="field">
+						<label>Colour:</label> <input type="text" name="xColourHEX" id="xColourHEX" />
+					</div>
+					
+					<div class="field"><label><u>Condition</u>:<label></div> <br/><br/>
+					
+					<input type="radio" name="xColourRadio" id="xColourRadioNone" checked="checked" value="none"/>None<br/>
+					
+					<div class="field">
+						<label><input type="radio" name="xColourRadio" id="xColourRadioIf" value="if"/>IF Condition:</label>
+						<input type="text" name="xColourIfCondition" id="xColourIfCondition" />
+					</div>
+					
+					<div class="field">
+						<label><input type="radio" name="xColourRadio" id="xColourRadioCustom" value="custom"/>Custom condition:</label>
+						<input type="text" name="xColourCustomCondition" id="xColourCustomCondition" />
+					</div>
+					
+					<button name="xColourButton" id="xColourButton" class="addButton"></button>
 				</fieldset>
 
 				<fieldset id="fieldThreshold">
 
 					<legend>Add: Threshold Filter</legend>
 
-					Node: <select name="xThresholdType" id="xThresholdType">
-						<option>Source</option>
-						<option>Event</option>
-						<option>Target</option>
-						<option>All</option>
-					</select>
-					<br/>
+					<div class="field">					
+						<label>Node:</label> 
+						<select name="xThresholdType" id="xThresholdType">
+							<option>Source</option>
+							<option>Event</option>
+							<option>Target</option>
+							<option>All</option>
+						</select>
+					</div>
+					
+					<div class="field">					
+						<label>Threshold:</label>
+					 	<input type="text" name="xThresholdSize" id="xThresholdSize" />
+					</div>
 
-					Threshold: <input type="text" name="xThresholdSize" id="xThresholdSize" />
-
-					<button name="xThresholdButton" id="xThresholdButton">Add</button>
+					<button name="xThresholdButton" id="xThresholdButton" class="addButton"></button>
 					<div class="cErrorConfig"><span id="thresholdE" class="cErrorMsg"></span></div>
 				</fieldset>
 
@@ -219,44 +240,58 @@
 
 					<legend>Add: Node Sizes</legend>
 
-					Node: <select name="xSizeType" id="xSizeType">
-						<option>Source</option>
-						<option>Event</option>
-						<option>Target</option>
-						<option>All</option>
-					</select>
-					<br/><br/>
+					<div class="field">					
+						<label>Node:</label>
+						<select name="xSizeType" id="xSizeType">
+							<option>Source</option>
+							<option>Event</option>
+							<option>Target</option>
+							<option>All</option>
+						</select>
+					</div>
 
-					Condition: <br/>
-					<input type="radio" name="xSizeRadio" id="xSizeRadioExp" checked="checked" value="exp"/> Expression
-					<input type="text" name="xSizeCondition" id="xSizeCondition"/>
-					<input type="radio" name="xSizeRadio" id="xSizeRadioPre value="pre"/> Predefined
-					<select name="xSizePreType" id="xSizePreType">
-						<option value="num">Number of occurrences</option>
-						<option value="third">Third data column</option>
-						<option value="fourth">Fourth data column</option>
-					</select>
+					<div class="field"><label><u>Condition</u>:<label></div> <br/><br/>
+					
+					<div class="field">
+						<label><input type="radio" name="xSizeRadio" id="xSizeRadioExp" checked="checked" value="exp"/>Expression:</label>
+						<input type="text" name="xSizeCondition" id="xSizeCondition"/>
+					</div>
+					
+					<div class="field">
+						<label><input type="radio" name="xSizeRadio" id="xSizeRadioPre value="pre"/>Predefined:</label>
+						<select name="xSizePreType" id="xSizePreType">
+							<option value="num">Number of occurrences</option>
+							<option value="third">Third data column</option>
+							<option value="fourth">Fourth data column</option>
+						</select>
+					</div>
 
-					<button name="xSizeButton" id="xSizeButton">Add</button>
+					<button name="xSizeButton" id="xSizeButton" class="addButton"></button>
 				</fieldset>
 
 				<fieldset id="fieldGlobals">
 
 					<legend>Add: Global settings</legend>
 
-					Max node size: <input type="text" name="xSizeMaxSize" id="xSizeMaxSize" />
-					<button name="xMaxNodeSizeButton" id="xMaxNodeSizeButton">Add</button>
+					<div class="field">
+						<label>Max node size:</label>
+						<input type="text" name="xSizeMaxSize" id="xSizeMaxSize" />
+						<button name="xMaxNodeSizeButton" id="xMaxNodeSizeButton" class="addButtonSmall"></button>
+					</div>
+					
 					<div class="cErrorConfig"><span id="maxNodeSizeE" class="cErrorMsg"></span></div>
+					
+					<div class="field">
+						<label>Sum Nodes:</label>
+						<select name="xSumType" id="xSumType">
+							<option id="xSumOptionSource">Source</option>
+							<option id="xSumOptionEvent">Event</option>
+							<option id="xSumOptionTarget">Target</option>
+						</select>
+						<button name="xSumButton" id="xSumButton" class="addButtonSmall"></button>
+					</div>
 
-					<br/><br/>
-
-					Sum Nodes: <select name="xSumType" id="xSumType">
-						<option id="xSumOptionSource">Source</option>
-						<option id="xSumOptionEvent">Event</option>
-						<option id="xSumOptionTarget">Target</option>
-					</select>
-
-					<button name="xSumButton" id="xSumButton">Add</button>
+					
 				</fieldset>
 
 				<div class="clear"></div>
@@ -266,30 +301,34 @@
 
 					<legend>Add: Clustering</legend>
 
-					Node: <select name="xClusteringType" id="xClusteringType">
-						<option>Source</option>
-						<option>Event</option>
-						<option>Target</option>
-						<option>All</option>
-					</select>
-					<br/><br/>
-
-					Condition:
-					<br/><br/>
-					<input type="radio" name="xClusteringRadio" id="xClusteringRadioIP" value="ip" checked="checked"/> IP Classes
-					<select name="xClusteringIPType" id="xClusteringIPType">
-						<option>Class A</option>
-						<option>Class B</option>
-						<option>Class C</option>
-						<option>Class D</option>
-					</select>
-					<br/>
-
-					<input type="radio" name="xClusteringRadio" id="xClusteringRadioExp" value="exp"/> Expression
-					<input type="text" name="xClusteringCondition" id="xClusteringCondition"/>
-					<br/>
-
-					<button name="xClusteringButton" id="xClusteringButton">Add</button>
+					<div class="field">
+						<label>Node:</label>
+						<select name="xClusteringType" id="xClusteringType">
+							<option>Source</option>
+							<option>Event</option>
+							<option>Target</option>
+							<option>All</option>
+						</select>
+					</div>
+					
+					<div class="field"><label><u>Condition</u>:<label></div> <br/><br/>
+					
+					<div class="field">
+						<label><input type="radio" name="xClusteringRadio" id="xClusteringRadioIP" value="ip" checked="checked"/>IP Classes:</label>
+						<select name="xClusteringIPType" id="xClusteringIPType">
+							<option>Class A</option>
+							<option>Class B</option>
+							<option>Class C</option>
+							<option>Class D</option>
+						</select>
+					</div>
+					
+					<div class="field">
+						<label><input type="radio" name="xClusteringRadio" id="xClusteringRadioExp" value="exp"/>Expression:</label>
+						<input type="text" name="xClusteringCondition" id="xClusteringCondition"/>
+					</div>
+					
+					<button name="xClusteringButton" id="xClusteringButton" class="addButton"></button>
 				</fieldset>
 
 				<fieldset id="fieldCustom">
@@ -297,7 +336,7 @@
 					<legend>Add: Custom Line</legend>
 
 					<input type="text" name="xCustomCondition" id="xCustomCondition"/>
-					<button name="xCustomButton" id="xCustomButton">Add</button>
+					<button name="xCustomButton" id="xCustomButton" class="addButton"></button>
 				</fieldset>
 
 				<div class="clear"></div>

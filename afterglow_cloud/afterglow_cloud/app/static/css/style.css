@@ -34,12 +34,13 @@ a:hover{
 	margin-bottom: 10px;
 }
 
+
 #alreadyLabel{
 	font-size: 18px !important;
 	text-decoration: none !important;
 }
 
-#mainSettings, #advanced, #config{
+#mainSettings, #advanced{
 	margin-left: 50px;
 	display: none;
 }
@@ -59,25 +60,28 @@ a:hover{
 }
 
 #fieldSize{
-	width: 700px;
+	width: 500px;
 	float: left;
 }
 
 #fieldGlobals{
-	width: 500px;
+	width: 400px;
+	float: right;
 }
 
 #fieldThreshold{
-	width: 350px;
+	width: 400px;
+	float: right;
 }
 
 #fieldClustering{
-	width: 400px;
+	width: 500px;
 	float: left;
 }
 
 #fieldCustom{
 	width: 400px;
+	float: right;
 }
 
 .clear{
@@ -118,4 +122,91 @@ ul.errorlist, .cError {
 	margin: 0;
 	padding: 0;
 	width: 250px;
+}
+
+#config{
+	margin-left: 50px;
+	display: none;
+	width: 1000px;
+}
+
+#config label{
+	width: 35%;
+	font-variant: normal;
+	font-size: 15px;
+}
+
+#config .field{
+	margin-bottom: 10px;
+}
+
+fieldset legend{
+	font-weight: bold;
+}
+
+#xThresholdSize, #xSizeMaxSize{
+	width: 150px;
+}
+
+.addButton{
+	background: url('../images/add.png') no-repeat;
+	width: 32px;
+	height: 32px;
+	border: 0;
+	outline: none;
+}
+
+.addButtonSmall{
+	background: url('../images/add16.png') no-repeat;
+	width: 16px;
+	height: 16px;
+	border: 0;
+	outline: none;
+}
+
+.removeLink{
+	background: url('../images/cancel.png') no-repeat;
+	width: 16px;
+	height: 16px;
+	border: 0;
+	outline: none;
+	text-decoration: none;
+}
+
+.upLink{
+	background: url('../images/arrow_up.png') no-repeat;
+	width: 16px;
+	height: 16px;
+	border: 0;
+	outline: none;
+	text-decoration: none;
+}
+
+.downLink{
+	background: url('../images/arrow_down.png') no-repeat;
+	width: 16px;
+	height: 16px;
+	border: 0;
+	outline: none;
+	text-decoration: none;
+}
+
+#alreadyAddedHidden{
+	display: none;
+}
+
+#configTypeText{
+	font-size: 19px;
+	font-variant: small-caps;
+	font-weight: bold;
+	margin-bottom: 10px;
+}
+
+#configType{
+	font-size: 17px;
+	
+}
+
+.configTypeRadio{
+	margin-left: 50px;
 }
