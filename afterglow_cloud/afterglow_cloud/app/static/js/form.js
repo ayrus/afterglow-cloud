@@ -10,6 +10,10 @@ $(document).ready(function(){
     
 	$('#xColourHEX').miniColors();
 
+	if($("#id_overrideEdge").is(":checked")){
+		toggleShowOverrideInput();
+	}
+
     $("#id_overrideEdge").click(function () { 
         toggleShowOverrideInput();
     });
@@ -33,7 +37,10 @@ $(document).ready(function(){
     });
     
     $('#xThresholdButton').click(function () {
-        addThreshold();
+
+		if(validateConfig('threshold')){
+        	addThreshold();
+		}
         
         return false;
     });
@@ -60,10 +67,13 @@ $(document).ready(function(){
     });
     
     $('#xMaxNodeSizeButton').click(function (){
-    
-        addMaxNodeSize();
-        
-        return false;
+
+		if(validateConfig('maxNodeSize')){
+        	addMaxNodeSize();
+		}
+
+		return false;
+
     });
     
     $('#xSumButton').click(function (){
@@ -93,10 +103,18 @@ $(document).ready(function(){
     
     
     $('#renderMainForm').submit(function () {
+
+		resetValidations();
+	
+		var dataFile = validateDataFile();
+
+		var edgeLength = validateEdgeLength();
+
+		var advancedIntegers = validateAdvancedIntegers();
         
         populateProperty();    
     
-        //return false;
+        return dataFile && edgeLength && advancedIntegers
     });
     
 });
@@ -586,4 +604,142 @@ function populateProperty(){
     document.getElementById("id_propertyConfig").value = value;
 
     //alert(value);
+}
+
+function showParent(id){
+
+	$("#" + id).parent().attr('style','display: block !important');
+
+}
+
+function hideParent(id){
+
+	$("#" + id).parent().attr('style','display: none !important');
+
+}
+
+function resetValidations(){
+
+	var ids = new Array("dataFileE", "overrideEdgeE", "maxLinesE", "skipLinesE", "omitThresholdE", "sourceFanOutE", "eventFanOutE");
+
+	for (var i = 0; i < ids.length; i++){
+		hideParent(ids[i]);
+	}
+}
+
+function validateDataFile(){
+
+	if(!$("#id_dataFile").attr("value")){
+
+		$("#dataFileE").html("Please choose a file.");
+
+		showParent("dataFileE");
+
+		return false;
+
+	}
+    
+    return true;
+
+}
+
+function validateEdgeLength(){
+
+	if($("#id_overrideEdge").is(":checked")){
+
+		var condition = /^[0-9]+(\.[0-9]{1,2})?$/;
+
+		if(!condition.test($("#id_overrideEdgeLength").attr("value"))){
+
+			$("#overrideEdgeE").html("Please enter a positive decimal value. Maximum of two decimal places.");
+	
+			showParent("overrideEdgeE");
+
+			$('#mainSettings').show();   
+
+			return false;
+		}
+
+	}
+	
+	return true;
+
+}
+
+function validateAdvancedIntegers(){
+
+	var flag = true;
+
+	var posInteger = /^[0-9]+$/;
+
+	var intFields = new Array("skipLines", "omitThreshold", "sourceFanOut", "eventFanOut");
+
+	if(!posInteger.test($("#id_maxLines").attr("value"))){
+
+		$("#maxLinesE").html("Please enter a valid decimal.");
+
+		showParent("maxLinesE");
+
+		flag = flag = false;
+
+	}else if(parseInt($("#id_maxLines").attr("value")) < 1 || parseInt($("#id_maxLines").attr("value")) > 999999){
+	
+		$("#maxLinesE").html("Please enter a value between 1 - 999999");
+
+		showParent("maxLinesE");
+
+		flag = flag && false;
+
+	}
+
+	for (var i = 0; i < intFields.length; i++){
+
+		if(!posInteger.test($("#id_" + intFields[i]).attr("value"))){
+
+			$("#" + intFields[i] +"E").html("Please enter a valid decimal.");		
+
+			showParent(intFields[i] + "E");
+	
+			flag = flag && false;
+
+		}
+	}
+	
+	if(!flag){
+		$('#advanced').show();
+	}
+	
+	return flag;
+}
+
+function validateConfig(what){
+
+	var posInteger = /^[0-9]+$/;
+
+	hideParent(what + "E");
+
+	if(what == "maxNodeSize"){
+
+		if(!posInteger.test($("#xSizeMaxSize").attr("value"))){
+
+			$("#" + what +"E").html("Please enter a valid decimal.");		
+
+			showParent(what + "E");
+
+			return false;
+		}
+
+	}else{
+
+		if(!posInteger.test($("#xThresholdSize").attr("value"))){
+
+			$("#" + what +"E").html("Please enter a valid decimal.");		
+
+			showParent(what + "E");
+
+			return false;
+		}	
+	}
+
+	return true;
 }

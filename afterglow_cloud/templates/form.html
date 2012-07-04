@@ -25,6 +25,7 @@
 			{{ form.dataFile.errors }}
 			<label>Data:</label>
 			{{ form.dataFile }} 
+			<div class="cError"><span id="dataFileE" class="cErrorMsg"></span></div>
 
 		</div>
 
@@ -75,9 +76,11 @@
 			<div class="field">
 
 				{{ form.overrideEdge.errors }}
+				{{ form.overrideEdgeLength.errors }}
 				<label>Override edge length:</label>
 				{{ form.overrideEdge }} &nbsp;&nbsp;&nbsp;&nbsp; 
 				{{form.overrideEdgeLength }}
+				<div class="cError"><span id="overrideEdgeE" class="cErrorMsg"></span></div>
 			</div>
 
 			<div class="field">
@@ -98,6 +101,7 @@
 				{{ form.skipLines.errors }}
 				<label>Skip Lines:</label>
 				{{ form.skipLines }}
+				<div class="cError"><span id="skipLinesE" class="cErrorMsg"></span></div>
 
 			</div>
 
@@ -106,6 +110,7 @@
 				{{ form.maxLines.errors }}
 				<label>Maximum lines:</label>
 				{{ form.maxLines }}
+				<div class="cError"><span id="maxLinesE" class="cErrorMsg"></span></div>
 
 			</div>
 
@@ -114,6 +119,7 @@
 				{{ form.omitThreshold.errors }}
 				<label>Omit threshold for each node:</label>
 				{{ form.omitThreshold }}
+				<div class="cError"><span id="omitThresholdE" class="cErrorMsg"></span></div>
 
 			</div>
 
@@ -122,6 +128,7 @@
 				{{ form.sourceFanOut.errors }}
 				<label>Source fan out threshold:</label>
 				{{ form.sourceFanOut }}
+				<div class="cError"><span id="sourceFanOutE" class="cErrorMsg"></span></div>
 
 			</div>
 
@@ -130,6 +137,7 @@
 				{{ form.eventFanOut.errors }}
 				<label>Event fan out threshold:</label>
 				{{ form.eventFanOut }}
+				<div class="cError"><span id="eventFanOutE" class="cErrorMsg"></span></div>
 
 			</div>
 	   </div>
@@ -143,8 +151,6 @@
 			<div id="alreadyAdded"> </div>
 
 			<br/><br/>
-
-			[---- Following is raw (backend) preview of configuration. Will be hidden eventually. -----] : <br/>
 
 			<div id="alreadyAddedHidden"> </div>
 
@@ -203,6 +209,7 @@
 					Threshold: <input type="text" name="xThresholdSize" id="xThresholdSize" />
 
 					<button name="xThresholdButton" id="xThresholdButton">Add</button>
+					<div class="cErrorConfig"><span id="thresholdE" class="cErrorMsg"></span></div>
 				</fieldset>
 
 				<div class="clear"></div>
@@ -239,6 +246,7 @@
 
 					Max node size: <input type="text" name="xSizeMaxSize" id="xSizeMaxSize" />
 					<button name="xMaxNodeSizeButton" id="xMaxNodeSizeButton">Add</button>
+					<div class="cErrorConfig"><span id="maxNodeSizeE" class="cErrorMsg"></span></div>
 
 					<br/><br/>
 

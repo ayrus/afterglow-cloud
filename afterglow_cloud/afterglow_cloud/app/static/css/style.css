@@ -94,13 +94,13 @@ a:hover{
 	display: none;
 }
 
-ul.errorlist {
+ul.errorlist, .cError {
 	margin: 0;
         padding: 0;
 	width: 500px;
 }
     
-.errorlist li {
+.errorlist li, .cErrorMsg{
         background-color: #E34242;
         color: white;
         font-size: 12px;
@@ -108,4 +108,14 @@ ul.errorlist {
         margin: 0 0 3px;
         padding: 4px 5px;
 	display: block;
+}
+
+.cError, .cErrorConfig{
+	display: none !important;
+}
+
+.cErrorConfig{
+	margin: 0;
+	padding: 0;
+	width: 250px;
 }
