@@ -9,6 +9,8 @@ $(document).ready(function(){
     $('#id_textLabel').miniColors();
     
 	$('#xColourHEX').miniColors();
+	
+	$(".tooltip").tipTip({maxWidth: "250px"});
 
 	if($("#id_overrideEdge").is(":checked")){
 		toggleShowOverrideInput();
@@ -146,11 +148,11 @@ function appendUserConfigDiv(id, html){
     
     elem.id = "line" + id;
     
-    html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"removeConfigLine(this.parentNode.id)\" class=\"removeLink\" alt=\"Remove line\">&nbsp;&nbsp;&nbsp;&nbsp;</a>";
+    html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"removeConfigLine(this.parentNode.id)\" class=\"removeLink\" title=\"Remove line\">&nbsp;&nbsp;&nbsp;&nbsp;</a>";
     
-    html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"changeOrder(this.parentNode.id, 'up')\" class=\"upLink\" alt=\"Move Up\">&nbsp;&nbsp;&nbsp;&nbsp;</a>";
+    html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"changeOrder(this.parentNode.id, 'up')\" class=\"upLink\" title=\"Move Up\">&nbsp;&nbsp;&nbsp;&nbsp;</a>";
     
-    html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"changeOrder(this.parentNode.id, 'down')\" class=\"downLink\" alt=\"Move Down\">&nbsp;&nbsp;&nbsp;&nbsp;</a>";
+    html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"changeOrder(this.parentNode.id, 'down')\" class=\"downLink\" title=\"Move Down\">&nbsp;&nbsp;&nbsp;&nbsp;</a>";
    
     elem.innerHTML = html;
 

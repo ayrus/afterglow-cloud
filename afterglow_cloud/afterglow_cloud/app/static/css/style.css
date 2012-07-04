@@ -210,3 +210,12 @@ fieldset legend{
 .configTypeRadio{
 	margin-left: 50px;
 }
+
+.tooltip{
+	font-size: 14px;
+}
+
+.configTip{
+	float: right;
+	font-size: 18px;
+}

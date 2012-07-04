@@ -6,8 +6,10 @@
 
 {% block extra_head %}	
 	<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/jquery.miniColors.css" />
+	<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/tipTip.css" />
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
 	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.miniColors.min.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.tipTip.js"></script>
 	<script type="text/javascript" src="{{ STATIC_URL }}js/form.js"></script>
 {% endblock %}
 
@@ -33,7 +35,7 @@
 
 			{{ form.twoNodeMode.errors }}
 			<label>Two node mode:</label>
-			{{ form.twoNodeMode }}
+			{{ form.twoNodeMode }} <a href="#" class="tooltip" title="When using data with two columns, this option should be checked.">?</a>
 
 		</div>
 
@@ -45,7 +47,7 @@
 
 				{{ form.printNodeCount.errors }}
 				<label>Print node count:</label>
-				{{ form.printNodeCount }}
+				{{ form.printNodeCount }} <a href="#" class="tooltip" title="Check to print the number of instances of each node present.">?</a>
 
 			</div>
 
@@ -53,7 +55,7 @@
 
 				{{ form.omitLabelling.errors }}
 				<label>Omit node labelling:</label>
-				{{ form.omitLabelling }}
+				{{ form.omitLabelling }} <a href="#" class="tooltip" title="Turns off labelling at the footer.">?</a>
 
 			</div>
 
@@ -61,7 +63,7 @@
 
 				{{ form.splitNodes.errors }}
 				<label>Split source and target nodes:</label>
-				{{ form.splitNodes }}
+				{{ form.splitNodes }} <a href="#" class="tooltip" title="Split source and target as seperate nodes (otherwise same node with two edges).">?</a>
 
 			</div>
 
@@ -69,7 +71,7 @@
 
 				{{ form.splitMode.errors }}
 				<label>Splitting:</label>
-				{{ form.splitMode }}
+				{{ form.splitMode }} <a href="#" class="tooltip" title="(To add -- an example image).">?</a>
 
 			</div>
 
@@ -79,7 +81,7 @@
 				{{ form.overrideEdgeLength.errors }}
 				<label>Override edge length:</label>
 				{{ form.overrideEdge }} &nbsp;&nbsp;&nbsp;&nbsp; 
-				{{form.overrideEdgeLength }}
+				{{form.overrideEdgeLength }} <a href="#" class="tooltip" title="Override default edge length">?</a>
 				<div class="cError"><span id="overrideEdgeE" class="cErrorMsg"></span></div>
 			</div>
 
@@ -87,7 +89,7 @@
 
 				{{ form.textLabel.errors }}
 				<label>Text label colour:</label>
-				{{ form.textLabel }}
+				{{ form.textLabel }} <a href="#" class="tooltip" title="HEX colour for the text labels used on the graph.">?</a>
 
 			</div>
 	   </div>
@@ -100,7 +102,7 @@
 
 				{{ form.skipLines.errors }}
 				<label>Skip Lines:</label>
-				{{ form.skipLines }}
+				{{ form.skipLines }} <a href="#" class="tooltip" title="Skips the specified number of lines from the data-file (say for example, header data).">?</a>
 				<div class="cError"><span id="skipLinesE" class="cErrorMsg"></span></div>
 
 			</div>
@@ -109,7 +111,7 @@
 
 				{{ form.maxLines.errors }}
 				<label>Maximum lines:</label>
-				{{ form.maxLines }}
+				{{ form.maxLines }} <a href="#" class="tooltip" title="Maximum number of lines to read from the data-file.">?</a>
 				<div class="cError"><span id="maxLinesE" class="cErrorMsg"></span></div>
 
 			</div>
@@ -118,7 +120,7 @@
 
 				{{ form.omitThreshold.errors }}
 				<label>Omit threshold for each node:</label>
-				{{ form.omitThreshold }}
+				{{ form.omitThreshold }} <a href="#" class="tooltip" title="Omits nodes which occur less than the specified threshold.">?</a>
 				<div class="cError"><span id="omitThresholdE" class="cErrorMsg"></span></div>
 
 			</div>
@@ -127,7 +129,7 @@
 
 				{{ form.sourceFanOut.errors }}
 				<label>Source fan out threshold:</label>
-				{{ form.sourceFanOut }}
+				{{ form.sourceFanOut }} <a href="#" class="tooltip" title="Omits nodes which have a lesser number of edges originating from them, than the specified threshold.">?</a>
 				<div class="cError"><span id="sourceFanOutE" class="cErrorMsg"></span></div>
 
 			</div>
@@ -136,7 +138,7 @@
 
 				{{ form.eventFanOut.errors }}
 				<label>Event fan out threshold:</label>
-				{{ form.eventFanOut }}
+				{{ form.eventFanOut }} <a href="#" class="tooltip" title="Omits event nodes which have a lesser number of edges originating form them, than the specified threshold.">?</a>
 				<div class="cError"><span id="eventFanOutE" class="cErrorMsg"></span></div>
 
 			</div>
@@ -162,6 +164,7 @@
 				<span id="configTypeText">Config Type:</span>
 				<input type="radio" name="xConfigType" checked="checked" value="custom" class="configTypeRadio"/>Custom
 				<input type="radio" name="xConfigType" value="manual" class="configTypeRadio"/>Manual
+				<a href="#" class="tooltip configTypeRadio" title="Configuration type -- Manual lets you copy/paste the complete configuration file. Custom - choose each line.">?</a>
 			</div>
 
 			<br/><br/>
@@ -177,6 +180,8 @@
 				<fieldset id="fieldColour">
 
 					<legend>Add: Colour</legend>
+					
+					<a href="#" class="tooltip configTip" title="Specify a colour configuration for each node type with optional conditions. Adding an 'IF' condition wraps a perl 'if' expression around the condition, while a 'custom' condition can be any perl condition.">?</a>
 					
 					<div class="field">
 						<label>Node:</label>
@@ -213,6 +218,8 @@
 				<fieldset id="fieldThreshold">
 
 					<legend>Add: Threshold Filter</legend>
+					
+					<a href="#" class="tooltip configTip" title="Specify an omit threshold for any/every type of node. Nodes below the threshold are ignored.">?</a>
 
 					<div class="field">					
 						<label>Node:</label> 
@@ -239,6 +246,8 @@
 				<fieldset id="fieldSize">
 
 					<legend>Add: Node Sizes</legend>
+					
+					<a href="#" class="tooltip configTip" title="(To be added).">?</a>
 
 					<div class="field">					
 						<label>Node:</label>
@@ -272,6 +281,8 @@
 				<fieldset id="fieldGlobals">
 
 					<legend>Add: Global settings</legend>
+					
+					<a href="#" class="tooltip configTip" title="Global settings for the configurations. These settings once applied will be disabled to input again, since they can be applied only once. The input becomes active again if the respective configuration is removed above.">?</a>
 
 					<div class="field">
 						<label>Max node size:</label>
@@ -300,6 +311,8 @@
 				<fieldset id="fieldClustering">
 
 					<legend>Add: Clustering</legend>
+					
+					<a href="#" class="tooltip configTip" title="(To be added).">?</a>
 
 					<div class="field">
 						<label>Node:</label>
@@ -334,6 +347,8 @@
 				<fieldset id="fieldCustom">
 
 					<legend>Add: Custom Line</legend>
+					
+					<a href="#" class="tooltip configTip" title="Add any custom line to the configuration page. The lines are parsed as-is.">?</a>
 
 					<input type="text" name="xCustomCondition" id="xCustomCondition"/>
 					<button name="xCustomButton" id="xCustomButton" class="addButton"></button>
@@ -348,7 +363,7 @@
 		<div class="field">
 
 			<label>Save configuration:</label>
-			{{ form.saveConfigCookie }}
+			{{ form.saveConfigCookie }} <a href="#" class="tooltip" title="If checked the options chosen in the 'Settings' and 'Advanced settings' tabs are saved as a cookie and retained for four days. AfterGlow will remember your settings if you choose to render a graph again.">?</a>
 
 		</div>
 
