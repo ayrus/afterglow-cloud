@@ -148,6 +148,8 @@ function appendUserConfigDiv(id, html){
     
     elem.id = "line" + id;
     
+    elem.className = "xConfigLine";
+    
     html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"removeConfigLine(this.parentNode.id)\" class=\"removeLink\" title=\"Remove line\">&nbsp;&nbsp;&nbsp;&nbsp;</a>";
     
     html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"changeOrder(this.parentNode.id, 'up')\" class=\"upLink\" title=\"Move Up\">&nbsp;&nbsp;&nbsp;&nbsp;</a>";

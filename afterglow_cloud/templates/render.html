@@ -8,12 +8,15 @@
 
 	{% if not status %}
 
-		<center><b>Rendered Graph</b>: </center>
-		<img src="{{ STATIC_URL }}rendered/{{ requestID }}.gif" alt=""/>
+		<b>Rendered Graph</b>:<br/>
+		<center>
+			<img src="{{ STATIC_URL }}rendered/{{ requestID }}.gif" alt="" id="outputImage"/>
+		</center>
 	
 	{% else %}
 
-		<center><b>
+		<center>
+		<div class="cRenderError"><span class="cErrorMsg">
 
 		{% ifequal status 1 %}
 			Error: Could not create an output image (1).
@@ -39,7 +42,7 @@
             Error: Could not find afterglow instance (6).
         {% endifequal %}
         
-        </b></center>        
+        </span></div></center>        
         
     {% endif %}        
         
