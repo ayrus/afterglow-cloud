@@ -2,9 +2,31 @@ body{
 	background: #3F4C6B;
 	color: #fff;
 	font-size: 14px;
-	font-family: Georgia, serif;
-	margin-top: 15px;
-	margin-left: 25px;
+}
+
+#wrapper{
+	border: 1px solid #abab1c;
+	width: 95%;
+	margin: 0 auto;
+	padding-top: 20px;
+	padding-left: 25px;
+}
+
+#header{
+	background: url('../images/afterglow_logo.png') no-repeat;
+	width: 500px;
+	height: 66px;
+	margin: 0 auto;
+	padding-bottom: 25px;
+}
+
+#footer{
+	width: 500px;
+	margin: 0 auto;
+	text-align: center;
+	padding-bottom: 20px;
+	padding-top: 5px;
+	border-top: 1px dotted #abab1c;
 }
 
 label {
@@ -218,4 +240,8 @@ fieldset legend{
 .configTip{
 	float: right;
 	font-size: 18px;
+}
+
+#xRenderProcess{
+	font-size: 16px;
 }
