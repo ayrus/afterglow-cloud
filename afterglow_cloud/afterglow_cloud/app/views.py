@@ -8,33 +8,40 @@ from time import time
 import os
 
 def index(request):
+    ''' Display a view for the index page. '''
     
     return render_to_response('index.html')
 
 def processForm(request):
+    ''' Display a view (form) to submit a render request. If there is already
+    data in the request (form has been submitted) process the request and try
+    rendering a graph. '''
     
     if request.method == 'POST':
         form = renderForm(request.POST, request.FILES)        
         
         if form.is_valid():
-          
-            ##proces
+            
+            #Generate a session if one isn't already active.
             if hasattr(request, 'session') and hasattr(request.session, \
                                                        'session_key') and \
                getattr(request.session, 'session_key') is None:
               
                 request.session.create()
-              
+            
+            #Generate a unique request ID hash from the session key.
             requestID = md5(request.session.session_key + 
                     str(datetime.now())).hexdigest()       
             
+            #Clean up old resource files (user config, user property and
+            #rendered images) which are older than four hours.
             _cleanFiles()
             
-            #--handle error here.
             _writeDataFile(request.FILES['dataFile'], requestID)
             
             _writeConfigFile(request.POST['propertyConfig'], requestID)
             
+            #Build up parameters to be sent to the shell script.
             param = _buildParameters(request.POST)
             
             dataFile = "user_data/" + requestID + ".csv"
@@ -42,16 +49,20 @@ def processForm(request):
             outputFile = "afterglow_cloud/app/static/rendered/" + requestID + ".gif"
             afPath = "../afterglow/src/afterglow.pl"
             
-            #--deal with errors
+            #Try rendering a graph, store the return code from the shell script.
             status = _renderGraph(dataFile, propertyFile, outputFile, afPath, 
                                param)
             
+            #Construct a response.
             response = render_to_response('render.html', locals(), 
                                       context_instance=RequestContext(request))
             
+            #Check if the user wanted to save/create a cookie to save their
+            #settings for future use.
             if("saveConfigCookie" in request.POST):
               
                 expiry = datetime.now() + timedelta(days = 3)
+                
                 response.set_cookie(key = "afConfig", 
                                     value = _buildCookie(request.POST),
                                     expires = expiry)
@@ -69,43 +80,48 @@ def processForm(request):
                               context_instance=RequestContext(request))
 
 def _cleanFiles():
-  
-  paths = ["afterglow_cloud/app/static/rendered/", "user_data/", "user_config/"]
-  
-  for path in paths:
-  
-    absPath = os.path.abspath(path)
-    files = os.listdir(absPath)
+    ''' Clean up every user-data, user-configuration and rendered image files
+    which are older than 4 hours from this point. '''
     
-    for oldFile in files:
+    paths = ["afterglow_cloud/app/static/rendered/", "user_data/", "user_config/"]
+    
+    for path in paths:
+    
+        absPath = os.path.abspath(path)
+        files = os.listdir(absPath)
+    
+        for oldFile in files:
       
-        oldFilePath = os.path.join(absPath, oldFile)
-        info = os.stat(oldFilePath)
-      
-        if(info.st_ctime < int(time() - 4*60*60)):
+            oldFilePath = os.path.join(absPath, oldFile)
+            info = os.stat(oldFilePath)
+            
+            #If older than 4 hours -- delete.
+            if(info.st_ctime < int(time() - 4*60*60)):
         
-            os.unlink(oldFilePath)
-  
+                os.unlink(oldFilePath)
+            
 def _writeDataFile(f, requestID):
+    ''' Write the CSV data file present in the file-stream 'f' from the user,
+    to a local file with 'requestID' as its name. '''
     
     fileName = requestID + '.csv'
     
-    with open('user_data/' + fileName, 'wb+') as dest: #------
+    with open('user_data/' + fileName, 'wb+') as dest:
         for chunk in f.chunks():
             dest.write(chunk)
-            
-    return 0
 
 def _writeConfigFile(data, requestID):
+    ''' Write the configuration file present in the string 'data' fromt he user,
+    to a local file with "requestID" as its name. '''
     
     fileName = requestID + '.property'
     
-    with open('user_config/' + fileName, 'wb') as dest: #------
+    with open('user_config/' + fileName, 'wb') as dest:
         dest.write(data)
-        
-    return 0
 
 def _buildParameters(options):
+    ''' Read the different flag values sent by the user request in 'options' and
+    build parameters to be sent to AfterGlow. '''
     
     param = ""
     
@@ -147,6 +163,8 @@ def _buildParameters(options):
     return param  
   
 def _buildCookie(options):
+    ''' Read the different flag values sent by the user request in 'options' and
+    build a cookie string to be stored as a cookie with the user. '''
 
     cookieString = ""
     
@@ -172,6 +190,8 @@ def _buildCookie(options):
     return cookieString
         
 def _readCookie(cookie):
+    ''' Read the cookie data from 'cookie' and populate the render form with
+    their default values from the cookie. '''
     
     formData = {}
     
@@ -181,6 +201,7 @@ def _readCookie(cookie):
         
         checkBox = checkBox.split(":")
         
+        #Explicit cast to booleans required for the form's checkboxes.
         formData[checkBox[0]] = bool(int(checkBox[1]))
     
     cookie = dict(item.split(":") for item in cookie[5:-1])
@@ -197,6 +218,8 @@ def _readCookie(cookie):
     return formData
 
 def _renderGraph(dataFile, propertyFile, outputFile, afPath, afArgs):
+    ''' Call the shell script invoking AfterGlow with the required parameters
+    to render a graph. Return the exit status returned by the shell script. '''
     
     return call("../afterglow.sh " + dataFile + " " + propertyFile + " " + 
                 outputFile + " " + afPath + " " + afArgs, shell=True)

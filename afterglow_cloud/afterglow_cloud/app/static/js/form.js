@@ -1,4 +1,7 @@
-var configCount = 0;
+/* Globals */
+var configCount = 0; //A counter for the number of configuration lines.
+//Following are flags to enable/disable inputting a global setting (which can be
+//	set only once).
 var maxNodeSizeSet = false;
 var sumSourceSet = false;
 var sumEventSet = false;
@@ -6,12 +9,15 @@ var sumTargetSet = false;
 
 $(document).ready(function(){
 
+	//Invoke the colour pickers.
     $('#id_textLabel').miniColors();
-    
 	$('#xColourHEX').miniColors();
 	
+	//Invoke the tool-tips.
 	$(".tooltip").tipTip({maxWidth: "250px"});
 
+	//Show the override box input (which is hidden otherwise) if the cookie
+	//data from the view has the 'override-edge' box checked.
 	if($("#id_overrideEdge").is(":checked")){
 		toggleShowOverrideInput();
 	}
@@ -32,39 +38,34 @@ $(document).ready(function(){
         toggleShowConfig();
     });
     
+    //Following are event handlers for different buttons in the configurations'
+    //fieldsets.
     $('#xColourButton').click(function () {
         addColour();
-        
         return false;
     });
     
     $('#xThresholdButton').click(function () {
 
-		if(validateConfig('threshold')){
+		if(validateConfig('threshold')){ 
+			//Request is processed only if the data is found to be valid.
         	addThreshold();
 		}
-        
         return false;
     });
     
     $('#xCustomButton').click(function () {
-    
         addCustom();
-        
         return false;
     });    
     
     $('#xClusteringButton').click(function (){
-    
         addClustering();
-        
         return false;
     });
     
     $('#xSizeButton').click(function (){
-    
         addSize();
-        
         return false;
     });
     
@@ -73,18 +74,16 @@ $(document).ready(function(){
 		if(validateConfig('maxNodeSize')){
         	addMaxNodeSize();
 		}
-
 		return false;
-
     });
     
     $('#xSumButton').click(function (){
-    
         addSum();
-        
         return false;
     });
     
+    //Change the type of configuration input, if the radio in the configurations
+    //panel has any action.
     $('input[name=xConfigType]').change(function() {
     
         if($('input[name=xConfigType]:checked').val() == "manual"){
@@ -103,9 +102,10 @@ $(document).ready(function(){
     });
 
     
-    
+	//Set up a listener for the submit of the main form.    
     $('#renderMainForm').submit(function () {
 
+		//Reset any previous validation messages.
 		resetValidations();
 	
 		var dataFile = validateDataFile();
@@ -114,13 +114,22 @@ $(document).ready(function(){
 
 		var advancedIntegers = validateAdvancedIntegers();
         
+        //Read the configuration data (added by the user) from the hidden field
+        //'alreadyAddedHidden' and populate form element to submit.
         populateProperty();    
     
-        return dataFile && edgeLength && advancedIntegers
+    	//Check the validation booleans from every validators above and proceed
+    	//ahead only if all are 'true'.
+        return dataFile && edgeLength && advancedIntegers;
     });
     
 });
 
+/*	Toggle the textbox to input the edge-length. If the 'override-edge' checkbox
+ *	is checked then show the box, hide otherwise.
+ *	@Params: None.
+ *	@Return: None.
+ */
 function toggleShowOverrideInput(){
 
      if($('#id_overrideEdge').attr('checked')){
@@ -130,18 +139,35 @@ function toggleShowOverrideInput(){
      }
 }
 
+/*	Toggle the 'Settings' pane using JQuery's slide UI function.
+ *	@Params: None.
+ *	@Return: None.
+ */
 function toggleShowMainSettings(){
     $('#mainSettings').slideToggle(('slow'));   
 }
 
+/*	Toggle the 'Advanced Settings' pane using JQuery's slide UI function.
+ *	@Params: None.
+ *	@Return: None.
+ */
 function toggleShowAdvanced(){
     $('#advanced').slideToggle(('slow'));
 }
 
+/*	Toggle the 'Configuration' pane using JQuery's slide UI function.
+ *	@Params: None.
+ *	@Return: None.
+ */
 function toggleShowConfig(){
     $('#config').slideToggle(('slow'));
 }
 
+/*	Append a configuration line to the user UI.
+ *	@Params: id - the count of this configuration (from the global counter).
+ 			html - the inner HTML content to append.
+ *	@Return: None.
+ */
 function appendUserConfigDiv(id, html){
 
     var elem = document.createElement("div");
@@ -161,6 +187,11 @@ function appendUserConfigDiv(id, html){
     document.getElementById("alreadyAdded").appendChild(elem);
 }
 
+/*	Append a raw configuration line (which is hidden) to the page..
+ *	@Params: id - the count of this configuration (from the global counter).
+ 			html - the inner HTML content to append.
+ *	@Return: None.
+ */
 function appendHiddenConfigDiv(id, html){
 
     var elem = document.createElement("div");
@@ -172,8 +203,14 @@ function appendHiddenConfigDiv(id, html){
     document.getElementById("alreadyAddedHidden").appendChild(elem);
 }
 
+/*	Remove a configuration line from the user's UI and the hidden field on the
+	page.
+ *	@Params: id - the HTML ID of the element on the user UI to be removed.
+ *	@Return: None.
+ */
 function removeConfigLine(id){
 
+	//Grab the unique numeric ID.
     id = id.split("")[4];
     
     //Check if any global config is being removed and re-enable the form if so.
@@ -237,6 +274,11 @@ function removeConfigLine(id){
     parent.removeChild(child);
 }
 
+/*	Find and return the next sibling node to the existing node 'node'. The next
+ *	sibling node has to be an element node.
+ *	@Params: node - the present node to start the search from.
+ *	@Return: The next sibling element node.
+ */
 function getNextSibling(node){
 
     var next = node.nextSibling;
@@ -249,6 +291,11 @@ function getNextSibling(node){
     return next;
 }
 
+/*	Find and return the previous sibling node to the existing node 'node'. The
+ *	previous node has to be an element node.
+ *	@Params: node - the present node to start the search from.
+ *	@Return: The previous sibling element node.
+ */
 function getPreviousSibling(node){
 
     var previous = node.previousSibling;
@@ -263,6 +310,13 @@ function getPreviousSibling(node){
 
 }
 
+/*	Change the ordering of a configuration element (both on the user ID and the
+ * 	the hidden field) either 'up' or 'down'.
+ *	@Params: id - the HTML ID of the element on the user UI to change the
+ *	the ordering of.
+ *		type - 'up' or 'down' specifying the order of change, upwards or down.
+ *	@Return: The next sibling element node.
+ */
 function changeOrder(id, type){
 
     var node = document.getElementById(id);
@@ -288,17 +342,21 @@ function changeOrder(id, type){
 
         var temp = document.getElementById(userID);
         
+		//Swap the elements IDs on the user UI.
+        
         document.getElementById(closestUserID).id = userID;
             
         temp.id = closestUserID;
             
-        //Swap raw-config end IDs.
+		//Swap the elements IDs on the hidden end.
         
         temp = document.getElementById(configID);
         
         document.getElementById(closestConfigID).id = configID;
         
         temp.id = closestConfigID;
+        
+        //Make the configurations lines on the page "appear" going "up" or "down".
         
         if(type == "down"){        
         
@@ -313,16 +371,26 @@ function changeOrder(id, type){
     }
 }
 
+/*	Add a colour configuration line.
+ *	@Params: None.
+ *	@Return: None.
+ */
 function addColour(){
     
     var elemID = configCount++;
     
     var html = "Colour :: " +  $("#xColourType").attr("value") + " | " + $("#xColourHEX").attr("value") + " | ";
     
-    if ($("input[name='xColourRadio']:checked").val() == "if"){ // not empty -- condition
+    //Prepare and add the element to the user UI.
+    if ($("input[name='xColourRadio']:checked").val() == "if"){
+    
+    	// not empty -- condition
         html += " IF | " + $("#xColourIfCondition").attr("value");
+        
     }else if($("input[name='xColourRadio']:checked").val() == "custom"){
+    
         html += " Custom | " + $("#xColourCustomCondition").attr("value");
+        
     }
     
     
@@ -330,21 +398,35 @@ function addColour(){
     
     appendUserConfigDiv(elemID, html);
 
+	//Prepare and add the element to the hidden config end.
     if($("#xColourType").attr("value") == "All"){
+    
         html = "color=\"" + $("#xColourHEX").attr("value") + "\"";
+        
     }else{
+    
         html = "color." + $("#xColourType").attr("value").toLowerCase() + "=\"" + $("#xColourHEX").attr("value") + "\"";    
+        
     }
     
-    if ($("input[name='xColourRadio']:checked").val() == "if"){ // not empty -- condition
+    if ($("input[name='xColourRadio']:checked").val() == "if"){ 
+    
+    	// not empty -- condition
         html += " if (" + $("#xColourIfCondition").attr("value") + ")";
+        
     }else if($("input[name='xColourRadio']:checked").val() == "custom"){
+    
         html += " " + $("#xColourCustomCondition").attr("value");
+        
     }
     
     appendHiddenConfigDiv(elemID, html);
 }
 
+/*	Add a threshold configuration line.
+ *	@Params: None.
+ *	@Return: None.
+ */
 function addThreshold(){
     
     var elemID = configCount++;
@@ -365,6 +447,10 @@ function addThreshold(){
     appendHiddenConfigDiv(elemID, html);
 }
 
+/*	Add a custom configuration line.
+ *	@Params: None.
+ *	@Return: None.
+ */
 function addCustom(){
     
     var elemID = configCount++;
@@ -379,6 +465,10 @@ function addCustom(){
     
 }
 
+/*	Add a clustering configuration line.
+ *	@Params: None.
+ *	@Return: None.
+ */
 function addClustering(){
     
     var elemID = configCount++;
@@ -397,8 +487,6 @@ function addClustering(){
         configHTML = "cluster." + $("#xClusteringType").attr("value").toLowerCase() + "=";    
     
     }
-    
-    
     
     if ($("input[name='xClusteringRadio']:checked").val() == "ip"){
         
@@ -420,6 +508,10 @@ function addClustering(){
     
 }
 
+/*	Add a size configuration line.
+ *	@Params: None.
+ *	@Return: None.
+ */
 function addSize(){
     
     var elemID = configCount++;
@@ -475,8 +567,13 @@ function addSize(){
     
 }
 
+/*	Add a maxnodesize configuration line (a global setting).
+ *	@Params: None.
+ *	@Return: None.
+ */
 function addMaxNodeSize(){
 
+	//Proceed only if not already set.
     if (!maxNodeSizeSet){
     
         var html = "Max Node Size :: " +  $("#xSizeMaxSize").attr("value");
@@ -495,9 +592,9 @@ function addMaxNodeSize(){
         
         document.getElementById("line" + elemID).appendChild(elem);
         
-        
         appendHiddenConfigDiv(elemID, html);
         
+        //Update the flag and disable further input (until removed).
         maxNodeSizeSet = true;
         
         $("#xSizeMaxSize").prop('disabled', true);
@@ -508,12 +605,18 @@ function addMaxNodeSize(){
 
 }
 
+/*	Add a sum configuration line (a global setting).
+ *	@Params: None.
+ *	@Return: None.
+ */
 function addSum(){
 
     var html;
     
     var elemID = configCount++;
     
+    //Check for individual sum setting (determine which one has been set) and
+    //proceed only if the one requested hasn't been already set.
     if($("#xSumType").attr("value") == "Source" && !sumSourceSet){
     
         html = "Sum Source :: True";
@@ -584,10 +687,16 @@ function addSum(){
     
 }
 
+/*	Read the raw configuration data from the hidden field and populate the
+ * 	textbox form element supplied by the view to process and send the request.
+ *	@Params: None.
+ *	@Return: None.
+ */
 function populateProperty(){
 
     var value = "";
     
+    //Check if the configuration tpye is manual or custom.
     if($('input[name=xConfigType]:checked').val() == "manual"){
     
         value = $("#xManualConfig").attr("value");
@@ -604,22 +713,34 @@ function populateProperty(){
     }
     
     document.getElementById("id_propertyConfig").value = value;
-
-    //alert(value);
 }
 
+/*	Change the CSS style property 'display' of the parent element of 'id' to
+ *	'block' (show) itself.
+ *	@Params: None.
+ *	@Return: None.
+ */
 function showParent(id){
 
 	$("#" + id).parent().attr('style','display: block !important');
 
 }
 
+/*	Change the CSS style property 'display' of the parent element of 'id' to
+ *	'none' (hide) itself.
+ *	@Params: None.
+ *	@Return: None.
+ */
 function hideParent(id){
 
 	$("#" + id).parent().attr('style','display: none !important');
 
 }
 
+/*	Remove every validation message (everything that is present) from the page.
+ *	@Params: None.
+ *	@Return: None.
+ */
 function resetValidations(){
 
 	var ids = new Array("dataFileE", "overrideEdgeE", "maxLinesE", "skipLinesE", "omitThresholdE", "sourceFanOutE", "eventFanOutE");
@@ -629,6 +750,11 @@ function resetValidations(){
 	}
 }
 
+/*	Validate the data-file form input on the page and return the validation
+ * 	status.
+ *	@Params: None.
+ *	@Return: true if valid, false otherwise.
+ */
 function validateDataFile(){
 
 	if(!$("#id_dataFile").attr("value")){
@@ -645,6 +771,11 @@ function validateDataFile(){
 
 }
 
+/*	Validate the edge-length form input on the page and return the validation
+ * 	status.
+ *	@Params: None.
+ *	@Return: true if valid, false otherwise.
+ */
 function validateEdgeLength(){
 
 	if($("#id_overrideEdge").is(":checked")){
@@ -668,6 +799,11 @@ function validateEdgeLength(){
 
 }
 
+/*	Validate all the integer form inputs on the page and return the validation
+ * 	status.
+ *	@Params: None.
+ *	@Return: true if all valid, false otherwise.
+ */
 function validateAdvancedIntegers(){
 
 	var flag = true;
@@ -690,6 +826,7 @@ function validateAdvancedIntegers(){
 
 		showParent("maxLinesE");
 
+		//Boolean AND.
 		flag = flag && false;
 
 	}
@@ -714,6 +851,11 @@ function validateAdvancedIntegers(){
 	return flag;
 }
 
+/*	Validate integer inputs on the configuration panel.
+ *	@Params: what - specifies which input to test; valid values are "threshold"
+ 		and "maxNodeSize".
+ *	@Return: true if valid, false otherwise.
+ */
 function validateConfig(what){
 
 	var posInteger = /^[0-9]+$/;

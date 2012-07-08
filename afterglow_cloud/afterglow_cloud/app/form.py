@@ -55,8 +55,10 @@ class renderForm(forms.Form):
     #originating from event nodes (trivially true only for three node graphs). 
     eventFanOut = forms.IntegerField(initial=0)
     
+    #The contents of the property file; eventually written out.
     propertyConfig = forms.CharField(widget=forms.HiddenInput, required=False)
     
+    #Boolean - Whether to save the settings as a configuration cookie.
     saveConfigCookie = forms.BooleanField(required=False, initial=True)
     
     def clean_textLabel(self):
@@ -73,11 +75,17 @@ class renderForm(forms.Form):
     
     def clean_dataFile(self):
         ''' Validate the uploaded data file to see if its MIME type is
-        "text/csv" (as only CSV files are supported). If not raise an error. '''
+        a valid CSV type (as only CSV files are supported). If not raise an
+        error. '''
         
         dataFile = self.cleaned_data['dataFile']
         
-        if dataFile.content_type not in ["text/csv"]:
+        validTypes = ["text/comma-separated-values", \
+                      "text/csv", "application/csv", "application/excel", \
+                      "application/vnd.ms-excel", "application/vnd.msexcel", \
+                      "text/anytext"]
+        
+        if dataFile.content_type not in validTypes:
             raise forms.ValidationError("Filetype has to be CSV.");
         
         return dataFile
