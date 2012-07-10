@@ -250,3 +250,10 @@ fieldset legend{
 	margin-left: 20px;
 	margin-bottom: 10px;
 }
+
+#configPlaceholder{
+	margin-left: 20px;
+	margin-bottom: 10px;
+	font-size: 12px;
+	color: #D4D4D4;
+}

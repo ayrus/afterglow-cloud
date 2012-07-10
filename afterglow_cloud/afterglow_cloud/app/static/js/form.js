@@ -42,43 +42,49 @@ $(document).ready(function(){
     //fieldsets.
     $('#xColourButton').click(function () {
         addColour();
+    	hidePlaceholder();
         return false;
     });
     
     $('#xThresholdButton').click(function () {
-
 		if(validateConfig('threshold')){ 
 			//Request is processed only if the data is found to be valid.
         	addThreshold();
+        	hidePlaceholder();
 		}
         return false;
     });
     
     $('#xCustomButton').click(function () {
         addCustom();
+        hidePlaceholder();
         return false;
     });    
     
     $('#xClusteringButton').click(function (){
         addClustering();
+        hidePlaceholder();
         return false;
     });
     
     $('#xSizeButton').click(function (){
         addSize();
+        hidePlaceholder();
         return false;
     });
     
     $('#xMaxNodeSizeButton').click(function (){
-
+		
 		if(validateConfig('maxNodeSize')){
         	addMaxNodeSize();
+        	hidePlaceholder();
 		}
 		return false;
     });
     
     $('#xSumButton').click(function (){
         addSum();
+        hidePlaceholder();
         return false;
     });
     
@@ -308,6 +314,19 @@ function getPreviousSibling(node){
     
     return previous;
 
+}
+
+/*	Hide the placeholder message inside the added configurations pane if any
+ *	configuration lines have been set.
+ *	@Params: None.
+ *	@Return: None.
+ */
+function hidePlaceholder(){
+	
+	if(configCount > 0){
+		$("#configPlaceholder").hide();
+	}
+	
 }
 
 /*	Change the ordering of a configuration element (both on the user ID and the
