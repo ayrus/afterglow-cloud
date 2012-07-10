@@ -1,0 +1,89 @@
+afterglow-cloud
+===============
+
+About:
+
+	AfterGlow Cloud is a security visualization tool which lets users upload data
+	and visualize the data as graphs on-the-fly. This project is a part of Google's
+	Summer of Code 2012 under The Honeynet Project [1][2]. 
+
+	The core of this tool is derived from its command-line predecessor AfterGlow 
+	[3]. AfterGlow Cloud runs primarily on Django. Currently live demos (clones of
+	this repository) can be found at:
+
+	http://andromeda.ayrus.net:31337
+	http://afterglow.ayrus.net:31080
+1.4.0
+References:
+
+	[1] http://www.google-melange.com/gsoc/project/google/gsoc2012/ayrus/8001
+	[2] https://honeynet.org/gsoc/slot6
+	[3] http://afterglow.sourceforge.net/
+	
+Installation:
+
+	At this stage of development the project only runs on Django's 'runserver'
+	module for development testing. The installation instructions below cover
+	only this scope presently. Further installation instructions would be added
+	soon when a version suitable for production is released (on Apache).
+	
+	The instructions given below are specific to a machine running Ubuntu.
+	
+	Requirements:
+	
+		-Django 1.4.0
+		-A RDBMS module that Django supports -- (tested on MySQL) 
+			see https://docs.djangoproject.com/en/dev/ref/databases/
+		-GraphViz Library
+		-'libtext-csv-perl' package on Ubuntu (presumed that Perl is installed)
+		
+	Installation:
+	
+		It is assumed beyond this point that Django and a RDBMS module is
+		installed.
+		
+		Create a database in the RDBMS module installed. This document will
+		refer to this database as "af_database".
+		
+		GraphViz and libtext-csv-perl can be installed on Ubuntu with:
+		
+		$ sudo apt-get install graphviz libtext-csv-perl
+		
+		Clone a latest copy of the project from the repository and change 
+			directory:
+		
+		$ git clone https://github.com/ayrus/afterglow-cloud.git
+		$ cd afterglow-cloud/afterglow_cloud/afterglow_cloud
+		
+		Open up 'settings.py' in a text-editor:
+		
+		$ sudo nano settings.py
+		
+		Edit all the required settings. 
+			-Supply all needed values for 'DATABASES' declaration in the file
+				(Lines #16-21).
+			-Change line #72 to the absolute path of the directory 'static'
+				(app/static) on your machine. If you cloned the repository
+				in your home directory and your username is 'foo' then the value
+				here should be - '/home/foo/afterglow-cloud/afterglow_cloud/
+									afterglow_cloud/app/static'
+			
+		Save and exit from the editor.
+		
+		Change directory into the parent directory and run 'syncdb'.
+		
+		$ cd ..
+		$ sudo python manage.py syncdb
+		
+		If everything went well you should see something like:
+		
+			$ Creating tables ...
+			Installing custom SQL ...
+			Installing indexes ...
+			
+		Once done, invoke Django's runserver module to launch the project:
+		
+		$ sudo python manage.py runserver 0.0.0.0:80
+		
+		This will run Django's development server on port 80 (listenting on all
+		hosts - example localhost) with AfterGlow Cloud running. 
