@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}
+	AfterGlow Cloud
+{% endblock %}
+
+{% block body %}
+
+	<div id="indexText">
+		AfterGlow Cloud is a security visualization tool which lets you upload data and visualize the data as graphs on-the-fly. You get to choose over the specifics, settings of the graph and generate them real time.
+		
+		<br/><br/><br/>
+	
+		<center>
+			<button type="button" onclick="location.href='process'">Render a Graph</button> 
+			<br/><br/>
+			<img src="{{ STATIC_URL }}images/afterglow_index.png" id="indexInfo" alt="AfterGlow"/>
+		</center>
+		
+		<br/>
+		AfterGlow Cloud is an <a href="https://github.com/ayrus/afterglow-cloud">open-source</a> project and is based on its command line predecessor <a href="http://afterglow.sourceforge.net/">AfterGlow</a>.
+	
+	</div>
+
+{% endblock %}

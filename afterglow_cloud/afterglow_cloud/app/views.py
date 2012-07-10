@@ -10,7 +10,8 @@ import os
 def index(request):
     ''' Display a view for the index page. '''
     
-    return render_to_response('index.html')
+    return render_to_response('index.html', locals(), 
+                                      context_instance=RequestContext(request))
 
 def processForm(request):
     ''' Display a view (form) to submit a render request. If there is already

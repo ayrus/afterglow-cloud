@@ -8,8 +8,9 @@
 
 	{% if not status %}
 
-		<b>Rendered Graph</b>:<br/>
+		<b>Rendered Graph</b>:
 		<center>
+			<a href="process" title="Back">Render another graph</a><br/><br/>
 			<img src="{{ STATIC_URL }}rendered/{{ requestID }}.gif" alt="" id="outputImage"/>
 		</center>
 	

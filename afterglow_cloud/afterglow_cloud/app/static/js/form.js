@@ -182,11 +182,15 @@ function appendUserConfigDiv(id, html){
     
     elem.className = "xConfigLine";
     
-    html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"removeConfigLine(this.parentNode.id)\" class=\"removeLink\" title=\"Remove line\">&nbsp;&nbsp;&nbsp;&nbsp;</a>";
+    html += "<div class=\"configFunctions\">";
     
-    html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"changeOrder(this.parentNode.id, 'up')\" class=\"upLink\" title=\"Move Up\">&nbsp;&nbsp;&nbsp;&nbsp;</a>";
+    html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"removeConfigLine(this.parentNode.parentNode.id)\" class=\"removeLink\" title=\"Remove line\">&nbsp;&nbsp;&nbsp;&nbsp;</a>";
     
-    html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"changeOrder(this.parentNode.id, 'down')\" class=\"downLink\" title=\"Move Down\">&nbsp;&nbsp;&nbsp;&nbsp;</a>";
+    html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"changeOrder(this.parentNode.parentNode.id, 'up')\" class=\"upLink\" title=\"Move Up\">&nbsp;&nbsp;&nbsp;&nbsp;</a>";
+    
+    html += "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"#\" onclick=\"changeOrder(this.parentNode.parentNode.id, 'down')\" class=\"downLink\" title=\"Move Down\">&nbsp;&nbsp;&nbsp;&nbsp;</a>";
+    
+    html += "</div>";
    
     elem.innerHTML = html;
 
@@ -325,6 +329,7 @@ function hidePlaceholder(){
 	
 	if(configCount > 0){
 		$("#configPlaceholder").hide();
+		$("#configHeaders").show();
 	}
 	
 }
