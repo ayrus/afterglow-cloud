@@ -22,6 +22,25 @@ DATABASES = {
     }
 }
 
+#Define your SMTP settings below for AfterGlow to use for the contact form.
+EMAIL_USE_TLS = True
+EMAIL_HOST = ''
+EMAIL_PORT = 
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+
+#Define the 'From email' used in the contact form (while sending an email).
+AF_FROM_EMAIL = ""
+
+#Define a list of emails to send copies of each contact form request.
+AF_TO_EMAILS = ['']
+
+#Following settings define keys required by the Re-CAPTCHA service to
+#present users with a CAPTCHA image on the contact form.
+#Keys can be obtained here: https://www.google.com/recaptcha/admin/create
+AF_RECAPTCHA_PUBLIC_KEY = ''
+AF_RECAPTCHA_PRIVATE_KEY = ''
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.

@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}
+	Render Graph - Afterglow
+{% endblock %}
+
+{% block extra_head %}
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/contact.js"></script>
+{% endblock %}
+
+{% block body %}
+	
+	<div id="contactLabel">Contact: </div>
+	
+	<div id="configPlaceholder">Please use the contact form below to reach us.</div>
+	
+	<br/><br/>
+	
+	{% if form.errors %}
+		Please correct the error{{ form.errors|pluralize }} below.
+	{% endif %}
+	
+	{% if mailSent %}
+		<div id="success">
+			Your mail has been sent. We'll contact you back if required.		
+		</div>
+	{% endif %}
+	
+	<form method="post" action="contact" id="contactForm">
+
+		{% csrf_token %}	
+		
+		<div class="field">
+
+			<label>Your Name:</label>
+			{{ form.userName }} 
+			{{ form.userName.errors }}
+			<div class="cError"><span id="userNameE" class="cErrorMsg"></span></div>
+
+		</div>
+		
+		<div class="field">
+
+			<label>Your Email:</label>
+			{{ form.userEmail }} 
+			{{ form.userEmail.errors }}
+			<div class="cError"><span id="userEmailE" class="cErrorMsg"></span></div>
+
+		</div>
+		
+		<div class="field">
+
+			<label>Subject:</label>
+			{{ form.userSubject }} 
+			{{ form.userSubject.errors }}
+
+		</div>
+
+		<div class="field">
+
+			<label>Message:</label>
+			{{ form.userMessage }} 
+			{{ form.userMessage.errors }}
+			<div class="cError"><span id="userMessageE" class="cErrorMsg"></span></div>
+
+		</div>
+		
+		<div class="field">
+			<label>&nbsp;</label>
+			<script type="text/javascript" src="http://api.recaptcha.net/challenge?k={{ CAPTCHA_PUBLIC_KEY }}"></script>
+		</div>		
+		
+		<noscript>  
+			<iframe src="http://api.recaptcha.net/noscript?k={{ CAPTCHA_PUBLIC_KEY }}" height="300" width="500" frameborder="0"></iframe>
+			<br/>  
+			<textarea name="recaptcha_challenge_field" rows="3" cols="40">  
+			</textarea>  
+			<input type="hidden" name="recaptcha_response_field" value="manual_challenge">  
+		</noscript>
+		
+		{% if captchaWrong %}
+			<div id="error">
+				Your captcha input is wrong. Please try again.		
+			</div>
+		{% endif %}
+		
+		<input type="submit" value="Submit" id="xContactProcess">
+		
+	</form>
+	
+{% endblock %}

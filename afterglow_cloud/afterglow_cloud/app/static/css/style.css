@@ -31,6 +31,19 @@ body{
 	border-top: 1px dotted #abab1c;
 }
 
+#nav{
+	width: 500px;
+	margin: 0 auto;
+	text-align: center;
+	padding-bottom: 5px;
+	font-size: 12px;
+	color: #D4D4D4;
+	padding-top: 5px;
+	border-bottom: 1px dotted #abab1c;
+	border-top: 1px dotted #abab1c;
+	margin-bottom: 15px;
+}
+
 label {
 	font-size: 17px;
 	font-variant: small-caps;
@@ -50,7 +63,7 @@ a:hover{
 	margin-bottom: 15px;
 }
 
-#settingsLabel, #advancedLabel, #configLabel, #alreadyLabel{
+#settingsLabel, #advancedLabel, #configLabel, #alreadyLabel, #contactLabel{
 	font-size: 19px;
 	font-variant: small-caps;
 	font-weight: bold;
@@ -59,7 +72,7 @@ a:hover{
 }
 
 
-#alreadyLabel{
+#alreadyLabel, #contactLabel{
 	font-size: 18px !important;
 	text-decoration: none !important;
 }
@@ -128,7 +141,7 @@ ul.errorlist, .cError, .cRenderError{
 	width: 500px;
 }
     
-.errorlist li, .cErrorMsg{
+.errorlist li, .cErrorMsg, #success, #error{
         background-color: #E34242;
         color: white;
         font-size: 12px;
@@ -136,6 +149,19 @@ ul.errorlist, .cError, .cRenderError{
         margin: 0 0 3px;
         padding: 4px 5px;
 	display: block;
+}
+
+#success{
+	background-color: #8FE368 !important;
+	width: 500px;
+	padding-left: 10px;
+	margin-bottom: 20px;
+}
+
+#error{
+	width: 500px;
+	padding-left: 10px;
+	margin-bottom: 20px;
 }
 
 .cError, .cErrorConfig{
@@ -249,7 +275,7 @@ fieldset legend{
 	font-size: 18px;
 }
 
-#xRenderProcess{
+#xRenderProcess, #xContactProcess{
 	font-size: 16px;
 }
 

@@ -89,3 +89,19 @@ class renderForm(forms.Form):
             raise forms.ValidationError("Filetype has to be CSV.");
         
         return dataFile
+    
+
+class contactForm(forms.Form):
+    '''  '''
+    
+    #The CSV data file submitted by the user.
+    userName = forms.CharField(min_length = 2, max_length = 20)
+    
+    userEmail = forms.EmailField()
+    
+    subjects = [("feedback", "Feedback"), ("bug", "Report a bug"), 
+                ("feature", "Suggest a new feature"), 
+                ("general", "Everything else")]
+    userSubject = forms.ChoiceField(subjects)
+    
+    userMessage = forms.CharField(widget=forms.Textarea)

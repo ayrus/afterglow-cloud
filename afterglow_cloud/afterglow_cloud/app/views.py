@@ -1,10 +1,13 @@
 from django.shortcuts import render_to_response, HttpResponseRedirect
 from django.template import RequestContext
-from afterglow_cloud.app.form import renderForm
+from django.core.mail import send_mail, BadHeaderError
+from django.conf import settings
+from recaptcha.client import captcha
 from hashlib import md5
 from datetime import datetime, timedelta
 from subprocess import call
 from time import time
+from afterglow_cloud.app.form import renderForm, contactForm
 import os
 
 def index(request):
@@ -78,6 +81,50 @@ def processForm(request):
             form = renderForm()
         
     return render_to_response('form.html', locals(), 
+                              context_instance=RequestContext(request))
+
+def contact(request):
+    
+    CAPTCHA_PUBLIC_KEY = settings.AF_RECAPTCHA_PUBLIC_KEY
+    
+    if request.method == 'POST':
+        form = contactForm(request.POST)        
+        
+        if form.is_valid():
+            
+            response = captcha.submit(  
+                        request.POST.get('recaptcha_challenge_field'),  
+                        request.POST.get('recaptcha_response_field'),  
+                        settings.AF_RECAPTCHA_PRIVATE_KEY,  
+                        request.META['REMOTE_ADDR'],)         
+            
+            if not response.is_valid:
+                captchaWrong = True
+                return render_to_response('contact.html', locals(), 
+                              context_instance=RequestContext(request))
+            
+            subject = request.POST['userSubject']
+            
+            message = "Hello, you've received a message from AfterGlow Cloud.\n"
+            
+            message += "User: " + request.POST["userName"] + " (" \
+                + request.POST["userEmail"] + ") says: \n\n"
+            
+            message += request.POST["userMessage"]
+            
+            from_email = settings.AF_FROM_EMAIL
+            try:
+                send_mail("AfterGlow: " + subject, message, 
+                          from_email, settings.AF_TO_EMAILS)
+            except BadHeaderError:
+                return HttpResponse('Invalid header found. Please try again.')
+            
+            mailSent = True
+
+    else:
+        form = contactForm()
+    
+    return render_to_response('contact.html', locals(), 
                               context_instance=RequestContext(request))
 
 def _cleanFiles():
