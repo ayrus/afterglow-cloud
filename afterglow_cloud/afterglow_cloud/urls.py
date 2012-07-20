@@ -4,4 +4,5 @@ urlpatterns = patterns('afterglow_cloud.app.views',
      url(r'^process$', 'processForm'),
      url(r'^$', 'index'),
      url(r'^contact$', 'contact'),
+     url(r'^parse$', 'parser'),
 )

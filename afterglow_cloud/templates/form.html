@@ -19,17 +19,35 @@
 		Please correct the error{{ form.errors|pluralize }} below.
 	{% endif %}
 
-	<form enctype="multipart/form-data" method="post" action="process" id="renderMainForm">
+	{% if parsedData %}
+		<form enctype="multipart/form-data" method="post" action="parse" id="renderMainForm">
+	{% else %}
+		<form enctype="multipart/form-data" method="post" action="process" id="renderMainForm">
+	{% endif %}
 		{% csrf_token %}
 
 		<div class="field">
 
 			{{ form.dataFile.errors }}
-			<label>Data:</label>
+			{% if parsedData %}
+				<label>Log:</label>
+			{% else %}
+				<label>Data:</label>
+			{% endif %}			
 			{{ form.dataFile }} 
 			<div class="cError"><span id="dataFileE" class="cErrorMsg"></span></div>
 
 		</div>
+		
+		{% if parsedData %}
+		
+			---Following will be changed to make it more friendly to the user---
+			<div class="field">		
+				{{ form.regEx.errors }}
+				<label>Reg Ex:</label>
+				{{ form.regEx }} <a href="#" class="tooltip" title="Regular expression to parse CSV data (more)">?</a>
+			</div>
+		{% endif %}
 
 		<div class="field">
 

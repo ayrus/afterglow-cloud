@@ -105,3 +105,7 @@ class contactForm(forms.Form):
     userSubject = forms.ChoiceField(subjects)
     
     userMessage = forms.CharField(widget=forms.Textarea)
+    
+class parserForm(renderForm):
+    
+    regEx = forms.CharField()
