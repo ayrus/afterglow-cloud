@@ -107,8 +107,11 @@ $(document).ready(function(){
     
     });
 
+    $('input[name=xLogType]').change(function() {	
+    	$('#regEx').toggle();
+    });
     
-	//Set up a listener for the submit of the main form.    
+    //Set up a listener for the submit of the main form.    
     $('#renderMainForm').submit(function () {
 
 		//Reset any previous validation messages.

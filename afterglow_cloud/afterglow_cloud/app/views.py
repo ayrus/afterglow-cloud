@@ -7,7 +7,7 @@ from hashlib import md5
 from datetime import datetime, timedelta
 from subprocess import call
 from time import time
-from afterglow_cloud.app.form import renderForm, contactForm, parserForm
+from afterglow_cloud.app.form import renderForm, contactForm
 import os, re
 
 def index(request):
@@ -25,9 +25,10 @@ def processForm(request):
         form = renderForm(request.POST, request.FILES)        
         
         if form.is_valid():
+	    
+	    	print request.POST['xLogType'] == "log"
             
-            return _render(request)
-
+            	return _render(request, request.POST['xLogType'] == "log")
     else:
 
         if "afConfig" in request.COOKIES: #Some saved config in history.
@@ -83,27 +84,7 @@ def contact(request):
     return render_to_response('contact.html', locals(), 
                               context_instance=RequestContext(request))
 
-def parser(request):
-
-    parsedData = True
-    
-    if request.method == 'POST':
-        form = parserForm(request.POST, request.FILES)        
-        
-        if form.is_valid(): 
-            
-            #***ENABLE PRUNING***
-            
-            return _render(request, True)
-    
-    else:
-        #**** COOKIE ***#
-        form = parserForm()
-    
-    return render_to_response('form.html', locals(), 
-                              context_instance=RequestContext(request))
-
-def _render(request, parsedData=False):
+def _render(request, parsedData):
 
     #Generate a session if one isn't already active.
     if hasattr(request, 'session') and hasattr(request.session, \
@@ -189,7 +170,8 @@ def _cleanFiles():
     ''' Clean up every user-data, user-configuration and rendered image files
     which are older than 4 hours from this point. '''
     
-    paths = ["afterglow_cloud/app/static/rendered/", "user_data/", "user_config/"]
+    paths = ["afterglow_cloud/app/static/rendered/", "user_data/", \
+             "user_config/", "user_logs/", "user_logs_parsed/"]
     
     for path in paths:
     

@@ -61,6 +61,9 @@ class renderForm(forms.Form):
     #Boolean - Whether to save the settings as a configuration cookie.
     saveConfigCookie = forms.BooleanField(required=False, initial=True)
     
+    #---------------------------------------------------------------
+    regEx = forms.CharField(required=False)
+    
     def clean_textLabel(self):
         ''' Validate the textLabel input to see if it has a valid HEX colour
         format. Raise an error if not. '''
@@ -73,22 +76,22 @@ class renderForm(forms.Form):
         
         return textLabel
     
-    def clean_dataFile(self):
-        ''' Validate the uploaded data file to see if its MIME type is
-        a valid CSV type (as only CSV files are supported). If not raise an
-        error. '''
+    #def clean_dataFile(self):
+        #''' Validate the uploaded data file to see if its MIME type is
+        #a valid CSV type (as only CSV files are supported). If not raise an
+        #error. '''
         
-        dataFile = self.cleaned_data['dataFile']
+        #dataFile = self.cleaned_data['dataFile']
         
-        validTypes = ["text/comma-separated-values", \
-                      "text/csv", "application/csv", "application/excel", \
-                      "application/vnd.ms-excel", "application/vnd.msexcel", \
-                      "text/anytext"]
+        #validTypes = ["text/comma-separated-values", \
+                      #"text/csv", "application/csv", "application/excel", \
+                      #"application/vnd.ms-excel", "application/vnd.msexcel", \
+                      #"text/anytext"]
         
-        if dataFile.content_type not in validTypes:
-            raise forms.ValidationError("Filetype has to be CSV.");
+        #if dataFile.content_type not in validTypes:
+            #raise forms.ValidationError("Filetype has to be CSV.");
         
-        return dataFile
+        #return dataFile
     
 
 class contactForm(forms.Form):
@@ -105,7 +108,3 @@ class contactForm(forms.Form):
     userSubject = forms.ChoiceField(subjects)
     
     userMessage = forms.CharField(widget=forms.Textarea)
-    
-class parserForm(renderForm):
-    
-    regEx = forms.CharField()
