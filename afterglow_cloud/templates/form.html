@@ -16,7 +16,9 @@
 {% block body %}
 
 	{% if form.errors %}
-		Please correct the error{{ form.errors|pluralize }} below.
+		<div class="cRenderError"><span class="cErrorMsg">
+			Please correct the error{{ form.errors|pluralize }} below.
+		</div></span>
 	{% endif %}
 
 	<form enctype="multipart/form-data" method="post" action="process" id="renderMainForm">
@@ -43,7 +45,9 @@
 
 			{{ form.regEx.errors }}
 			<label>Reg Ex:</label>
-			{{ form.regEx }} <a href="#" class="tooltip" title="Regular expression to parse CSV data (more)">?</a>
+			{{ form.regExType }}
+			{{ form.regEx }} 
+			{{ form.regExChoices }} <a href="#" class="tooltip" title="">?</a>
 
 		</div>
 
@@ -385,6 +389,34 @@
 			{{ form.saveConfigCookie }} <a href="#" class="tooltip" title="If checked the options chosen in the 'Settings' and 'Advanced settings' tabs are saved as a cookie and retained for four days. AfterGlow will remember your settings if you choose to render a graph again.">?</a>
 
 		</div>
+		
+		<div id="saveRegEx">
+			<div class="field">
+	
+				<label>Save RegEx:</label>
+				{{ form.saveRegEx }} <a href="#" class="tooltip" title="">?</a>
+	
+			</div>
+			
+			
+			<fieldset id="saveRegExDetails">
+				
+				<legend>RegEx Details:</legend>
+				<div class="field">
+					<label>Name:</label>
+					{{ form.saveRegExName }} <a href="#" class="tooltip" title="">?</a>
+					{{ form.saveRegExName.errors }}
+				</div>
+				
+				<div class="field">
+					<label>Description:</label>
+					{{ form.saveRegExDescription }} <a href="#" class="tooltip" title="">?</a>
+					{{ form.saveRegExDescription.errors }}
+				</div>
+			</fieldset>
+		</div>
+		
+		<br/>
 
 		<input type="submit" value="Render" id="xRenderProcess">
 	</form>

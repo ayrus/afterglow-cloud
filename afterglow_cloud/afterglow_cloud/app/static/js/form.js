@@ -11,16 +11,23 @@ $(document).ready(function(){
 
 	//Invoke the colour pickers.
     $('#id_textLabel').miniColors();
-	$('#xColourHEX').miniColors();
+    $('#xColourHEX').miniColors();
 	
-	//Invoke the tool-tips.
-	$(".tooltip").tipTip({maxWidth: "250px"});
+    //Invoke the tool-tips.
+    $(".tooltip").tipTip({maxWidth: "250px"});
 
-	//Show the override box input (which is hidden otherwise) if the cookie
-	//data from the view has the 'override-edge' box checked.
-	if($("#id_overrideEdge").is(":checked")){
-		toggleShowOverrideInput();
-	}
+    //Show the override box input (which is hidden otherwise) if the cookie
+    //data from the view has the 'override-edge' box checked.
+    if($("#id_overrideEdge").is(":checked")){
+	    toggleShowOverrideInput();
+    }
+    
+    if($('input[name=xLogType]:checked').val() == "log"){
+	    $('#regEx').show();
+	    $('#saveRegEx').show();
+    }
+    
+    $('input[name=regExType]')[0].checked = true;
 
     $("#id_overrideEdge").click(function () { 
         toggleShowOverrideInput();
@@ -109,19 +116,36 @@ $(document).ready(function(){
 
     $('input[name=xLogType]').change(function() {	
     	$('#regEx').toggle();
+	if($('input[name=xLogType]:checked').val() == "log" ){
+		toggleRegExInputs(); 
+	}else{
+		$('#saveRegEx').hide();
+	}
+    });
+    
+    $('input[name=regExType]').change(function() {
+	toggleRegExInputs();    
+    });
+    
+    $("#id_saveRegEx").click(function () { 
+    	if($("#id_saveRegEx").is(":checked")){
+		$('#saveRegExDetails').show();
+	}else{
+		$('#saveRegExDetails').hide();
+	}
     });
     
     //Set up a listener for the submit of the main form.    
     $('#renderMainForm').submit(function () {
 
-		//Reset any previous validation messages.
-		resetValidations();
+	//Reset any previous validation messages.
+	resetValidations();
 	
-		var dataFile = validateDataFile();
+	var dataFile = validateDataFile();
 
-		var edgeLength = validateEdgeLength();
+	var edgeLength = validateEdgeLength();
 
-		var advancedIntegers = validateAdvancedIntegers();
+	var advancedIntegers = validateAdvancedIntegers();
         
         //Read the configuration data (added by the user) from the hidden field
         //'alreadyAddedHidden' and populate form element to submit.
@@ -133,6 +157,18 @@ $(document).ready(function(){
     });
     
 });
+
+function toggleRegExInputs(){
+    	if ($('input[name=regExType]:checked').val() == 1){
+		$('#id_regEx').show();
+		$('#id_regExChoices').hide();
+		$('#saveRegEx').show();
+	}else{
+		$('#id_regExChoices').show();
+		$('#id_regEx').hide();
+		$('#saveRegEx').hide();
+	}
+}
 
 /*	Toggle the textbox to input the edge-length. If the 'override-edge' checkbox
  *	is checked then show the box, hide otherwise.

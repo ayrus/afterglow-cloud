@@ -87,8 +87,37 @@ a:hover{
 	font-variant: normal;
 }
 
-#id_overrideEdgeLength{
+#regEx ul{
+	list-style-type: none;
+}
+
+#regEx ul li label{
+	font-variant: normal;
+}
+
+#id_overrideEdgeLength, #id_regExChoices, #saveRegEx, #saveRegExDetails{
 	display: none;
+}
+
+#saveRegExDetails{
+	width: 400px;
+	margin-left: 40px;
+}
+
+#saveRegExDetails label {
+	font-size: 14px;
+	font-variant: normal;
+	width: 35%;
+	float: left;
+}
+
+#id_saveRegExName{
+	width: 200px;
+}
+
+#id_saveRegExDescription{
+	width: 200px;
+	height: 100px;
 }
 
 #fieldColour{

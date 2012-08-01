@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 from subprocess import call
 from time import time
 from afterglow_cloud.app.form import renderForm, contactForm
+from afterglow_cloud.app.models import Expressions
 import os, re
 
 def index(request):
@@ -25,8 +26,6 @@ def processForm(request):
         form = renderForm(request.POST, request.FILES)        
         
         if form.is_valid():
-	    
-	    	print request.POST['xLogType'] == "log"
             
             	return _render(request, request.POST['xLogType'] == "log")
     else:
@@ -35,7 +34,7 @@ def processForm(request):
             
             form = renderForm(initial = _readCookie(request.COOKIES['afConfig']))
         else:
-            form = renderForm()
+            form = renderForm(initial = {'regExType': '1'})
         
     return render_to_response('form.html', locals(), 
                               context_instance=RequestContext(request))
@@ -103,6 +102,20 @@ def _render(request, parsedData):
     
     if parsedData:
         _parseToCsv(request.FILES['dataFile'], requestID, request.POST)
+	
+	print request.POST['regExType']
+	
+	if request.POST['regExType'] == '1' and "saveRegEx" in request.POST:
+	    
+	    print "in"
+	    
+	    
+	    expression = Expressions(name=request.POST['saveRegExName'], \
+	                             description=request.POST['saveRegExDescription'], \
+	                             regex=request.POST['regEx'])
+	    expression.save()
+	    
+	
     else:
         _writeDataFile(request.FILES['dataFile'], requestID)
     
@@ -142,13 +155,16 @@ def _render(request, parsedData):
 
 def _parseToCsv(f, requestID, POSTdata):
     
-    fileName = requestID + '.csv'
+    fileName = requestID + '.log'
         
     with open('user_logs/' + fileName, 'wb+') as dest:
         for chunk in f.chunks():
             dest.write(chunk)
-    
-    pat = re.compile(POSTdata['regEx'])    
+	    
+    if POSTdata['regExType'] == '1':
+    	pat = re.compile(POSTdata['regEx'])
+    else:
+	pat = re.compile(Expressions.objects.all().get(id=POSTdata['regExChoices']).regex)
     
     with open('user_logs_parsed/' + fileName, 'wb+') as dest:
         
@@ -164,6 +180,8 @@ def _parseToCsv(f, requestID, POSTdata):
             string += "\n"
             
             dest.write(string)
+	    
+    
 
 
 def _cleanFiles():
@@ -302,6 +320,8 @@ def _readCookie(cookie):
                     'sourceFanOut', 'eventFanOut']:
     
         formData[intData] = int(cookie[intData])
+	
+    formData['regExType'] = '1'
     
     return formData
 

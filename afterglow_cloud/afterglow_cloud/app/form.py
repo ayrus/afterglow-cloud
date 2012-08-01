@@ -1,4 +1,5 @@
 from django import forms
+from afterglow_cloud.app.models import Expressions
 import re
 
 class renderForm(forms.Form):
@@ -64,6 +65,19 @@ class renderForm(forms.Form):
     #---------------------------------------------------------------
     regEx = forms.CharField(required=False)
     
+    regExTypes = (('1', 'Custom',), ('2', 'Predefined',))
+    
+    regExType = forms.ChoiceField(widget=forms.RadioSelect, choices=regExTypes)
+        
+    regExChoices = forms.ModelChoiceField(queryset = Expressions.objects.all(),\
+                                          empty_label = None)
+    
+    saveRegEx = forms.BooleanField(required=False, initial=False)
+    
+    saveRegExName = forms.CharField(required=False)
+    
+    saveRegExDescription = forms.CharField(widget=forms.Textarea, required=False)
+    
     def clean_textLabel(self):
         ''' Validate the textLabel input to see if it has a valid HEX colour
         format. Raise an error if not. '''
@@ -72,26 +86,28 @@ class renderForm(forms.Form):
         
         pat = re.compile('^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$');
         if not pat.match(textLabel):
-            raise forms.ValidationError("Not valid HEX colour format");
+            raise forms.ValidationError("Not valid HEX colour format")
         
         return textLabel
     
-    #def clean_dataFile(self):
-        #''' Validate the uploaded data file to see if its MIME type is
-        #a valid CSV type (as only CSV files are supported). If not raise an
-        #error. '''
+    def clean_saveRegExName(self):
         
-        #dataFile = self.cleaned_data['dataFile']
+        if self.cleaned_data['saveRegEx']:
+            
+            data = self.cleaned_data['saveRegExName']
+            
+            if len(data) <= 2:
+                raise forms.ValidationError("Should be at least two characters")
+            
+    def clean_saveRegExDescription(self):
         
-        #validTypes = ["text/comma-separated-values", \
-                      #"text/csv", "application/csv", "application/excel", \
-                      #"application/vnd.ms-excel", "application/vnd.msexcel", \
-                      #"text/anytext"]
-        
-        #if dataFile.content_type not in validTypes:
-            #raise forms.ValidationError("Filetype has to be CSV.");
-        
-        #return dataFile
+        if self.cleaned_data['saveRegEx']:
+            
+            data = self.cleaned_data['saveRegExDescription']
+            
+            if len(data) <= 10:
+                raise forms.ValidationError("Should be at least ten characters")
+            
     
 
 class contactForm(forms.Form):
