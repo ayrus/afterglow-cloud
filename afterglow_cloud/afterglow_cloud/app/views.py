@@ -114,6 +114,21 @@ def _render(request, parsedData):
 	                             description=request.POST['saveRegExDescription'], \
 	                             regex=request.POST['regEx'])
 	    expression.save()
+			
+	    message = "Hello, a new expression has been submitted.\n"
+	    
+	    message += "Exp name: " + request.POST["saveRegExName"] \
+	        + "\n\nDescription: " + request.POST["saveRegExDescription"] \
+	        + "\n\nExpression: " + request.POST["regEx"] \
+	        + "\n\n"
+	    
+	    from_email = settings.AF_FROM_EMAIL
+	    
+	    try:
+		send_mail("Expression submit @AfterGlow", message, 
+	                  from_email, settings.AF_TO_EMAILS)
+	    except BadHeaderError:
+		return HttpResponse('Invalid header found. Please try again.')	    
 	    
 	
     else:
@@ -125,7 +140,7 @@ def _render(request, parsedData):
     param = _buildParameters(request.POST)
     
     if parsedData:
-        dataFile = "user_logs_parsed/" + requestID + ".csv"
+        dataFile = "user_logs_parsed/" + requestID + ".log"
     else:
         dataFile = "user_data/" + requestID + ".csv"
     propertyFile = "user_config/" + requestID + ".property"
