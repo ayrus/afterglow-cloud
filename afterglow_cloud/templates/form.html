@@ -28,7 +28,7 @@
 		
 			<label>File Type:</label>	
 			<input type="radio" name="xLogType" checked="checked" value="data"/>CSV Data
-			<input type="radio" name="xLogType" value="log" class="configTypeRadio"/>Log
+			<input type="radio" name="xLogType" value="log" class="configTypeRadio"/>Log File
 
 		</div>
 
@@ -45,10 +45,40 @@
 
 			{{ form.regEx.errors }}
 			<label>Reg Ex:</label>
-			{{ form.regExType }}
+			{{ form.regExType }} <div id="regExInputs">||&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			{{ form.regEx }} 
 			{{ form.regExChoices }} <a href="#" class="tooltip" title="">?</a>
+			</div>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div id="regDesc"></div>
 
+		</div>
+		
+		<div class="clear"></div>
+		
+		<div id="saveRegEx">
+			<div class="field">
+	
+				<label>Save RegEx:</label>
+				{{ form.saveRegEx }} <a href="#" class="tooltip" title="">?</a>
+	
+			</div>
+			
+			
+			<fieldset id="saveRegExDetails">
+				
+				<legend>RegEx Details:</legend>
+				<div class="field">
+					<label>Name:</label>
+					{{ form.saveRegExName }} <a href="#" class="tooltip" title="">?</a>
+					{{ form.saveRegExName.errors }}
+				</div>
+				
+				<div class="field">
+					<label>Description:</label>
+					{{ form.saveRegExDescription }} <a href="#" class="tooltip" title="">?</a>
+					{{ form.saveRegExDescription.errors }}
+				</div>
+			</fieldset>
 		</div>
 
 		<div class="field">
@@ -390,35 +420,11 @@
 
 		</div>
 		
-		<div id="saveRegEx">
-			<div class="field">
-	
-				<label>Save RegEx:</label>
-				{{ form.saveRegEx }} <a href="#" class="tooltip" title="">?</a>
-	
-			</div>
-			
-			
-			<fieldset id="saveRegExDetails">
-				
-				<legend>RegEx Details:</legend>
-				<div class="field">
-					<label>Name:</label>
-					{{ form.saveRegExName }} <a href="#" class="tooltip" title="">?</a>
-					{{ form.saveRegExName.errors }}
-				</div>
-				
-				<div class="field">
-					<label>Description:</label>
-					{{ form.saveRegExDescription }} <a href="#" class="tooltip" title="">?</a>
-					{{ form.saveRegExDescription.errors }}
-				</div>
-			</fieldset>
-		</div>
-		
 		<br/>
 
 		<input type="submit" value="Render" id="xRenderProcess">
 	</form>
+	
+	<div id="xRegExDescriptions">{{ regExDescriptions }}</div>
 
 {% endblock %}

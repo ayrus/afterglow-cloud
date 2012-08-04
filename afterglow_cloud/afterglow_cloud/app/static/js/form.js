@@ -127,6 +127,10 @@ $(document).ready(function(){
 	toggleRegExInputs();    
     });
     
+    $('#id_regExChoices').change(function() {
+	showDescription($('#id_regExChoices').val());
+    });
+    
     $("#id_saveRegEx").click(function () { 
     	if($("#id_saveRegEx").is(":checked")){
 		$('#saveRegExDetails').show();
@@ -158,11 +162,26 @@ $(document).ready(function(){
     
 });
 
+function showDescription(id){
+	var contents = $("#xRegExDescriptions").html().split("[[[;]]]");
+	
+	var desc;
+	for(var i=0; i<contents.length; i++){
+		desc = contents[i].split("[[;]]");
+		if (id == desc[0]){
+			$('#regDesc').html("<b>Expression Description</b>: " + desc[1].split('\n').join('<br/>'));
+			$('#regDesc').show();
+			break;
+		}
+	}	
+}
+
 function toggleRegExInputs(){
     	if ($('input[name=regExType]:checked').val() == 1){
 		$('#id_regEx').show();
 		$('#id_regExChoices').hide();
 		$('#saveRegEx').show();
+		$('#regDesc').hide();
 	}else{
 		$('#id_regExChoices').show();
 		$('#id_regEx').hide();

@@ -35,6 +35,10 @@ def processForm(request):
             form = renderForm(initial = _readCookie(request.COOKIES['afConfig']))
         else:
             form = renderForm(initial = {'regExType': '1'})
+	
+    regExDescriptions = ""
+    for e in Expressions.objects.order_by('id').all():
+	regExDescriptions += str(e.id) + "[[;]]" + e.description + "[[[;]]]"
         
     return render_to_response('form.html', locals(), 
                               context_instance=RequestContext(request))
@@ -106,9 +110,6 @@ def _render(request, parsedData):
 	print request.POST['regExType']
 	
 	if request.POST['regExType'] == '1' and "saveRegEx" in request.POST:
-	    
-	    print "in"
-	    
 	    
 	    expression = Expressions(name=request.POST['saveRegExName'], \
 	                             description=request.POST['saveRegExDescription'], \
