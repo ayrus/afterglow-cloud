@@ -185,6 +185,10 @@ ul.errorlist, .cError, .cRenderError{
 	display: block;
 }
 
+.cErrorMsg{
+	text-align: left !important;
+}
+
 #success{
 	background-color: #8FE368 !important;
 	width: 500px;

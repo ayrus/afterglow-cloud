@@ -104,12 +104,12 @@ def _render(request, parsedData):
     #rendered images) which are older than four hours.
     _cleanFiles()
     
+    retVal = 1
+    
     if parsedData:
-        _parseToCsv(request.FILES['dataFile'], requestID, request.POST)
+        retVal = _parseToCsv(request.FILES['dataFile'], requestID, request.POST)    
 	
-	print request.POST['regExType']
-	
-	if request.POST['regExType'] == '1' and "saveRegEx" in request.POST:
+	if retVal and request.POST['regExType'] == '1' and "saveRegEx" in request.POST:
 	    
 	    expression = Expressions(name=request.POST['saveRegExName'], \
 	                             description=request.POST['saveRegExDescription'], \
@@ -135,38 +135,45 @@ def _render(request, parsedData):
     else:
         _writeDataFile(request.FILES['dataFile'], requestID)
     
-    _writeConfigFile(request.POST['propertyConfig'], requestID)
-    
-    #Build up parameters to be sent to the shell script.
-    param = _buildParameters(request.POST)
-    
-    if parsedData:
-        dataFile = "user_logs_parsed/" + requestID + ".log"
+    if not retVal:
+	
+	return render_to_response('render.html', locals(), 
+		                          context_instance=RequestContext(request))	
+	
     else:
-        dataFile = "user_data/" + requestID + ".csv"
-    propertyFile = "user_config/" + requestID + ".property"
-    outputFile = "afterglow_cloud/app/static/rendered/" + requestID + ".gif"
-    afPath = "../afterglow/src/afterglow.pl"
     
-    #Try rendering a graph, store the return code from the shell script.
-    status = _renderGraph(dataFile, propertyFile, outputFile, afPath, 
-                       param)
-    
-    #Construct a response.
-    response = render_to_response('render.html', locals(), 
-                              context_instance=RequestContext(request))
-    
-    #Check if the user wanted to save/create a cookie to save their
-    #settings for future use.
-    if("saveConfigCookie" in request.POST):
-      
-        expiry = datetime.now() + timedelta(days = 3)
-        
-        response.set_cookie(key = "afConfig", 
-                            value = _buildCookie(request.POST),
-                            expires = expiry)
-    
-    return response    
+	_writeConfigFile(request.POST['propertyConfig'], requestID)
+	
+	#Build up parameters to be sent to the shell script.
+	param = _buildParameters(request.POST)
+	
+	if parsedData:
+	    dataFile = "user_logs_parsed/" + requestID + ".log"
+	else:
+	    dataFile = "user_data/" + requestID + ".csv"
+	propertyFile = "user_config/" + requestID + ".property"
+	outputFile = "afterglow_cloud/app/static/rendered/" + requestID + ".gif"
+	afPath = "../afterglow/src/afterglow.pl"
+	
+	#Try rendering a graph, store the return code from the shell script.
+	status = _renderGraph(dataFile, propertyFile, outputFile, afPath, 
+	                   param)
+	
+	#Construct a response.
+	response = render_to_response('render.html', locals(), 
+	                          context_instance=RequestContext(request))
+	
+	#Check if the user wanted to save/create a cookie to save their
+	#settings for future use.
+	if("saveConfigCookie" in request.POST):
+	  
+	    expiry = datetime.now() + timedelta(days = 3)
+	    
+	    response.set_cookie(key = "afConfig", 
+		                value = _buildCookie(request.POST),
+		                expires = expiry)
+	
+	return response    
     
 
 def _parseToCsv(f, requestID, POSTdata):
@@ -185,19 +192,28 @@ def _parseToCsv(f, requestID, POSTdata):
     with open('user_logs_parsed/' + fileName, 'wb+') as dest:
         
         for line in open('user_logs/' + fileName):
-            match = pat.match(line).groups()
+            match = pat.match(line)
+	    
+	    if not match:
+		return 0
+	    
+	    match = match.groups()
             
             string = match[0] + "," + match[1]
             
-            #***CATCH EXCEPTION***
-            if 'twoNodeMode' not in POSTdata: #We get the third group (column) as well.
-                string += "," + match[2]
+            try:            
+            
+		if 'twoNodeMode' not in POSTdata: #We get the third group (column) as well.
+		    string += "," + match[2]
+		    
+	    except IndexError:
+		return 0
                 
             string += "\n"
             
             dest.write(string)
 	    
-    
+    return 1
 
 
 def _cleanFiles():

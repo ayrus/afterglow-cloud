@@ -6,45 +6,60 @@
 
 {% block body %}
 
-	{% if not status %}
-
-		<b>Rendered Graph</b>:
-		<center>
-			<a href="process" title="Back">Render another graph</a><br/><br/>
-			<img src="{{ STATIC_URL }}rendered/{{ requestID }}.gif" alt="" id="outputImage"/>
-		</center>
+	{% if not retVal %}
 	
-	{% else %}
-
 		<center>
 		<div class="cRenderError"><span class="cErrorMsg">
+		The regular expression input failed to match one or columns in the log file provided. Please try <a href="process" title="Back">again</a>.
+		<br/><br/>
+		Possible reasons include (but not limit to):<br/>
+		-An invalid regular expression which does not generate any groupings for the file given to parse.<br/>
+		-Invalid number of groups to match for. Please remember to check "Two Node Mode" if you are attemping to parse a two column CSV file.
+		<br/>
+		</span></div></center> 
+	{% else %}
 
-		{% ifequal status 1 %}
-			Error: Could not create an output image (1).
+		{% if not status %}
+	
+			<b>Rendered Graph</b>:
+			<center>
+				<a href="process" title="Back">Render another graph</a><br/><br/>
+				<img src="{{ STATIC_URL }}rendered/{{ requestID }}.gif" alt="" id="outputImage"/>
+			</center>
+		
+		{% else %}
+	
+			<center>
+			<div class="cRenderError"><span class="cErrorMsg">
+	
+			{% ifequal status 1 %}
+				Error: Could not create an output image (1).
+			{% endifequal %}
+	
+			{% ifequal status 2 %}
+		    Error: Data file does not exist (2).
 		{% endifequal %}
-
-		{% ifequal status 2 %}
-            Error: Data file does not exist (2).
-        {% endifequal %}
-        
-        {% ifequal status 3 %}
-            Error: Property file does not exist (3).
-        {% endifequal %}
-        
-        {% ifequal status 4 %}
-            Fatal: Perl is not installed. (4).
-        {% endifequal %}
-        
-        {% ifequal status 5 %}
-            Fatal: Neato is not installed (5).
-        {% endifequal %}
-        
-        {% ifequal status 6 %}
-            Error: Could not find afterglow instance (6).
-        {% endifequal %}
-        
-        </span></div></center>        
-        
-    {% endif %}        
+		
+		{% ifequal status 3 %}
+		    Error: Property file does not exist (3).
+		{% endifequal %}
+		
+		{% ifequal status 4 %}
+		    Fatal: Perl is not installed. (4).
+		{% endifequal %}
+		
+		{% ifequal status 5 %}
+		    Fatal: Neato is not installed (5).
+		{% endifequal %}
+		
+		{% ifequal status 6 %}
+		    Error: Could not find afterglow instance (6).
+		{% endifequal %}
+		
+		</span></div></center>        
+		
+	    {% endif %}  
+	    
+	{% endif %}     
         
 {% endblock %}
