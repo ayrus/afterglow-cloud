@@ -4,5 +4,7 @@ urlpatterns = patterns('afterglow_cloud.app.views',
      url(r'^process$', 'processForm'),
      url(r'^$', 'index'),
      url(r'^contact$', 'contact'),
-     url(r'^callback$', 'receiveCallback')
+     url(r'^callback$', 'receiveCallback'),
+     url(r'^revoke$', 'revokeAccess'),
+     url(r'^search$', 'logglySearch'),
 )

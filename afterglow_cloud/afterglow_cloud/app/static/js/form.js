@@ -114,7 +114,7 @@ $(document).ready(function(){
 
     $('input[name=xLogType]').change(function() {
 
-	var val = $('input[name=xLogType]:checked').val() 	;
+	var val = $('input[name=xLogType]:checked').val();
 	
 	if(val != "data" ){
 		toggleRegExInputs(); 
@@ -129,11 +129,14 @@ $(document).ready(function(){
 		}else{
 			$('#file').show();
 			$('#logglySetMsg').hide();
+			$('#loggly').hide();
 		}
 	}else{
 		$('#logglySetMsg').hide();
 		$('#saveRegEx').hide();
 		$('#regEx').hide();
+		$('#file').show();
+		$('#loggly').hide();
 	}
     });
     
@@ -161,8 +164,8 @@ $(document).ready(function(){
 
 	var dataFile = true;
 	
-	if(!afLogglySet){
-	dataFile = validateDataFile();
+	if($('input[name=xLogType]:checked').val() != "loggly"){
+		dataFile = validateDataFile();
 	}
 
 	var edgeLength = validateEdgeLength();

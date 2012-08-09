@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}
+	Render Graph - Afterglow
+{% endblock %}
+
+{% block extra_head %}
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block body %}
+	
+	{% if not auth %}
+		<center>
+			<div id="error">Loggly wasn't able to authenticate us to access your resources. <br/>Please try again.</div>
+			<a href="/process">Back</a>
+		</center>
+	{% elif responseError %}
+		<center>
+			<div id="error">Loggly returned us an error. The message sent was: "{{ responseErrorContent }}". Please try again.</div>
+			<a href="/search">Try Again</a>
+		</center>
+	{% else %}
+	
+		{% if form.errors %}
+			Please correct the error{{ form.errors|pluralize }} below.
+		{% endif %}	
+	
+		<div id="contactLabel">Search for logs: </div>	<br/>
+	
+		<form enctype="multipart/form-data" method="post" action="search" id="renderMainForm">
+			{% csrf_token %}
+			
+			<div class="field">
+				{{ form.query.errors }}
+				<label>Search Query:</label>
+				{{ form.query }}
+			</div>
+			
+			<div class="field">
+				{{ form.dateFrom.errors }}
+				<label>From:</label>
+				{{ form.dateFrom }}
+			</div>
+			
+			<div class="field">
+				{{ form.dateUntil.errors }}
+				<label>Until:</label>
+				{{ form.dateUntil }}
+			</div>
+			
+			<div class="field">
+				{{ form.rows.errors }}
+				<label>Rows:</label>
+				{{ form.rows }}
+			</div>
+			
+			<div class="field">
+				{{ form.start.errors }}
+				<label>Start:</label>
+				{{ form.start }}
+			</div>
+			
+			<input type="submit" value="Import & Render" id="xContactProcess">
+		</form>
+	{% endif %}
+	
+{% endblock %}

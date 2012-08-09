@@ -20,6 +20,10 @@
 			Please correct the error{{ form.errors|pluralize }} below.
 		</div></span>
 	{% endif %}
+	
+	{% if afLogglyRevoked %}
+		<span class="success">You have revoked access to the subdomain from our end.</span>
+	{% endif %}
 
 	<form enctype="multipart/form-data" method="post" action="process" id="renderMainForm">
 		{% csrf_token %}
@@ -40,7 +44,7 @@
 			<div class="cError"><span id="subdomainE" class="cErrorMsg"></span></div>
 		</div>
 		{% if afLogglySet %}
-			<div class="success" id="logglySetMsg">You've previously authorized AfterGlow for the subdomain: <b>{{ afLogglySubdomain }}</b>.loggly.com</div>
+			<div id="logglySetMsg"><span class="success">You've previously authorized AfterGlow for the subdomain: <b>{{ afLogglySubdomain }}</b>.loggly.com</span> <a href="revoke" alt="Revoke access to AfterGlow from your Loggly subdomain">Revoke Access</a></div>
 		{% endif %}
 
 		<div class="field" id="file">

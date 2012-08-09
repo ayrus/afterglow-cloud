@@ -7,7 +7,7 @@ class renderForm(forms.Form):
     configurations required for rendering a graph by AfterGlow Cloud. '''
     
     #The CSV data file submitted by the user.
-    dataFile = forms.FileField()
+    dataFile = forms.FileField(required=False)
     
     #Flag: '-t' Configuration flag for "Two node mode".
     twoNodeMode = forms.BooleanField(required=False)
@@ -126,3 +126,17 @@ class contactForm(forms.Form):
     userSubject = forms.ChoiceField(subjects)
     
     userMessage = forms.CharField(widget=forms.Textarea)
+    
+class logglySearchForm(forms.Form):
+    
+    query = forms.CharField(min_length = 1)
+
+    dateFrom = forms.CharField(initial = "NOW-24HOURS")
+    
+    dateUntil = forms.CharField(initial = "NOW")
+    
+    rows = forms.IntegerField(initial = 10)
+    
+    start = forms.IntegerField(initial = 0)
+    
+    

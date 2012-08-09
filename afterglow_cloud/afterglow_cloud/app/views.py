@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import render_to_response, redirect, HttpResponseRedirect
 from django.template import RequestContext
 from django.core.mail import send_mail, BadHeaderError
 from django.conf import settings
@@ -7,13 +7,14 @@ from hashlib import md5
 from datetime import datetime, timedelta
 from subprocess import call
 from time import time
-from afterglow_cloud.app.form import renderForm, contactForm
+from afterglow_cloud.app.form import renderForm, contactForm, logglySearchForm
 from afterglow_cloud.app.models import Expressions
 import os, re
 import oauth2 as oauth
 import urlparse
 import base64
-from urllib import urlencode
+import urllib
+import simplejson as json
 
 def index(request):
     ''' Display a view for the index page. '''
@@ -30,9 +31,20 @@ def processForm(request):
         if form.is_valid():
 	    
 	    	if request.POST['xLogType'] == "loggly":
-			#--add session stuff here--
+		    
+			#Save the form detail in session.
+		    
+			request.session["logglyForm"] = request.POST
+			
+			if "afLoggly" in request.COOKIES \
+			   and'key' in request.session \
+			   and 'secret' in request.session \
+			   and 'subdomain' in request.session:
+			    
+			    	return redirect('/search')
+			else:
 		    	
-		    	return _logglyAuth(request)
+		    		return _logglyAuth(request)
 	    	else:
 	    	
             
@@ -49,7 +61,9 @@ def processForm(request):
     	
     	afLogglySet = True
 	afLogglySubdomain = _readLogglyCookie(request.COOKIES['afLoggly'], request.session)
-	    
+	
+    if "r" in request.GET and request.GET["r"] == '1':
+	afLogglyRevoked = True    
 	
     regExDescriptions = ""
     for e in Expressions.objects.order_by('id').all():
@@ -102,7 +116,7 @@ def contact(request):
     return render_to_response('contact.html', locals(), 
                               context_instance=RequestContext(request))
 
-def _render(request, parsedData):
+def _render(request, parsedData, loggly=False):
 
     #Generate a session if one isn't already active.
     if hasattr(request, 'session') and hasattr(request.session, \
@@ -119,23 +133,33 @@ def _render(request, parsedData):
     #rendered images) which are older than four hours.
     _cleanFiles()
     
+    if loggly:
+	POSTdata = request.session["logglyForm"]
+    else:
+	POSTdata = request.POST
+    
     retVal = 1
     
     if parsedData:
-        retVal = _parseToCsv(request.FILES['dataFile'], requestID, request.POST)    
+
+	if loggly:
+	    retVal = _parseToCsv(loggly, requestID, POSTdata, True)  
+	else:
+	    retVal = _parseToCsv(request.FILES['dataFile'], requestID, POSTdata)  
+          
 	
-	if retVal and request.POST['regExType'] == '1' and "saveRegEx" in request.POST:
+	if retVal and POSTdata['regExType'] == '1' and "saveRegEx" in POSTdata:
 	    
-	    expression = Expressions(name=request.POST['saveRegExName'], \
-	                             description=request.POST['saveRegExDescription'], \
-	                             regex=request.POST['regEx'])
+	    expression = Expressions(name=POSTdata['saveRegExName'], \
+	                             description=POSTdata['saveRegExDescription'], \
+	                             regex=POSTdata['regEx'])
 	    expression.save()
 			
 	    message = "Hello, a new expression has been submitted.\n"
 	    
-	    message += "Exp name: " + request.POST["saveRegExName"] \
-	        + "\n\nDescription: " + request.POST["saveRegExDescription"] \
-	        + "\n\nExpression: " + request.POST["regEx"] \
+	    message += "Exp name: " + POSTdata["saveRegExName"] \
+	        + "\n\nDescription: " + POSTdata["saveRegExDescription"] \
+	        + "\n\nExpression: " + POSTdata["regEx"] \
 	        + "\n\n"
 	    
 	    from_email = settings.AF_FROM_EMAIL
@@ -157,10 +181,10 @@ def _render(request, parsedData):
 	
     else:
     
-	_writeConfigFile(request.POST['propertyConfig'], requestID)
+	_writeConfigFile(POSTdata['propertyConfig'], requestID)
 	
 	#Build up parameters to be sent to the shell script.
-	param = _buildParameters(request.POST)
+	param = _buildParameters(POSTdata)
 	
 	if parsedData:
 	    dataFile = "user_logs_parsed/" + requestID + ".log"
@@ -180,24 +204,29 @@ def _render(request, parsedData):
 	
 	#Check if the user wanted to save/create a cookie to save their
 	#settings for future use.
-	if("saveConfigCookie" in request.POST):
+	if("saveConfigCookie" in POSTdata):
 	  
 	    expiry = datetime.now() + timedelta(days = 3)
 	    
 	    response.set_cookie(key = "afConfig", 
-		                value = _buildCookie(request.POST),
+		                value = _buildCookie(POSTdata),
 		                expires = expiry)
 	
 	return response    
     
 
-def _parseToCsv(f, requestID, POSTdata):
+def _parseToCsv(f, requestID, POSTdata, loggly=False):
     
     fileName = requestID + '.log'
-        
+    
     with open('user_logs/' + fileName, 'wb+') as dest:
-        for chunk in f.chunks():
-            dest.write(chunk)
+
+	if not loggly:	
+	    for chunk in f.chunks():
+	    	dest.write(chunk)
+	else:
+	    for line in f:
+		dest.write(line)
 	    
     if POSTdata['regExType'] == '1':
     	pat = re.compile(POSTdata['regEx'])
@@ -213,10 +242,10 @@ def _parseToCsv(f, requestID, POSTdata):
 		return 0
 	    
 	    match = match.groups()
+	    
+	    try:
             
-            string = match[0] + "," + match[1]
-            
-            try:            
+            	string = match[0] + "," + match[1]        
             
 		if 'twoNodeMode' not in POSTdata: #We get the third group (column) as well.
 		    string += "," + match[2]
@@ -393,7 +422,7 @@ def _logglyAuth(request):
     
     client.set_signature_method(method)    
     
-    resp, content = client.request(request_token_url, method="POST", body=urlencode({'oauth_callback': settings.LOGGLY_OAUTH_CALLBACK}))
+    resp, content = client.request(request_token_url, method="POST", body=urllib.urlencode({'oauth_callback': settings.LOGGLY_OAUTH_CALLBACK}))
     request_token = dict(urlparse.parse_qsl(content))    
     
     request.session["logglyTokenSecret"] = request_token['oauth_token_secret']
@@ -403,7 +432,9 @@ def _logglyAuth(request):
 
 def receiveCallback(request):
     
-    if request.GET['oauth_callback_confirmed'] == 'true':
+    if "oauth_callback_confirmed" in request.GET and \
+       request.GET['oauth_callback_confirmed'] == 'true' and \
+       "oauth_token" in request.GET and "oauth_verifier" in request.GET:
 	
 	consumer = oauth.Consumer(key=settings.LOGGLY_OAUTH_CONSUMER_KEY, 
 		secret=settings.LOGGLY_OAUTH_CONSUMER_SECRET)	
@@ -418,28 +449,94 @@ def receiveCallback(request):
 	
 	resp, content = client.request(access_token_url, "POST")
 	access_token = dict(urlparse.parse_qsl(content))
+	
+	auth = True
 
-	print "Access Token:"
-	print "    - oauth_token        = %s" % access_token['oauth_token']
-	print "    - oauth_token_secret = %s" % access_token['oauth_token_secret']
-	print
-	print "You may now access protected resources using the access tokens above." 
-	print	
-
-	response = render_to_response('search.html', locals(), 
-	                          context_instance=RequestContext(request))   
+	response = redirect('/search')   
 
 	expiry = datetime.now() + timedelta(days = 100)
 	
 	response.set_cookie(key = "afLoggly", 
 		                value = _buildLogglyCookie(access_token['oauth_token'], access_token['oauth_token_secret'], request.session["logglySubdomain"]),
 		                expires = expiry)    
+	request.session["subdomain"] = request.session["logglySubdomain"]
+	request.session["key"] = access_token['oauth_token']
+	request.session["secret"] = access_token['oauth_token_secret']
+	
 	return response
     
     else:
-	#Do this.
-	pass
+	
+	auth = False
+	
+	return render_to_response('search.html', locals(), 
+	                          context_instance=RequestContext(request))
     
+def revokeAccess(request):
+    
+    response = HttpResponseRedirect('/process?r=1')
+    
+    if "afLoggly" in request.COOKIES:
+	
+	response.delete_cookie(key = "afLoggly")
+	
+    keys = ['key', 'secret,' 'subdomain']
+    
+    for key in keys:
+	if key in request.session:
+	    request.session.pop(key)
+
+    return response
+
+def logglySearch(request):
+    
+    if 'afLoggly' not in request.COOKIES \
+       or 'key' not in request.session \
+       or 'secret' not in request.session \
+       or 'subdomain' not in request.session:
+	
+	    return redirect('/process')    
+    
+    auth = True
+    
+    if request.method == 'POST':
+        form = logglySearchForm(request.POST)        
+        
+        if form.is_valid():
+	    
+	    	endpoint = "http://%s.loggly.com/api/search/"	% (request.session['subdomain'])
+	    
+		params = "?q=%s&from=%s&until=%s&rows=%s&start=%s" % (urllib.quote(request.POST['query']), urllib.quote(request.POST['dateFrom']), urllib.quote(request.POST['dateUntil']), urllib.quote(request.POST['rows']), urllib.quote(request.POST['start']))
+		
+		consumer = oauth.Consumer(key=settings.LOGGLY_OAUTH_CONSUMER_KEY, 
+	secret=settings.LOGGLY_OAUTH_CONSUMER_SECRET)
+		token = oauth.Token(request.session['key'], request.session['secret'])
+		client = oauth.Client(consumer, token)
+		response, content = client.request(endpoint + params)
+	
+		if response.status is 200:
+			content = json.loads(content)		
+
+			fileData = ""			
+			
+			for entry in content["data"]:
+				fileData += entry["text"] + "\n"
+		    
+			return _render(request, True, fileData)
+			
+		else:
+		    
+		    responseError = True
+		    
+		    responseErrorContent = content
+		
+	    
+    else:
+	form = logglySearchForm()	
+	    
+    return render_to_response('search.html', locals(), 
+	                          context_instance=RequestContext(request))
+
 def _buildLogglyCookie(key, secret, subdomain):
     
     contents = "%s:%s;%s:%s;%s:%s" % ("key", key, "secret", secret, "subdomain", subdomain)
