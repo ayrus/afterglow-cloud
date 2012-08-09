@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response, HttpResponseRedirect
+from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 from django.core.mail import send_mail, BadHeaderError
 from django.conf import settings
@@ -10,6 +10,10 @@ from time import time
 from afterglow_cloud.app.form import renderForm, contactForm
 from afterglow_cloud.app.models import Expressions
 import os, re
+import oauth2 as oauth
+import urlparse
+import base64
+from urllib import urlencode
 
 def index(request):
     ''' Display a view for the index page. '''
@@ -18,16 +22,21 @@ def index(request):
                                       context_instance=RequestContext(request))
 
 def processForm(request):
-    ''' Display a view (form) to submit a render request. If there is already
-    data in the request (form has been submitted) process the request and try
-    rendering a graph. '''
     
     if request.method == 'POST':
+	
         form = renderForm(request.POST, request.FILES)        
         
         if form.is_valid():
+	    
+	    	if request.POST['xLogType'] == "loggly":
+			#--add session stuff here--
+		    	
+		    	return _logglyAuth(request)
+	    	else:
+	    	
             
-            	return _render(request, request.POST['xLogType'] == "log")
+            		return _render(request, request.POST['xLogType'] == "log")
     else:
 
         if "afConfig" in request.COOKIES: #Some saved config in history.
@@ -35,6 +44,12 @@ def processForm(request):
             form = renderForm(initial = _readCookie(request.COOKIES['afConfig']))
         else:
             form = renderForm(initial = {'regExType': '1'})
+	    
+    if "afLoggly" in request.COOKIES:
+    	
+    	afLogglySet = True
+	afLogglySubdomain = _readLogglyCookie(request.COOKIES['afLoggly'], request.session)
+	    
 	
     regExDescriptions = ""
     for e in Expressions.objects.order_by('id').all():
@@ -363,3 +378,84 @@ def _renderGraph(dataFile, propertyFile, outputFile, afPath, afArgs):
     
     return call("../afterglow.sh " + dataFile + " " + propertyFile + " " + 
                 outputFile + " " + afPath + " " + afArgs, shell=True)
+
+def _logglyAuth(request):
+    
+    consumer = oauth.Consumer(key=settings.LOGGLY_OAUTH_CONSUMER_KEY, 
+	secret=settings.LOGGLY_OAUTH_CONSUMER_SECRET)    
+
+    request_token_url = "http://%s.loggly.com/api/oauth/request_token/" % (request.POST['logglySubdomain'])
+    authorize_url = "http://%s.loggly.com/api/oauth/authorize/"	% (request.POST['logglySubdomain'])
+    
+    client = oauth.Client(consumer)
+    
+    method = oauth.SignatureMethod_PLAINTEXT()
+    
+    client.set_signature_method(method)    
+    
+    resp, content = client.request(request_token_url, method="POST", body=urlencode({'oauth_callback': settings.LOGGLY_OAUTH_CALLBACK}))
+    request_token = dict(urlparse.parse_qsl(content))    
+    
+    request.session["logglyTokenSecret"] = request_token['oauth_token_secret']
+    request.session["logglySubdomain"] = request.POST['logglySubdomain']
+    
+    return redirect("%s?oauth_token=%s" % (authorize_url, request_token['oauth_token']))
+
+def receiveCallback(request):
+    
+    if request.GET['oauth_callback_confirmed'] == 'true':
+	
+	consumer = oauth.Consumer(key=settings.LOGGLY_OAUTH_CONSUMER_KEY, 
+		secret=settings.LOGGLY_OAUTH_CONSUMER_SECRET)	
+	
+	access_token_url = "http://%s.loggly.com/api/oauth/access_token/" % (request.session["logglySubdomain"])
+    
+	token = oauth.Token(request.GET['oauth_token'],
+	    request.session['logglyTokenSecret'])
+	
+	token.set_verifier(request.GET['oauth_verifier'])
+	client = oauth.Client(consumer, token)
+	
+	resp, content = client.request(access_token_url, "POST")
+	access_token = dict(urlparse.parse_qsl(content))
+
+	print "Access Token:"
+	print "    - oauth_token        = %s" % access_token['oauth_token']
+	print "    - oauth_token_secret = %s" % access_token['oauth_token_secret']
+	print
+	print "You may now access protected resources using the access tokens above." 
+	print	
+
+	response = render_to_response('search.html', locals(), 
+	                          context_instance=RequestContext(request))   
+
+	expiry = datetime.now() + timedelta(days = 100)
+	
+	response.set_cookie(key = "afLoggly", 
+		                value = _buildLogglyCookie(access_token['oauth_token'], access_token['oauth_token_secret'], request.session["logglySubdomain"]),
+		                expires = expiry)    
+	return response
+    
+    else:
+	#Do this.
+	pass
+    
+def _buildLogglyCookie(key, secret, subdomain):
+    
+    contents = "%s:%s;%s:%s;%s:%s" % ("key", key, "secret", secret, "subdomain", subdomain)
+    return base64.b64encode(contents)
+
+def _readLogglyCookie(cookieData, SESSION):
+    
+    cookieData = base64.b64decode(cookieData)
+    cookieData = cookieData.split(";")
+    
+    for data in cookieData:
+	
+	data = data.split(":")
+	SESSION[data[0]] = data[1]
+	
+    return SESSION['subdomain']
+    
+    
+    

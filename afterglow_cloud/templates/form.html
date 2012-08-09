@@ -26,13 +26,24 @@
 		
 		<div class="field">
 		
-			<label>File Type:</label>	
+			<label>Source:</label>	
 			<input type="radio" name="xLogType" checked="checked" value="data"/>CSV Data
 			<input type="radio" name="xLogType" value="log" class="configTypeRadio"/>Log File
-
+			<input type="radio" name="xLogType" value="loggly" class="configTypeRadio"/>Loggly
 		</div>
+		
+		<div class="field" id="loggly">
 
-		<div class="field">
+			{{ form.logglySubdomain.errors }}
+			<label>Loggly Subdomain:</label>
+			{{ form.logglySubdomain }} 
+			<div class="cError"><span id="subdomainE" class="cErrorMsg"></span></div>
+		</div>
+		{% if afLogglySet %}
+			<div class="success" id="logglySetMsg">You've previously authorized AfterGlow for the subdomain: <b>{{ afLogglySubdomain }}</b>.loggly.com</div>
+		{% endif %}
+
+		<div class="field" id="file">
 
 			{{ form.dataFile.errors }}
 			<label>File:</label>
@@ -426,5 +437,9 @@
 	</form>
 	
 	<div id="xRegExDescriptions">{{ regExDescriptions }}</div>
+	
+	{% if afLogglySet %}
+		<script>afLogglySet = true;</script>
+	{% endif %}
 
 {% endblock %}

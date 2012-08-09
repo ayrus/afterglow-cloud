@@ -13,7 +13,7 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': '', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': '', # Or path to database file if using sqlite3.
         'USER': '', # Not used with sqlite3.
         'PASSWORD': '', # Not used with sqlite3.
@@ -25,7 +25,7 @@ DATABASES = {
 #Define your SMTP settings below for AfterGlow to use for the contact form.
 EMAIL_USE_TLS = True
 EMAIL_HOST = ''
-EMAIL_PORT = 
+EMAIL_PORT = 0
 EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
 
@@ -35,11 +35,14 @@ AF_FROM_EMAIL = ""
 #Define a list of emails to send copies of each contact form request.
 AF_TO_EMAILS = ['']
 
-#Following settings define keys required by the Re-CAPTCHA service to
-#present users with a CAPTCHA image on the contact form.
-#Keys can be obtained here: https://www.google.com/recaptcha/admin/create
 AF_RECAPTCHA_PUBLIC_KEY = ''
+
 AF_RECAPTCHA_PRIVATE_KEY = ''
+
+#
+LOGGLY_OAUTH_CONSUMER_KEY = ""
+LOGGLY_OAUTH_CONSUMER_SECRET = ""
+LOGGLY_OAUTH_CALLBACK = ""
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -109,7 +112,6 @@ SECRET_KEY = ''
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-# 'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -118,7 +120,6 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'afterglow_cloud.app',
 )
 
 ROOT_URLCONF = 'afterglow_cloud.urls'
@@ -137,10 +138,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
+    'afterglow_cloud.app',
 )
 
 # A sample logging configuration. The only tangible logging

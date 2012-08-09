@@ -78,6 +78,8 @@ class renderForm(forms.Form):
     
     saveRegExDescription = forms.CharField(widget=forms.Textarea, required=False)
     
+    logglySubdomain = forms.CharField(required=False)
+    
     def clean_textLabel(self):
         ''' Validate the textLabel input to see if it has a valid HEX colour
         format. Raise an error if not. '''

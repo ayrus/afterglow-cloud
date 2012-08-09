@@ -100,7 +100,7 @@ a:hover{
 	width: 10%;
 }
 
-#id_overrideEdgeLength, #id_regExChoices, #saveRegEx, #saveRegExDetails, #xRegExDescriptions{
+#id_overrideEdgeLength, #id_regExChoices, #saveRegEx, #saveRegExDetails, #xRegExDescriptions, #logglySetMsg, #loggly{
 	display: none;
 }
 
@@ -175,7 +175,7 @@ ul.errorlist, .cError, .cRenderError{
 	width: 500px;
 }
     
-.errorlist li, .cErrorMsg, #success, #error{
+.errorlist li, .cErrorMsg, #success, #error, .success{
         background-color: #E34242;
         color: white;
         font-size: 12px;
@@ -189,11 +189,15 @@ ul.errorlist, .cError, .cRenderError{
 	text-align: left !important;
 }
 
-#success{
+#success, .success{
 	background-color: #8FE368 !important;
 	width: 500px;
 	padding-left: 10px;
 	margin-bottom: 20px;
+}
+
+.success{
+	font-weight: normal;
 }
 
 #error{

@@ -7,6 +7,8 @@ var sumSourceSet = false;
 var sumEventSet = false;
 var sumTargetSet = false;
 
+var afLogglySet = false;
+
 $(document).ready(function(){
 
 	//Invoke the colour pickers.
@@ -22,11 +24,7 @@ $(document).ready(function(){
 	    toggleShowOverrideInput();
     }
     
-    if($('input[name=xLogType]:checked').val() == "log"){
-	    $('#regEx').show();
-	    $('#saveRegEx').show();
-    }
-    
+    $('input[name=xLogType]')[0].checked = true;
     $('input[name=regExType]')[0].checked = true;
 
     $("#id_overrideEdge").click(function () { 
@@ -114,12 +112,28 @@ $(document).ready(function(){
     
     });
 
-    $('input[name=xLogType]').change(function() {	
-    	$('#regEx').toggle();
-	if($('input[name=xLogType]:checked').val() == "log" ){
+    $('input[name=xLogType]').change(function() {
+
+	var val = $('input[name=xLogType]:checked').val() 	;
+	
+	if(val != "data" ){
 		toggleRegExInputs(); 
+		$('#regEx').show();
+		if(val == "loggly"){
+			$('#file').hide();
+			if(!afLogglySet){
+				$('#loggly').show();
+			}else{
+				$('#logglySetMsg').show();
+			}
+		}else{
+			$('#file').show();
+			$('#logglySetMsg').hide();
+		}
 	}else{
+		$('#logglySetMsg').hide();
 		$('#saveRegEx').hide();
+		$('#regEx').hide();
 	}
     });
     
@@ -144,8 +158,12 @@ $(document).ready(function(){
 
 	//Reset any previous validation messages.
 	resetValidations();
+
+	var dataFile = true;
 	
-	var dataFile = validateDataFile();
+	if(!afLogglySet){
+	dataFile = validateDataFile();
+	}
 
 	var edgeLength = validateEdgeLength();
 
