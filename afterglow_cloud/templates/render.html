@@ -17,6 +17,9 @@
 		-Invalid number of groups to match for. Please remember to check "Two Node Mode" if you are attemping to parse a two column CSV file.
 		<br/>
 		</span></div></center> 
+	{% elif emptyData %}
+	<center><span id="error">Your search returned no data for AfterGlow to parse. Please try again.</span>
+	<a href="/search">Try Again</a></center>
 	{% else %}
 
 		{% if not status %}

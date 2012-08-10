@@ -116,7 +116,7 @@ def contact(request):
     return render_to_response('contact.html', locals(), 
                               context_instance=RequestContext(request))
 
-def _render(request, parsedData, loggly=False):
+def _render(request, parsedData, loggly=False, logglyData=None):
 
     #Generate a session if one isn't already active.
     if hasattr(request, 'session') and hasattr(request.session, \
@@ -143,7 +143,13 @@ def _render(request, parsedData, loggly=False):
     if parsedData:
 
 	if loggly:
-	    retVal = _parseToCsv(loggly, requestID, POSTdata, True)  
+	    
+	    if not logglyData:
+		emptyData = True
+		return render_to_response('render.html', locals(), 
+				                          context_instance=RequestContext(request))			
+	    
+	    retVal = _parseToCsv(logglyData, requestID, POSTdata, True)  
 	else:
 	    retVal = _parseToCsv(request.FILES['dataFile'], requestID, POSTdata)  
           
@@ -249,6 +255,7 @@ def _parseToCsv(f, requestID, POSTdata, loggly=False):
             
 		if 'twoNodeMode' not in POSTdata: #We get the third group (column) as well.
 		    string += "," + match[2]
+		    print "here"
 		    
 	    except IndexError:
 		return 0
@@ -522,7 +529,7 @@ def logglySearch(request):
 			for entry in content["data"]:
 				fileData += entry["text"] + "\n"
 		    
-			return _render(request, True, fileData)
+			return _render(request, True, True, fileData)
 			
 		else:
 		    
