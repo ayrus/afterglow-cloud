@@ -138,7 +138,7 @@ def _render(request, parsedData, loggly=False, logglyData=None):
     else:
 	POSTdata = request.POST
     
-    retVal = 1
+    retVal = 0
     
     if parsedData:
 
@@ -154,7 +154,7 @@ def _render(request, parsedData, loggly=False, logglyData=None):
 	    retVal = _parseToCsv(request.FILES['dataFile'], requestID, POSTdata)  
           
 	
-	if retVal and POSTdata['regExType'] == '1' and "saveRegEx" in POSTdata:
+	if not retVal and POSTdata['regExType'] == '1' and "saveRegEx" in POSTdata:
 	    
 	    expression = Expressions(name=POSTdata['saveRegExName'], \
 	                             description=POSTdata['saveRegExDescription'], \
@@ -180,7 +180,7 @@ def _render(request, parsedData, loggly=False, logglyData=None):
     else:
         _writeDataFile(request.FILES['dataFile'], requestID)
     
-    if not retVal:
+    if retVal:
 	
 	return render_to_response('render.html', locals(), 
 		                          context_instance=RequestContext(request))	
@@ -245,26 +245,29 @@ def _parseToCsv(f, requestID, POSTdata, loggly=False):
             match = pat.match(line)
 	    
 	    if not match:
-		return 0
+		return 1
 	    
 	    match = match.groups()
 	    
 	    try:
             
-            	string = match[0] + "," + match[1]        
-            
-		if 'twoNodeMode' not in POSTdata: #We get the third group (column) as well.
+            	string = match[0] + "," + match[1]   
+	    
+	    except IndexError:
+		return 2
+	    
+	    try:
+	    	if 'twoNodeMode' not in POSTdata: #We get the third group (column) as well.
 		    string += "," + match[2]
-		    print "here"
 		    
 	    except IndexError:
-		return 0
+		return 3
                 
             string += "\n"
             
             dest.write(string)
 	    
-    return 1
+    return 0
 
 
 def _cleanFiles():
@@ -295,9 +298,12 @@ def _writeDataFile(f, requestID):
     
     fileName = requestID + '.csv'
     
+    
+    i = 0
+    
     with open('user_data/' + fileName, 'wb+') as dest:
         for chunk in f.chunks():
-            dest.write(chunk)
+            dest.write(line)
 
 def _writeConfigFile(data, requestID):
     ''' Write the configuration file present in the string 'data' fromt he user,
@@ -522,7 +528,7 @@ def logglySearch(request):
 		response, content = client.request(endpoint + params)
 	
 		if response.status is 200:
-			content = json.loads(content)		
+			content = json.loads(content)
 
 			fileData = ""			
 			

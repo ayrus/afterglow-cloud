@@ -199,7 +199,7 @@
 
 			</div>
 
-			<div class="field">
+			<div class="field" id="eventFanOutThres">
 
 				{{ form.eventFanOut.errors }}
 				<label>Event fan out threshold:</label>
@@ -272,12 +272,15 @@
 					
 					<div class="field">
 						<label><input type="radio" name="xColourRadio" id="xColourRadioIf" value="if"/>IF Condition:</label>
-						<input type="text" name="xColourIfCondition" id="xColourIfCondition" />
+						<input type="text" name="xColourIfCondition" id="xColourIfCondition" class="long"/>
+						<br/>
+						<label>&nbsp;</label>
+						<span class="smallText">e.g.: $fields[2] =~ /^192\.168/</span>
 					</div>
 					
 					<div class="field">
 						<label><input type="radio" name="xColourRadio" id="xColourRadioCustom" value="custom"/>Custom condition:</label>
-						<input type="text" name="xColourCustomCondition" id="xColourCustomCondition" />
+						<input type="text" name="xColourCustomCondition" id="xColourCustomCondition" class="long"/>
 					</div>
 					
 					<button name="xColourButton" id="xColourButton" class="addButton"></button>
@@ -331,7 +334,10 @@
 					
 					<div class="field">
 						<label><input type="radio" name="xSizeRadio" id="xSizeRadioExp" checked="checked" value="exp"/>Expression:</label>
-						<input type="text" name="xSizeCondition" id="xSizeCondition"/>
+						<input type="text" name="xSizeCondition" id="xSizeCondition" class="long"/>
+						<br/>
+						<label>&nbsp;</label>
+						<span class="smallText">e.g.: $fields[2]</span>
 					</div>
 					
 					<div class="field">
@@ -400,13 +406,15 @@
 							<option>Class A</option>
 							<option>Class B</option>
 							<option>Class C</option>
-							<option>Class D</option>
 						</select>
 					</div>
 					
 					<div class="field">
 						<label><input type="radio" name="xClusteringRadio" id="xClusteringRadioExp" value="exp"/>Expression:</label>
-						<input type="text" name="xClusteringCondition" id="xClusteringCondition"/>
+						<input type="text" name="xClusteringCondition" id="xClusteringCondition" class="long"/>
+						<br/>
+						<label>&nbsp;</label>
+						<span class="smallText">e.g.: regex_replace("(\\d\+)")."/8" if ($fields[0]!="192.168.0.1")</span>
 					</div>
 					
 					<button name="xClusteringButton" id="xClusteringButton" class="addButton"></button>
@@ -418,7 +426,10 @@
 					
 					<a href="#" class="tooltip configTip" title="Add any custom line to the configuration page. The lines are parsed as-is.">?</a>
 
-					<input type="text" name="xCustomCondition" id="xCustomCondition"/>
+					<input type="text" name="xCustomCondition" id="xCustomCondition" class="long"/>
+					<br/>
+					<span class="smallText">e.g.: variable=@violation=("Backdoor Access");</span>
+					<br/><br/>
 					<button name="xCustomButton" id="xCustomButton" class="addButton"></button>
 				</fieldset>
 

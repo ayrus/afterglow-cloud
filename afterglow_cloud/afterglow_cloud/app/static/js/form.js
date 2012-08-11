@@ -93,6 +93,10 @@ $(document).ready(function(){
         return false;
     });
     
+    if($("#id_twoNodeMode").is(":checked")){
+    	$('#eventFanOutThres').hide();
+    }
+    
     //Change the type of configuration input, if the radio in the configurations
     //panel has any action.
     $('input[name=xConfigType]').change(function() {
@@ -153,6 +157,14 @@ $(document).ready(function(){
 		$('#saveRegExDetails').show();
 	}else{
 		$('#saveRegExDetails').hide();
+	}
+    });
+    
+    $("#id_twoNodeMode").click(function () { 
+    	if($("#id_twoNodeMode").is(":checked")){
+		$('#eventFanOutThres').hide();
+	}else{
+		$('#eventFanOutThres').show();
 	}
     });
     

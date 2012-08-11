@@ -6,16 +6,23 @@
 
 {% block body %}
 
-	{% if not retVal %}
+	{% if retVal %}
 	
 		<center>
 		<div class="cRenderError"><span class="cErrorMsg">
-		The regular expression input failed to match one or columns in the log file provided. Please try <a href="process" title="Back">again</a>.
+		{% ifequal retVal 1 %}
+				Error: An invalid regular expression has been input which does not match one or more lines in the given file.
+		{% endifequal %}
+		
+		{% ifequal retVal 2 %}
+				Error: An invalid regular expression has been input which does not generate the required groupings for the file given to parse.
+		{% endifequal %}
+		
+		{% ifequal retVal 3 %}
+				Error: An invalid regular expression has been input which does not generate the required groupings for the file given to parse. Please remember to check "Two Node Mode" on the settings pane; if you are attemping to parse a two column CSV file.
+		{% endifequal %}
 		<br/><br/>
-		Possible reasons include (but not limit to):<br/>
-		-An invalid regular expression which does not generate any groupings for the file given to parse.<br/>
-		-Invalid number of groups to match for. Please remember to check "Two Node Mode" if you are attemping to parse a two column CSV file.
-		<br/>
+		Please try <a href="process" title="Back">again</a>.
 		</span></div></center> 
 	{% elif emptyData %}
 	<center><span id="error">Your search returned no data for AfterGlow to parse. Please try again.</span>

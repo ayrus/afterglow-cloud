@@ -283,6 +283,10 @@ fieldset legend{
 	text-decoration: none;
 }
 
+.long{
+	width: 300px;
+}
+
 #alreadyAddedHidden{
 	display: none;
 }
@@ -326,7 +330,7 @@ fieldset legend{
 	margin-bottom: 10px;
 }
 
-#configPlaceholder{
+#configPlaceholder, .smallText{
 	margin-left: 20px;
 	margin-bottom: 10px;
 	font-size: 12px;
