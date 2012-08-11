@@ -606,15 +606,27 @@ function addClustering(){
     if ($("input[name='xClusteringRadio']:checked").val() == "ip"){
         
         userHTML += " | IP | " + $("#xClusteringIPType").attr("value");
+	
+	if($("#xClusteringIPType").val() == "a"){
+		configHTML += 'regex_replace("(\\\\d\\+)\\\\.\\\\d\\+")."/8"';
+	}else if($("#xClusteringIPType").val() == "b"){
+		configHTML += 'regex_replace("(\\\\d\\+\\\\.\\\\d\\+)\\\\.\\\\d\\+")."/16"';
+	}else{
+		configHTML += 'regex_replace("(\\\\d\\+\\\\.\\\\d\\+\\\\.\\\\d\\+)\\\\.\\\\d\\+")."/24"';
+	}
         
-        configHTML += 'regex_replace("(\\\\d\\+)\\\\.\\\\d\\+")."/8"';
         
-    }else{
+    }else if($("input[name='xClusteringRadio']:checked").val() == "exp"){
         
         userHTML += " | Condition | " + $("#xClusteringCondition").attr("value"); 
         
         configHTML += $("#xClusteringCondition").attr("value");
     
+    }else{
+    	
+    	userHTML += " | Port | > " + $("#xClusteringPort").attr("value");
+	
+	configHTML += '\"> ' + $("#xClusteringPort").attr("value") + '\" if ($fields[2]>' + $("#xClusteringPort").attr("value") + ')';
     }
     
     appendUserConfigDiv(elemID, userHTML);

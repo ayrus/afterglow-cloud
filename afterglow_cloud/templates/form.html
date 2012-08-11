@@ -403,10 +403,18 @@
 					<div class="field">
 						<label><input type="radio" name="xClusteringRadio" id="xClusteringRadioIP" value="ip" checked="checked"/>IP Classes:</label>
 						<select name="xClusteringIPType" id="xClusteringIPType">
-							<option>Class A</option>
-							<option>Class B</option>
-							<option>Class C</option>
+							<option value="a">Class A</option>
+							<option value="b">Class B</option>
+							<option value="c">Class C</option>
 						</select>
+					</div>
+					
+					<div class="field">
+						<label><input type="radio" name="xClusteringRadio" id="xClusteringRadioPort" value="port" checked="checked"/>Port:</label>
+						<input type="text" name="xClusteringPort" id="xClusteringPort" value="2000" />
+						<br/>
+						<label>&nbsp;</label>
+						<span class="smallText">e.g.: 2000 -- would cluster all ports '> 2000'.</span>
 					</div>
 					
 					<div class="field">

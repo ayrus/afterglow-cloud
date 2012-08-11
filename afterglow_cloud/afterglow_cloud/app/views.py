@@ -303,7 +303,7 @@ def _writeDataFile(f, requestID):
     
     with open('user_data/' + fileName, 'wb+') as dest:
         for chunk in f.chunks():
-            dest.write(line)
+            dest.write(chunk)
 
 def _writeConfigFile(data, requestID):
     ''' Write the configuration file present in the string 'data' fromt he user,
