@@ -7,8 +7,10 @@ from hashlib import md5
 from datetime import datetime, timedelta
 from subprocess import call
 from time import time
-from afterglow_cloud.app.form import renderForm, contactForm, logglySearchForm
-from afterglow_cloud.app.models import Expressions
+from afterglow_cloud.app.form import renderForm, contactForm, logglySearchForm, gallerySubmitForm
+from afterglow_cloud.app.models import Expressions, Images
+from shutil import copyfile
+from easy_thumbnails.files import get_thumbnailer
 import os, re
 import oauth2 as oauth
 import urlparse
@@ -203,6 +205,12 @@ def _render(request, parsedData, loggly=False, logglyData=None):
 	#Try rendering a graph, store the return code from the shell script.
 	status = _renderGraph(dataFile, propertyFile, outputFile, afPath, 
 	                   param)
+	
+	CAPTCHA_PUBLIC_KEY = settings.AF_RECAPTCHA_PUBLIC_KEY
+		
+	form = gallerySubmitForm(initial = {'image' : requestID})
+	
+	request.session['requestID'] = requestID
 	
 	#Construct a response.
 	response = render_to_response('render.html', locals(), 
@@ -566,6 +574,95 @@ def _readLogglyCookie(cookieData, SESSION):
 	SESSION[data[0]] = data[1]
 	
     return SESSION['subdomain']
+
+def galleryProcess(request):
     
+    if request.method == 'POST':
+	
+	    CAPTCHA_PUBLIC_KEY = settings.AF_RECAPTCHA_PUBLIC_KEY	
+	
+	    form = gallerySubmitForm(request.POST)        
+	    
+	    if form.is_valid():
+		
+		response = captcha.submit(  
+			               request.POST.get('recaptcha_challenge_field'),  
+			               request.POST.get('recaptcha_response_field'),  
+			               settings.AF_RECAPTCHA_PRIVATE_KEY,  
+			               request.META['REMOTE_ADDR'],)         			   
+			   
+		if not response.is_valid:
+			captchaWrong = True
+			submitError = True
+			requestID = request.POST['image']
+			
+			return render_to_response('render.html', locals(), 
+					     context_instance=RequestContext(request))	
+		    
+		staticPath = "afterglow_cloud/app/static/"
+		
+		renderedFile = staticPath + "rendered/" + request.session['requestID'] + ".gif"
+		
+		outputFile = staticPath + "gallery/" + request.session['requestID'] + ".gif"
+		
+		copyfile(renderedFile, outputFile)
+		
+		_generateThumbnail(staticPath, request.session['requestID'])
+		
+		form.save()
+		
+		return redirect('/gallery?s=1')
+	    
+	    else:
+		
+		requestID = request.POST['image']
+		
+		submitError = True
+		
+		return render_to_response('render.html', locals(), 
+	                          context_instance=RequestContext(request))
+    else:
+	return redirect('/process')
     
+def _generateThumbnail(staticPath, requestID):
     
+    pic = open(staticPath + "gallery/" + requestID + ".gif")
+    
+    exportName = staticPath + "gallery_thumbs/" + requestID
+    
+    thumbnailer = get_thumbnailer(pic, relative_name = exportName)
+    
+    thumbnail = thumbnailer.generate_thumbnail({'size': (150, 150), 'crop' : 'smart'})
+    
+    thumbnail.image.save(staticPath + "gallery_thumbs/" + requestID + ".png")
+    
+def showGallery(request):
+    
+    if "s" in request.GET and request.GET["s"] == "1":
+	fromSubmit = True
+	
+    if "o" in request.GET:
+    	try:
+		offset = int(request.GET['o'])
+		
+		if offset % 15 != 0:
+		    raise Exception
+	except:
+	    	error = True
+		return render_to_response('gallery.html', locals(), 
+			                          context_instance=RequestContext(request))		
+    else:
+	offset = 0
+	
+    imageSet = Images.objects.order_by('-id')[offset : offset + 15]
+    
+    moreImages = False
+    if Images.objects.order_by('-id')[offset - 1 + 15:15].count():
+	moreImages = True
+	nextVal = offset + 15
+    
+    prevVal = offset - 15
+	
+	
+    return render_to_response('gallery.html', locals(), 
+	                              context_instance=RequestContext(request))

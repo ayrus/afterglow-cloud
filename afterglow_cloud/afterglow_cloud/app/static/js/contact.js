@@ -1,3 +1,7 @@
+var RecaptchaOptions = {
+    theme : 'white'
+};
+
 $(document).ready(function(){
     $('#contactForm').submit(function () {
     

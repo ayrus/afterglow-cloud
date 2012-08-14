@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}
+	Gallery - Afterglow
+{% endblock %}
+
+{% block extra_head %}
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="{{ STATIC_URL }}js/fancybox/source/jquery.fancybox.css?v=2.0.6" type="text/css" media="screen" />
+	<script type="text/javascript" src="{{ STATIC_URL }}js/fancybox/source/jquery.fancybox.pack.js?v=2.0.6"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/gallery.js"></script>
+	
+{% endblock %}
+
+{% block body %}
+
+	<center>
+		<span class="headLabel">Gallery</span>
+		<br/><br/>
+	
+	{% if fromSubmit %}
+			<div class="success">Your image has been submitted to the gallery. </div>
+	{% endif %}
+	
+	{% if error %}
+			<div class="errorMsg">Fatal: Malformed input</div>
+	{% endif %}
+	
+		
+	</center>
+	
+	{% if not error %}
+	
+		<div id="galleryWrapper">
+			
+			{% for image in imageSet %}
+			
+				<a class="gallImg" href="{{ STATIC_URL }}gallery/{{ image.image }}.gif" title="<u>Name</u>: {{ image.name }} | <u>by</u> (if given): {{ image.author }} <br/><br/> <u>Description</u>: {{ image.description }}">
+					<img class="galleryImage" src="{{ STATIC_URL }}gallery_thumbs/{{ image.image }}.png"  alt="{{ image.name }}" />
+				</a>
+				
+				{% ifequal forloop.counter 5 %}
+				
+					<br/>			
+					
+				{% endifequal %}
+				
+			{% empty %}
+			
+				<div class="errorMsg">No images to display.</div>
+			
+			{% endfor %}
+			
+			<br/><br/>
+			
+			<center>
+				{% ifequal offset 0 %}
+					<span class="galNoLink">Previous <<</span>
+				{% else %}
+					<a href="gallery?o={{ prevVal }}">Previous <<</a>
+				{% endifequal %}
+				
+				||
+				
+				{% if moreImages %}
+					<a href="gallery?o={{ nextVal }}">>> Next</a>
+				{% else %}		
+					<span class="galNoLink">>> Next</span>
+				{% endif %}
+			</center>
+		</div>
+		
+	{% endif %}
+	
+{% endblock %}

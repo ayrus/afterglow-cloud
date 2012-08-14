@@ -55,6 +55,11 @@ label {
 	width: 1400px;
 }
 
+#gallerySubmitForm{
+	width: 800px;
+	display: none;
+}
+
 a:link, a:visited{
 	color: #A4A400;
 }
@@ -63,16 +68,24 @@ a:hover{
 	text-decoration: none;
 }
 
+#galleryWrapper a:link, #galleryWrappera a:visited{
+	text-decoration: none;
+}
+
 .field{
 	margin-bottom: 15px;
 }
 
-#settingsLabel, #advancedLabel, #configLabel, #alreadyLabel, #contactLabel{
+#settingsLabel, #advancedLabel, #configLabel, #alreadyLabel, #contactLabel, .headLabel{
 	font-size: 19px;
 	font-variant: small-caps;
 	font-weight: bold;
 	text-decoration: underline;
 	margin-bottom: 10px;
+}
+
+.headLabel{
+	text-decoration: none !important;
 }
 
 
@@ -100,7 +113,7 @@ a:hover{
 	width: 10%;
 }
 
-#id_overrideEdgeLength, #id_regExChoices, #saveRegEx, #saveRegExDetails, #xRegExDescriptions, #logglySetMsg, #loggly{
+#id_overrideEdgeLength, #id_regExChoices, #saveRegEx, #saveRegExDetails, #xRegExDescriptions, #logglySetMsg, #loggly, .imgTitle{
 	display: none;
 }
 
@@ -175,7 +188,7 @@ ul.errorlist, .cError, .cRenderError{
 	width: 500px;
 }
     
-.errorlist li, .cErrorMsg, #success, #error, .success{
+.errorlist li, .cErrorMsg, #success, #error, .success, .errorMsg{
         background-color: #E34242;
         color: white;
         font-size: 12px;
@@ -200,7 +213,7 @@ ul.errorlist, .cError, .cRenderError{
 	font-weight: normal;
 }
 
-#error{
+#error, .errorMsg{
 	width: 500px;
 	padding-left: 10px;
 	margin-bottom: 20px;
@@ -337,6 +350,11 @@ fieldset legend{
 	color: #D4D4D4;
 }
 
+.galNoLink{
+	font-size: 12px;
+	color: #D4D4D4;	
+}
+
 #configHeaders{
 	margin-left: 20px;
 	margin-bottom: 10px;
@@ -375,4 +393,16 @@ fieldset legend{
 
 #regExInputs{
 	float: left;
+}
+
+#galleryWrapper{
+
+	width: 1000px;
+	margin: 0 auto;
+}
+
+.galleryImage{
+	margin-left: 30px;
+	margin-top: 30px;
+	border: 1px solid #C4513A;
 }

@@ -7,4 +7,6 @@ urlpatterns = patterns('afterglow_cloud.app.views',
      url(r'^callback$', 'receiveCallback'),
      url(r'^revoke$', 'revokeAccess'),
      url(r'^search$', 'logglySearch'),
+     url(r'^gallery-submit$', 'galleryProcess'),
+     url(r'^gallery$', 'showGallery'),
 )

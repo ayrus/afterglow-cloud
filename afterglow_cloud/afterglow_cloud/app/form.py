@@ -1,5 +1,5 @@
 from django import forms
-from afterglow_cloud.app.models import Expressions
+from afterglow_cloud.app.models import Expressions, Images
 import re
 
 class renderForm(forms.Form):
@@ -140,3 +140,9 @@ class logglySearchForm(forms.Form):
     start = forms.IntegerField(initial = 0)
     
     
+class gallerySubmitForm(forms.ModelForm):
+    class Meta:
+        model = Images
+        widgets = {
+                    'image': forms.HiddenInput(),
+                }        
