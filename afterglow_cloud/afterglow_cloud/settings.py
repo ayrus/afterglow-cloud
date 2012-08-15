@@ -44,6 +44,8 @@ LOGGLY_OAUTH_CONSUMER_KEY = ""
 LOGGLY_OAUTH_CONSUMER_SECRET = ""
 LOGGLY_OAUTH_CALLBACK = ""
 
+PROJECT_PATH = abspath(dirname(__file__))
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.

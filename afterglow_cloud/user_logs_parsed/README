@@ -1,1 +1,2 @@
 Parsed CSV logs from the backend are written here.
+This folder should have a 777 (rwxrwxrwx) permission.

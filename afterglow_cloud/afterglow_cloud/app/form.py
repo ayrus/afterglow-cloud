@@ -15,9 +15,6 @@ class renderForm(forms.Form):
     #Flag: '-d' To print node count for each node.
     printNodeCount = forms.BooleanField(required=False)
     
-    #Flag: '-a' Turn off any labelling.
-    omitLabelling = forms.BooleanField(required=False)
-    
     #Flag: '-s' Split subject and object nodes.
     splitNodes = forms.BooleanField(required=False)
     

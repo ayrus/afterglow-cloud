@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response, redirect, HttpResponseRedirect
+from django.shortcuts import render_to_response, redirect, HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.core.mail import send_mail, BadHeaderError
 from django.conf import settings
@@ -233,7 +233,7 @@ def _parseToCsv(f, requestID, POSTdata, loggly=False):
     
     fileName = requestID + '.log'
     
-    with open('user_logs/' + fileName, 'wb+') as dest:
+    with open(os.path.join(settings.PROJECT_PATH, '../user_logs/') + fileName, 'wb+') as dest:
 
 	if not loggly:	
 	    for chunk in f.chunks():
@@ -247,9 +247,9 @@ def _parseToCsv(f, requestID, POSTdata, loggly=False):
     else:
 	pat = re.compile(Expressions.objects.all().get(id=POSTdata['regExChoices']).regex)
     
-    with open('user_logs_parsed/' + fileName, 'wb+') as dest:
+    with open(os.path.join(settings.PROJECT_PATH, '../user_logs_parsed/') + fileName, 'wb+') as dest:
         
-        for line in open('user_logs/' + fileName):
+        for line in open(os.path.join(settings.PROJECT_PATH, '../user_logs/') + fileName):
             match = pat.match(line)
 	    
 	    if not match:
@@ -287,7 +287,7 @@ def _cleanFiles():
     
     for path in paths:
     
-        absPath = os.path.abspath(path)
+        absPath = os.path.join(settings.PROJECT_PATH, '../' + path)
         files = os.listdir(absPath)
     
         for oldFile in files:
@@ -309,7 +309,7 @@ def _writeDataFile(f, requestID):
     
     i = 0
     
-    with open('user_data/' + fileName, 'wb+') as dest:
+    with open(os.path.join(settings.PROJECT_PATH, '../user_data/') + fileName, 'wb+') as dest:
         for chunk in f.chunks():
             dest.write(chunk)
 
@@ -319,23 +319,20 @@ def _writeConfigFile(data, requestID):
     
     fileName = requestID + '.property'
     
-    with open('user_config/' + fileName, 'wb') as dest:
+    with open(os.path.join(settings.PROJECT_PATH, '../user_config/') + fileName, 'wb') as dest:
         dest.write(data)
 
 def _buildParameters(options):
     ''' Read the different flag values sent by the user request in 'options' and
     build parameters to be sent to AfterGlow. '''
     
-    param = ""
+    param = "-a "
     
     if 'twoNodeMode' in options:
         param += "-t "
         
     if 'printNodeCount' in options:
         param += "-d "
-        
-    if 'omitLabelling' in options:
-        param += "-a "
         
     if 'splitNodes' in options:
         param += "-s "
@@ -371,8 +368,7 @@ def _buildCookie(options):
 
     cookieString = ""
     
-    for checkBox in ["twoNodeMode", "printNodeCount", "omitLabelling", \
-                     "splitNodes"]:
+    for checkBox in ["twoNodeMode", "printNodeCount", "splitNodes"]:
         
         if checkBox in options:            
             cookieString += checkBox + ":1;"
@@ -400,14 +396,16 @@ def _readCookie(cookie):
     
     cookie = cookie.split(";")
 
-    for checkBox in cookie[:5]:
+    for checkBox in cookie[:4]:
         
         checkBox = checkBox.split(":")
+	
+	print checkBox
         
         #Explicit cast to booleans required for the form's checkboxes.
         formData[checkBox[0]] = bool(int(checkBox[1]))
     
-    cookie = dict(item.split(":") for item in cookie[5:-1])
+    cookie = dict(item.split(":") for item in cookie[4:-1])
         
     formData['overrideEdgeLength'] = float(cookie['overrideEdgeLength'])
     
@@ -426,7 +424,15 @@ def _renderGraph(dataFile, propertyFile, outputFile, afPath, afArgs):
     ''' Call the shell script invoking AfterGlow with the required parameters
     to render a graph. Return the exit status returned by the shell script. '''
     
-    return call("../afterglow.sh " + dataFile + " " + propertyFile + " " + 
+    dataFile = os.path.join(settings.PROJECT_PATH, '../' + dataFile)
+    
+    propertyFile = os.path.join(settings.PROJECT_PATH, '../' + propertyFile)
+    
+    outputFile = os.path.join(settings.PROJECT_PATH, '../' + outputFile)
+    
+    afPath = os.path.join(settings.PROJECT_PATH, '../' + afPath)
+    
+    return call(os.path.join(settings.PROJECT_PATH, "../../afterglow.sh") + " " + dataFile + " " + propertyFile + " " + 
                 outputFile + " " + afPath + " " + afArgs, shell=True)
 
 def _logglyAuth(request):
@@ -599,7 +605,7 @@ def galleryProcess(request):
 			return render_to_response('render.html', locals(), 
 					     context_instance=RequestContext(request))	
 		    
-		staticPath = "afterglow_cloud/app/static/"
+		staticPath = os.path.join(settings.PROJECT_PATH, "app/static/")
 		
 		renderedFile = staticPath + "rendered/" + request.session['requestID'] + ".gif"
 		
@@ -666,3 +672,4 @@ def showGallery(request):
 	
     return render_to_response('gallery.html', locals(), 
 	                              context_instance=RequestContext(request))
+    
