@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response, redirect, HttpResponseRedirect, HttpResponse
+from django.shortcuts import render_to_response, redirect, HttpResponseRedirect
 from django.template import RequestContext
 from django.core.mail import send_mail, BadHeaderError
 from django.conf import settings
