@@ -113,7 +113,7 @@ a:hover{
 	width: 10%;
 }
 
-#id_overrideEdgeLength, #id_regExChoices, #saveRegEx, #saveRegExDetails, #xRegExDescriptions, #logglySetMsg, #loggly, .imgTitle{
+#id_overrideEdgeLength, #id_regExChoices, #saveRegEx, #saveRegExDetails, #xRegExDescriptions, #logglySetMsg, #loggly, .imgTitle, #xPropertyConfigPopulate, #lastUsedConfig{
 	display: none;
 }
 

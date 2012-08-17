@@ -32,6 +32,8 @@ def processForm(request):
         
         if form.is_valid():
 	    
+	    	request.session['propertyConfig'] = request.POST['propertyConfig']
+	    
 	    	if request.POST['xLogType'] == "loggly":
 		    
 			#Save the form detail in session.
@@ -70,6 +72,10 @@ def processForm(request):
     regExDescriptions = ""
     for e in Expressions.objects.order_by('id').all():
 	regExDescriptions += str(e.id) + "[[;]]" + e.description + "[[[;]]]"
+	
+    if "propertyConfig" in request.session:
+	propertyConfigPopulate = True
+	propertyConfig = request.session["propertyConfig"]        
         
     return render_to_response('form.html', locals(), 
                               context_instance=RequestContext(request))
@@ -399,8 +405,6 @@ def _readCookie(cookie):
     for checkBox in cookie[:4]:
         
         checkBox = checkBox.split(":")
-	
-	print checkBox
         
         #Explicit cast to booleans required for the form's checkboxes.
         formData[checkBox[0]] = bool(int(checkBox[1]))

@@ -26,6 +26,7 @@ $(document).ready(function(){
     
     $('input[name=xLogType]')[0].checked = true;
     $('input[name=regExType]')[0].checked = true;
+    $('input[name=xConfigType]')[0].checked = true;
 
     $("#id_overrideEdge").click(function () { 
         toggleShowOverrideInput();
@@ -93,6 +94,11 @@ $(document).ready(function(){
         return false;
     });
     
+    $("#importLastUsedConfig").click(function (){
+    	$("#xManualConfig").val($("#xPropertyConfigPopulate").val());
+    	return false;
+    });
+    
     if($("#id_twoNodeMode").is(":checked")){
     	$('#eventFanOutThres').hide();
     }
@@ -104,15 +110,26 @@ $(document).ready(function(){
         if($('input[name=xConfigType]:checked').val() == "manual"){
         
             $("#customConfig").hide();
+	    
+	    $("#lastUsedConfig").hide();
             
-            $("#manualConfig").fadeToggle(400);
+            $("#manualConfig").fadeIn(400);
         
-        }else{
+        }else if($('input[name=xConfigType]:checked').val() == "custom"){
         
             $("#manualConfig").hide();
+	    
+	    $("#lastUsedConfig").hide();
         
-            $("#customConfig").fadeToggle(400);
-        }
+            $("#customConfig").fadeIn(400);
+        }else{
+	
+	    $("#manualConfig").hide();
+		
+	    $("#customConfig").hide();
+	    
+	    $("#lastUsedConfig").fadeIn(400);
+	}
     
     });
 
@@ -827,7 +844,9 @@ function populateProperty(){
     if($('input[name=xConfigType]:checked').val() == "manual"){
     
         value = $("#xManualConfig").attr("value");
-    
+	
+    }else if($('input[name=xConfigType]:checked').val() == "prev"){
+    	value = $("#xPropertyConfigPopulate").val();
     }else{
     
         for (var i = 0; i <= configCount; i++){

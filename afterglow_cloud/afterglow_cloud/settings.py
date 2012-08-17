@@ -1,4 +1,5 @@
 import os.path
+from os.path import abspath, dirname
 
 # Django settings for afterglow_cloud project.
 
@@ -44,7 +45,7 @@ LOGGLY_OAUTH_CONSUMER_KEY = ""
 LOGGLY_OAUTH_CONSUMER_SECRET = ""
 LOGGLY_OAUTH_CALLBACK = ""
 
-PROJECT_PATH = abspath(dirname(__file__))
+PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name

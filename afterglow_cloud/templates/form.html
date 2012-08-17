@@ -224,6 +224,9 @@
 				<span id="configTypeText">Config Type:</span>
 				<input type="radio" name="xConfigType" checked="checked" value="custom" class="configTypeRadio"/>Custom
 				<input type="radio" name="xConfigType" value="manual" class="configTypeRadio"/>Manual
+				{% if propertyConfigPopulate %}
+					<input type="radio" name="xConfigType" value="prev" class="configTypeRadio"/>Last used configuration
+				{% endif %}
 				<a href="#" class="tooltip configTypeRadio" title="Configuration type -- Manual lets you copy/paste the complete configuration file. Custom - choose each line.">?</a>
 			</div>
 
@@ -232,7 +235,23 @@
 			<div id="manualConfig">
 
 				<textarea rows="10" cols="50" name="xManualConfig" id="xManualConfig"></textarea>
+				<br/><br/>
+				{% if propertyConfigPopulate %}
+					<span class="smallText">Your previously used configuration setting is saved. Importing it to edit will replace any configuration added above.</span><br/><br/>
+					<a href="#" id="importLastUsedConfig">Import last used configuration</a> 
+				{% endif %}
 
+			</div>		
+			
+			<div id="lastUsedConfig">
+			
+				Your previously used configuration setting is saved. The following will be used: <br/>
+				<span class="smallText">(You can alternatively import this configuration and manually edit it under "Manual" mode)</span>
+				
+				<br/><br/>
+				
+				<textarea rows="15" cols="75" name="xPropertyConfigDummy" disabled="true">{{ propertyConfig }}</textarea>
+			
 			</div>
 
 			<div id="customConfig">
@@ -452,6 +471,7 @@
 	</form>
 	
 	<div id="xRegExDescriptions">{{ regExDescriptions }}</div>
+	<textarea id="xPropertyConfigPopulate" name="xPropertyConfigPopulate" rows="2" cols="2">{{ propertyConfig }}</textarea>
 	
 	{% if afLogglySet %}
 		<script>afLogglySet = true;</script>
