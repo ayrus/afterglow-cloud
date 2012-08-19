@@ -293,8 +293,8 @@ def _render(request, parsedData, loggly=False, logglyData=None):
 	afPath = "../afterglow/src/afterglow.pl"
 	
 	#Try rendering a graph, store the return code from the shell script.
-	status = _renderGraph(dataFile, propertyFile, outputFile, afPath, 
-	                   param)
+	status = _renderGraph(dataFile, propertyFile, outputFile, afPath,
+	                   POSTdata['renderingFilter'], param)
 	
 	CAPTCHA_PUBLIC_KEY = settings.AF_RECAPTCHA_PUBLIC_KEY
 	
@@ -425,7 +425,7 @@ def _cleanFiles():
         for oldFile in files:
       
             oldFilePath = os.path.join(absPath, oldFile)
-            info = os.stat(oldFilePath)
+            info = os.stat(oldFilePath)            
             
             #If older than 4 hours -- delete.
             if(info.st_ctime < int(time() - 4*60*60)):
@@ -593,7 +593,7 @@ def _readCookie(cookie):
     
     return formData
 
-def _renderGraph(dataFile, propertyFile, outputFile, afPath, afArgs):
+def _renderGraph(dataFile, propertyFile, outputFile, afPath, rFilter, afArgs):
     '''
     Call the shell script invoking AfterGlow with the required parameters
     to render a graph. Return the exit status returned by the shell script.
@@ -603,6 +603,7 @@ def _renderGraph(dataFile, propertyFile, outputFile, afPath, afArgs):
     propertyFile -- Path to the configuration file.
     outputFile -- Path to render the image to (with filename and extension).
     afPath -- Path to the afterglow shell script.
+    rFilter -- Rendering filter to use with GraphViz (neato/dot/sfdp).
     afArgs -- Arguments to be sent to the shell script.
     
     Return:
@@ -617,8 +618,10 @@ def _renderGraph(dataFile, propertyFile, outputFile, afPath, afArgs):
     
     afPath = os.path.join(settings.PROJECT_PATH, '../' + afPath)
     
+    filters = {'1' : 'neato', '2' : 'dot', '3' : 'sfdp'}
+    
     return call(os.path.join(settings.PROJECT_PATH, "../../afterglow.sh") + " " + dataFile + " " + propertyFile + " " + 
-                outputFile + " " + afPath + " " + afArgs, shell=True)
+                outputFile + " " + afPath + " " + filters[rFilter] + " " + afArgs, shell=True)
 
 def _logglyAuth(request):
     '''

@@ -3,16 +3,17 @@
 ###
 # This shell script invokes AfterGlow [1] with the settings given as arguments
 # and generates a GIF graph image of the resulting output from Afterglow; using
-# neato [2]. 
+# neato, dot or sfdp [2]. 
 #
 # Usage:
 # 	afterglow.sh "path_to_csv_file" "path_to_colour_property_file" 
-#				"path_to_resulting_output_file" "path_to_afterglow.pl" "arguments"
+#				"path_to_resulting_output_file" 
+#				"path_to_afterglow.pl" "filter name" "arguments"
 #
 # Note: Paths can be absolute or relative.
 # 		For a list of 'arguments' please see [1].
 #
-# Example usage: ./afterglow.sh data/firewall.csv sample.properties images/firewall.gif afterglow/src/afterglow.pl -d -e 1.5
+# Example usage: ./afterglow.sh data/firewall.csv sample.properties images/firewall.gif afterglow/src/afterglow.pl neato -d -e 1.5
 #
 # Exit status:
 #	0: On successful image creation.
@@ -20,7 +21,7 @@
 #	2: No valid data file supplied.
 #	3: No valid property file supplied.
 #	4: Perl is not installed $PATH.
-#	5: Neato [2] is not installed $PATH.
+#	5: Neato/Sfdp/Dot [2] is not installed $PATH.
 #	6: Afterglow.pl [1] is not present.
 #
 # References:
@@ -42,6 +43,10 @@ outputFile="$1"
 
 #Complete path to afterglow.pl, including its name and extension.
 afPath="$1"
+	shift
+	
+#Filter to be used with GraphViz
+filter="$1"
 	shift
 
 #Additional parameters (if any) to be passed to AfterGlow.
@@ -76,6 +81,22 @@ args="$@"
 		echo "Neato seems to be missing." >&2
 		exit 5
 	fi
+
+#Check if dot is installed anywhere on $PATH.
+	out=`which dot`
+	if [ $? -eq 1 ]
+	then
+		echo "Dot seems to be missing." >&2
+		exit 5
+	fi
+	
+#Check if sfdp is installed anywhere on $PATH.
+	out=`which sfdp`
+	if [ $? -eq 1 ]
+	then
+		echo "Sfdp seems to be missing." >&2
+		exit 5
+	fi
 	
 #Check if afterglow.pl is present.
 	if [ ! -e "$afPath" ]
@@ -85,7 +106,7 @@ args="$@"
 	fi
 
 #Everything looks good for now; render the graph.
-perl "$afPath" -i "$dataFile" -c "$propertyFile" $args | neato -Tgif -o "$outputFile"
+perl "$afPath" -i "$dataFile" -c "$propertyFile" $args | "$filter" -Tgif -o "$outputFile"
 
 #Check if the output was successfuly rendered and that the output file is
 #more than 0 bytes in size.

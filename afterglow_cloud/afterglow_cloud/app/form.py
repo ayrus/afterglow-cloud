@@ -85,6 +85,10 @@ class renderForm(forms.Form):
     #Subdomain field for Loggly.com's API access.
     logglySubdomain = forms.CharField(required=False)
     
+    #Filters dropdown for selecting a particular filter for GraphViz
+    filters = [('1', 'Default (Neato)'), ('2', 'Dot'), ('3', 'Sfdp')]
+    renderingFilter= forms.ChoiceField(filters)
+    
     def clean_textLabel(self):
         '''
         Validate the textLabel input to see if it has a valid HEX colour
