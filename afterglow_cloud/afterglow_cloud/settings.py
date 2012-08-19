@@ -45,7 +45,7 @@ EMAIL_HOST_PASSWORD = ''
 AF_FROM_EMAIL = ""
 
 # Define a list of emails to send copies of each contact form request.
-AF_TO_EMAILS = ['surya@hakc.net']
+AF_TO_EMAILS = ['']
 
 # Define API keys for RECAPTCHA used in generating CAPTCHA images in the
 # application. Keys can be obtained here:
