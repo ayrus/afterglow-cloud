@@ -55,7 +55,8 @@ following; even if you have a fresh install of Ubuntu. Missing packages (or all)
 are installed. It's also assumed that you'd want to install the application
 in your home folder, merely as an example (throughout the document):
 
-<code>~$ sudo apt-get install git apache2 libapache2-mod-wsgi mysql-server libmysqlclient-dev python-pip python-mysqldb libtext-csv-perl graphviz</code>
+<code>~$ sudo apt-get install git apache2 libapache2-mod-wsgi mysql-server libmysqlclient-dev </code><br/>
+<code>~$ sudo apt-get install python-pip python-mysqldb libtext-csv-perl graphviz</code>
 
 2) Install Django 1.4.0 and the libraries AfterGlow requires:
 
@@ -69,8 +70,8 @@ in your home folder, merely as an example (throughout the document):
 to by Apache while performing various operations):
 
 <code>~$ cd afterglow-cloud/afterglow\_cloud/</code> <br/>
-<code>~/afterglow-cloud/afterglow\_cloud$ chmod 777 user\_config/ user\_data/ user\_logs/ user\_logs\_parsed/ afterglow\_cloud/app/static/gallery/ afterglow\_cloud/app/static/gallery\_thumbs/ afterglow\_cloud/app/static/rendered/
-</code>
+<code>~/afterglow-cloud/afterglow\_cloud$ chmod 777 user\_config/ user\_data/ user\_logs/ user\_logs\_parsed/<br/>
+afterglow\_cloud/app/static/gallery/ afterglow\_cloud/app/static/gallery\_thumbs/ afterglow\_cloud/app/static/rendered/</code>
 
 5) Create a database for AfterGlow to use (this example will use the database
 name as "af").
@@ -158,7 +159,9 @@ Links
 -----
 
 A first version of this application (development version) can be found in a
-seperate tree <code>first-version</code> or commit: 86e55a923edcd0461137a81a2a6ea13f6d58b9fb
+seperate tree <code>first-version</code> 
+
+Commit: ayrus/afterglow-cloud@86e55a923edcd0461137a81a2a6ea13f6d58b9fb
 
 Blog post detailing the features available in the first version can be viewed
 [here](http://honeynet.org/node/890).
