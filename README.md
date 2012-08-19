@@ -46,7 +46,7 @@ to run the application.
   <br/>
   
 You will also have to sign up for specific API keys and mention settings at
-settings.py (Step x below)
+settings.py (Step #6 below)
   
 ###Instructions:
 
@@ -90,7 +90,7 @@ Once logged in to the MySQL prompt, create the database:
 6) Edit <code>settings.py</code> at afterglow\_cloud/settings.py (if you're currently in 
 ~/afterglow-cloud/afterglow\_cloud). This file contains important configuration
 for the application to run. You'll have to edit Lines #10-88 with the 
-instructions inside. The file has been commented to help you out.
+instructions inside. The file has been commented in detail to help you out.
 
 7) Create tables in the database with Django's <code>syncdb</code> command.
 
@@ -138,7 +138,7 @@ __Note__: Several assumptions have been made above. <br/>
 
  * You do __not__ have any sites enabled on Apache. If you do, ideally the
  <code>WSGIPythonPath</code> declaration goes in <code>/etc/apache2/httpd.conf</code>
- and the rest of the above should go in your VirtualHost declaration for the
+ and the rest of the above should go in your <code>VirtualHost</code> declaration for the
  site you want to enable/serve the application with.
  
  * It is also assumed that you'd want to use Apache to serve the static files
