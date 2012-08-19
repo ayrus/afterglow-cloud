@@ -71,7 +71,7 @@ class renderForm(forms.Form):
     #A dropdown of predefined RegExs saved by different users imported from the
     #database.
     regExChoices = forms.ModelChoiceField(queryset = Expressions.objects.all(),\
-                                          empty_label = None)
+                                          empty_label = None, required=False)
     
     #Boolean - Whether to save the regular expression to the database.
     saveRegEx = forms.BooleanField(required=False, initial=False)
