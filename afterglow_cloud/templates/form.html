@@ -34,17 +34,28 @@
 			<input type="radio" name="xLogType" checked="checked" value="data"/>CSV Data
 			<input type="radio" name="xLogType" value="log" class="configTypeRadio"/>Log File
 			<input type="radio" name="xLogType" value="loggly" class="configTypeRadio"/>Loggly
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<a href="#" class="tooltip" title="Select the source of your data. Choose CSV to upload an already parsed log; Choose 'Lof File' to upload a generated log and then use a RegEx to parse it automatically to a CSV file for AfterGlow or use an account you have with Loggly.com to bring in your logs to AfterGlow.">?</a>
 		</div>
 		
 		<div class="field" id="loggly">
 
 			{{ form.logglySubdomain.errors }}
 			<label>Loggly Subdomain:</label>
-			{{ form.logglySubdomain }} 
+			{{ form.logglySubdomain }}
+			 <a href="#" class="tooltip" title="Enter your account subdomain at Loggly. E.g: 'foo.loggly.com'">?</a>
 			<div class="cError"><span id="subdomainE" class="cErrorMsg"></span></div>
 		</div>
+		
 		{% if afLogglySet %}
-			<div id="logglySetMsg"><span class="success">You've previously authorized AfterGlow for the subdomain: <b>{{ afLogglySubdomain }}</b>.loggly.com</span> <a href="revoke" alt="Revoke access to AfterGlow from your Loggly subdomain">Revoke Access</a></div>
+		
+			<div id="logglySetMsg">
+				<span class="success">
+					You've previously authorized AfterGlow for the subdomain: <b>{{ afLogglySubdomain }}</b>.loggly.com
+				</span> 
+				<a href="revoke" alt="Revoke access to AfterGlow from your Loggly subdomain">Revoke Access</a>
+			</div>
+			
 		{% endif %}
 
 		<div class="field" id="file">
@@ -62,7 +73,7 @@
 			<label>Reg Ex:</label>
 			{{ form.regExType }} <div id="regExInputs">||&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			{{ form.regEx }} 
-			{{ form.regExChoices }} <a href="#" class="tooltip" title="">?</a>
+			{{ form.regExChoices }} <a href="#" class="tooltip" title="Enter a custom regular expression or choose from a list of predefined (already saved) expressions to parse your log into a CSV file. You will have to appropriately have groupings in your expressions for each column. You will also have to check 'Two node mode' below if you're trying to parse the file into two columns.">?</a>
 			</div>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div id="regDesc"></div>
 
@@ -74,7 +85,7 @@
 			<div class="field">
 	
 				<label>Save RegEx:</label>
-				{{ form.saveRegEx }} <a href="#" class="tooltip" title="">?</a>
+				{{ form.saveRegEx }} <a href="#" class="tooltip" title="When checked, you can can save your custom expression for others users to use as a parser in the future.">?</a>
 	
 			</div>
 			
@@ -84,13 +95,13 @@
 				<legend>RegEx Details:</legend>
 				<div class="field">
 					<label>Name:</label>
-					{{ form.saveRegExName }} <a href="#" class="tooltip" title="">?</a>
+					{{ form.saveRegExName }} <a href="#" class="tooltip" title="Enter a name for your expression. E.g: 'Apache - IP;Size'">?</a>
 					{{ form.saveRegExName.errors }}
 				</div>
 				
 				<div class="field">
 					<label>Description:</label>
-					{{ form.saveRegExDescription }} <a href="#" class="tooltip" title="">?</a>
+					{{ form.saveRegExDescription }} <a href="#" class="tooltip" title="Enter a description for your expression.">?</a>
 					{{ form.saveRegExDescription.errors }}
 				</div>
 			</fieldset>
@@ -128,7 +139,7 @@
 
 				{{ form.splitMode.errors }}
 				<label>Splitting:</label>
-				{{ form.splitMode }} <a href="#" class="tooltip" title="(To add -- an example image).">?</a>
+				{{ form.splitMode }} <a href="#" class="tooltip" title="Splitting mode. See: http://afterglow.sourceforge.net/configuration.jpg for an example.">?</a>
 
 			</div>
 
@@ -225,9 +236,11 @@
 				<input type="radio" name="xConfigType" checked="checked" value="custom" class="configTypeRadio"/>Custom
 				<input type="radio" name="xConfigType" value="manual" class="configTypeRadio"/>Manual
 				{% if propertyConfigPopulate %}
+				
 					<input type="radio" name="xConfigType" value="prev" class="configTypeRadio"/>Last used configuration
+					
 				{% endif %}
-				<a href="#" class="tooltip configTypeRadio" title="Configuration type -- Manual lets you copy/paste the complete configuration file. Custom - choose each line.">?</a>
+				<a href="#" class="tooltip configTypeRadio" title="Configuration type -- Manual lets you copy/paste the complete configuration file. Custom - choose each line. If you used AfterGlow before (recently) your last used configuration is also saved.">?</a>
 			</div>
 
 			<br/><br/>
@@ -237,8 +250,12 @@
 				<textarea rows="10" cols="50" name="xManualConfig" id="xManualConfig"></textarea>
 				<br/><br/>
 				{% if propertyConfigPopulate %}
-					<span class="smallText">Your previously used configuration setting is saved. Importing it to edit will replace any configuration added above.</span><br/><br/>
+				
+					<span class="smallText">
+						Your previously used configuration setting is saved. Importing it to edit will replace any configuration added above.
+					</span><br/><br/>
 					<a href="#" id="importLastUsedConfig">Import last used configuration</a> 
+					
 				{% endif %}
 
 			</div>		
@@ -329,7 +346,7 @@
 
 					<legend>Add: Node Sizes</legend>
 					
-					<a href="#" class="tooltip configTip" title="(To be added).">?</a>
+					<a href="#" class="tooltip configTip" title="Specify settings for size of the nodes. This setting (for example) can be used to identify the frequency of a node using 'Number of occurences'; the size of each node will be proportionate to its frequency in the log.">?</a>
 
 					<div class="field">					
 						<label>Node:</label>
@@ -397,7 +414,7 @@
 
 					<legend>Add: Clustering</legend>
 					
-					<a href="#" class="tooltip configTip" title="(To be added).">?</a>
+					<a href="#" class="tooltip configTip" title="Cluster a group of nodes accordingly to a property. For example: You can cluster all nodes of Class A IP as a single node/label or you can cluster all nodes with ports greater than 2000 as single node.">?</a>
 
 					<div class="field">
 						<label>Node:</label>
@@ -471,6 +488,7 @@
 	</form>
 	
 	<div id="xRegExDescriptions">{{ regExDescriptions }}</div>
+	
 	<textarea id="xPropertyConfigPopulate" name="xPropertyConfigPopulate" rows="2" cols="2">{{ propertyConfig }}</textarea>
 	
 	{% if afLogglySet %}

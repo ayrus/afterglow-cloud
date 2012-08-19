@@ -1,20 +1,24 @@
 import os.path
-from os.path import abspath, dirname
 
-# Django settings for afterglow_cloud project.
-
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
+    
+#    
+# Following settings (until mentioned; are all required and necessary.
+#
 
+# Define administrators of the website. Contact points defined here will be
+# as a source for sending debug information through demail when a user encounters
+# a 500 server error.
+# Add values as a tuple of (Name, Email) pair.
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+    #('Bob', 'bob@foo.bar'),
 )
 
-MANAGERS = ADMINS
-
+# Define a Django compatible RDBMS module; with authentication details.
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.db.backends.', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': '', # Or path to database file if using sqlite3.
         'USER': '', # Not used with sqlite3.
         'PASSWORD': '', # Not used with sqlite3.
@@ -23,28 +27,75 @@ DATABASES = {
     }
 }
 
-#Define your SMTP settings below for AfterGlow to use for the contact form.
+# Define your SMTP settings below for AfterGlow to use for the contact form and
+# sending error reports to administrators.
+#
+# -If you don't have a SMTP server, as such, you can use (for example) a GMail
+# -account to relay your emails. Define HOST as 'smtp.gmail.com'; PORT as 587 and
+# -'USE_TLS' as True. Define your username (someuser@gmail.com) and password 
+# -as well.
+#
 EMAIL_USE_TLS = True
 EMAIL_HOST = ''
-EMAIL_PORT = 0
+EMAIL_PORT = 587
 EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
 
-#Define the 'From email' used in the contact form (while sending an email).
+# Define the 'From email' used while sending an email. This can be any email.
 AF_FROM_EMAIL = ""
 
-#Define a list of emails to send copies of each contact form request.
-AF_TO_EMAILS = ['']
+# Define a list of emails to send copies of each contact form request.
+AF_TO_EMAILS = ['surya@hakc.net']
 
+# Define API keys for RECAPTCHA used in generating CAPTCHA images in the
+# application. Keys can be obtained here:
+#	https://www.google.com/recaptcha/admin/create
+#
 AF_RECAPTCHA_PUBLIC_KEY = ''
-
 AF_RECAPTCHA_PRIVATE_KEY = ''
 
+# AfterGlow intergrates with Loggly.com's accounts as a data source. For this
+# purpose OAuth 1.0 authentication is used. Obtain and define keys from 
+# Loggly.com as a developer account. More information can be found here:
+#	http://wiki.loggly.com/oauth
 #
 LOGGLY_OAUTH_CONSUMER_KEY = ""
 LOGGLY_OAUTH_CONSUMER_SECRET = ""
+
+# A callback URL for loggly. Enter the root location of the application
+# suffixed by "/callback". You *cannot* change the callback URL and the suffix
+# should *not* have a terminating backslash.
+# For example: If your app is running at http://localhost/afterglow then this
+#		setting should be defined as:
+#		"http://localhost/afterglow/callback
+#
 LOGGLY_OAUTH_CALLBACK = ""
 
+# Enter the absolute path to the static directory. Static directory is at
+# 'afterglow_cloud/app/static'. For example:
+#	If the app is running from your home folder and your username is foo,
+#	then this setting should be:
+#	"/home/foo/afterglow-cloud/afterglow_cloud/afterglow_cloud/app/static"
+#
+STATICFILES_DIRS = (
+    "",
+)
+
+# Generate a unique secret key for this instance of AfterGlow.
+# NB: This setting is essential for ensuring Django's internal security measures
+# are in place.
+SECRET_KEY = ''
+
+
+#
+#
+# *Settings below can be left as-is.*
+# Please change only if you know what you're up to.
+#
+#
+
+SERVER_EMAIL = AF_FROM_EMAIL
+MANAGERS = ADMINS
 PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
 
 # Local time zone for this installation. Choices can be found here:
@@ -92,30 +143,17 @@ STATIC_ROOT = ''
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/static/'
 
-# Additional locations of static files
-STATICFILES_DIRS = (
-    "",
-    # Put strings here, like "/home/html/static" or "C:/www/django/static".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-)
-
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-# 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
-
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = ''
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-# 'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -124,8 +162,6 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    # Uncomment the next line for simple clickjacking protection:
-    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
 ROOT_URLCONF = 'afterglow_cloud.urls'

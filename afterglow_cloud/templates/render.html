@@ -14,7 +14,9 @@
 	{% if retVal %}
 	
 		<center>
-		<div class="cRenderError"><span class="cErrorMsg">
+		<div class="cRenderError">
+		<span class="cErrorMsg">
+		
 		{% ifequal retVal 1 %}
 				Error: An invalid regular expression has been input which does not match one or more lines in the given file.
 		{% endifequal %}
@@ -26,20 +28,29 @@
 		{% ifequal retVal 3 %}
 				Error: An invalid regular expression has been input which does not generate the required groupings for the file given to parse. Please remember to check "Two Node Mode" on the settings pane; if you are attemping to parse a two column CSV file.
 		{% endifequal %}
+		
 		<br/><br/>
 		Please try <a href="process" title="Back">again</a>.
-		</span></div></center> 
+		
+		</span>
+		</div>
+		</center> 
+		
 	{% elif emptyData %}
-	<center><span id="error">Your search returned no data for AfterGlow to parse. Please try again.</span>
-	<a href="/search">Try Again</a></center>
+		<center>
+			<span id="error">
+				Your search returned no data for AfterGlow to parse. Please try again.
+			</span>
+			<a href="/search">Try Again</a>
+		</center>
 	{% else %}
 
 		{% if not status %}
 		
 			{% if form.errors %}
-				<div class="cRenderError"><span class="cErrorMsg">
+				<div class="errorMsg">
 					Please correct the error{{ form.errors|pluralize }} below.
-				</div></span>
+				</div>
 			{% endif %}
 			
 			<center>

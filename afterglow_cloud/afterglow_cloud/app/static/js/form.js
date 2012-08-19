@@ -1,7 +1,9 @@
 /* Globals */
-var configCount = 0; //A counter for the number of configuration lines.
-//Following are flags to enable/disable inputting a global setting (which can be
-//	set only once).
+
+var configCount = 0; // A counter for the number of configuration lines.
+
+// Following are flags to enable/disable inputting a global setting (which can be
+// set only once).
 var maxNodeSizeSet = false;
 var sumSourceSet = false;
 var sumEventSet = false;
@@ -11,19 +13,20 @@ var afLogglySet = false;
 
 $(document).ready(function(){
 
-	//Invoke the colour pickers.
+    // Invoke the colour pickers.
     $('#id_textLabel').miniColors();
     $('#xColourHEX').miniColors();
 	
-    //Invoke the tool-tips.
+    // Invoke the tool-tips.
     $(".tooltip").tipTip({maxWidth: "250px"});
 
-    //Show the override box input (which is hidden otherwise) if the cookie
-    //data from the view has the 'override-edge' box checked.
+    // Show the override box input (which is hidden otherwise) if the cookie
+    // data from the view has the 'override-edge' box checked.
     if($("#id_overrideEdge").is(":checked")){
 	    toggleShowOverrideInput();
     }
-    
+
+    // Reset the checkboxes.
     $('input[name=xLogType]')[0].checked = true;
     $('input[name=regExType]')[0].checked = true;
     $('input[name=xConfigType]')[0].checked = true;
@@ -44,8 +47,8 @@ $(document).ready(function(){
         toggleShowConfig();
     });
     
-    //Following are event handlers for different buttons in the configurations'
-    //fieldsets.
+    // Following are event handlers for different buttons in the configurations'
+    // fieldsets.
     $('#xColourButton').click(function () {
         addColour();
     	hidePlaceholder();
@@ -53,11 +56,14 @@ $(document).ready(function(){
     });
     
     $('#xThresholdButton').click(function () {
-		if(validateConfig('threshold')){ 
-			//Request is processed only if the data is found to be valid.
+		
+    	if(validateConfig('threshold')){ 
+		
+		// Request is processed only if the data is found to be valid.
         	addThreshold();
         	hidePlaceholder();
-		}
+	}
+		
         return false;
     });
     
@@ -82,19 +88,23 @@ $(document).ready(function(){
     $('#xMaxNodeSizeButton').click(function (){
 		
 		if(validateConfig('maxNodeSize')){
-        	addMaxNodeSize();
-        	hidePlaceholder();
+        	
+        		addMaxNodeSize();
+        		hidePlaceholder();
 		}
 		return false;
     });
     
     $('#xSumButton').click(function (){
+
         addSum();
         hidePlaceholder();
+
         return false;
     });
     
     $("#importLastUsedConfig").click(function (){
+
     	$("#xManualConfig").val($("#xPropertyConfigPopulate").val());
     	return false;
     });
@@ -122,6 +132,7 @@ $(document).ready(function(){
 	    $("#lastUsedConfig").hide();
         
             $("#customConfig").fadeIn(400);
+
         }else{
 	
 	    $("#manualConfig").hide();
@@ -138,13 +149,19 @@ $(document).ready(function(){
 	var val = $('input[name=xLogType]:checked').val();
 	
 	if(val != "data" ){
+
 		toggleRegExInputs(); 
+
 		$('#regEx').show();
+
 		if(val == "loggly"){
+
 			$('#file').hide();
 			if(!afLogglySet){
+
 				$('#loggly').show();
 			}else{
+
 				$('#logglySetMsg').show();
 			}
 		}else{
@@ -171,24 +188,29 @@ $(document).ready(function(){
     
     $("#id_saveRegEx").click(function () { 
     	if($("#id_saveRegEx").is(":checked")){
+
 		$('#saveRegExDetails').show();
 	}else{
+
 		$('#saveRegExDetails').hide();
 	}
     });
     
     $("#id_twoNodeMode").click(function () { 
+
     	if($("#id_twoNodeMode").is(":checked")){
+
 		$('#eventFanOutThres').hide();
 	}else{
+
 		$('#eventFanOutThres').show();
 	}
     });
     
-    //Set up a listener for the submit of the main form.    
+    // Set up a listener for the submit of the main form.    
     $('#renderMainForm').submit(function () {
 
-	//Reset any previous validation messages.
+	// Reset any previous validation messages.
 	resetValidations();
 
 	var dataFile = true;
@@ -201,20 +223,24 @@ $(document).ready(function(){
 
 	var advancedIntegers = validateAdvancedIntegers();
         
-        //Read the configuration data (added by the user) from the hidden field
-        //'alreadyAddedHidden' and populate form element to submit.
+        // Read the configuration data (added by the user) from the hidden field
+        // 'alreadyAddedHidden' and populate form element to submit.
         populateProperty();    
     
-    	//Check the validation booleans from every validators above and proceed
-    	//ahead only if all are 'true'.
+    	// Check the validation booleans from every validators above and proceed
+    	// ahead only if all are 'true'.
         return dataFile && edgeLength && advancedIntegers;
     });
     
 });
 
+/*	Show description for a regular expression chosen on the dropdown.
+ *	@Params: id - the id of the expression.
+ *	@Return: None.
+ */
 function showDescription(id){
 	var contents = $("#xRegExDescriptions").html().split("[[[;]]]");
-	
+    
 	var desc;
 	for(var i=0; i<contents.length; i++){
 		desc = contents[i].split("[[;]]");
@@ -226,6 +252,10 @@ function showDescription(id){
 	}	
 }
 
+/*	Toggle regular expression input options.
+ *	@Params: None.
+ *	@Return: None.
+ */
 function toggleRegExInputs(){
     	if ($('input[name=regExType]:checked').val() == 1){
 		$('#id_regEx').show();
@@ -242,15 +272,15 @@ function toggleRegExInputs(){
 /*	Toggle the textbox to input the edge-length. If the 'override-edge' checkbox
  *	is checked then show the box, hide otherwise.
  *	@Params: None.
- *	@Return: None.
+ * 	@Return: None.
  */
 function toggleShowOverrideInput(){
 
-     if($('#id_overrideEdge').attr('checked')){
-        $('#id_overrideEdgeLength').show();
-     }else{
-        $('#id_overrideEdgeLength').hide();
-     }
+	if($('#id_overrideEdge').attr('checked')){
+	        $('#id_overrideEdgeLength').show();
+	}else{
+        	$('#id_overrideEdgeLength').hide();
+     	}
 }
 
 /*	Toggle the 'Settings' pane using JQuery's slide UI function.
@@ -274,12 +304,12 @@ function toggleShowAdvanced(){
  *	@Return: None.
  */
 function toggleShowConfig(){
-    $('#config').slideToggle(('slow'));
+	$('#config').slideToggle(('slow'));
 }
 
 /*	Append a configuration line to the user UI.
  *	@Params: id - the count of this configuration (from the global counter).
- 			html - the inner HTML content to append.
+ * 			html - the inner HTML content to append.
  *	@Return: None.
  */
 function appendUserConfigDiv(id, html){
@@ -307,7 +337,7 @@ function appendUserConfigDiv(id, html){
 
 /*	Append a raw configuration line (which is hidden) to the page..
  *	@Params: id - the count of this configuration (from the global counter).
- 			html - the inner HTML content to append.
+ * 			html - the inner HTML content to append.
  *	@Return: None.
  */
 function appendHiddenConfigDiv(id, html){
@@ -328,7 +358,7 @@ function appendHiddenConfigDiv(id, html){
  */
 function removeConfigLine(id){
 
-	//Grab the unique numeric ID.
+    //Grab the unique numeric ID.
     id = id.split("")[4];
     
     //Check if any global config is being removed and re-enable the form if so.
@@ -474,13 +504,13 @@ function changeOrder(id, type){
 
         var temp = document.getElementById(userID);
         
-		//Swap the elements IDs on the user UI.
+	//Swap the elements IDs on the user UI.
         
         document.getElementById(closestUserID).id = userID;
             
         temp.id = closestUserID;
             
-		//Swap the elements IDs on the hidden end.
+	//Swap the elements IDs on the hidden end.
         
         temp = document.getElementById(configID);
         
@@ -625,11 +655,17 @@ function addClustering(){
         userHTML += " | IP | " + $("#xClusteringIPType").attr("value");
 	
 	if($("#xClusteringIPType").val() == "a"){
+	
 		configHTML += 'regex_replace("(\\\\d\\+)\\\\.\\\\d\\+")."/8"';
+		
 	}else if($("#xClusteringIPType").val() == "b"){
+	
 		configHTML += 'regex_replace("(\\\\d\\+\\\\.\\\\d\\+)\\\\.\\\\d\\+")."/16"';
+		
 	}else{
+	
 		configHTML += 'regex_replace("(\\\\d\\+\\\\.\\\\d\\+\\\\.\\\\d\\+)\\\\.\\\\d\\+")."/24"';
+		
 	}
         
         
@@ -717,7 +753,7 @@ function addSize(){
  */
 function addMaxNodeSize(){
 
-	//Proceed only if not already set.
+    //Proceed only if not already set.
     if (!maxNodeSizeSet){
     
         var html = "Max Node Size :: " +  $("#xSizeMaxSize").attr("value");
@@ -846,7 +882,9 @@ function populateProperty(){
         value = $("#xManualConfig").attr("value");
 	
     }else if($('input[name=xConfigType]:checked').val() == "prev"){
+    
     	value = $("#xPropertyConfigPopulate").val();
+	
     }else{
     
         for (var i = 0; i <= configCount; i++){

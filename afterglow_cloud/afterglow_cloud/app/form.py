@@ -3,8 +3,10 @@ from afterglow_cloud.app.models import Expressions, Images
 import re
 
 class renderForm(forms.Form):
-    ''' Generate an instance of a form used to input the data file and different
-    configurations required for rendering a graph by AfterGlow Cloud. '''
+    '''
+    Generate an instance of a form used to input the file and different
+    configurations required for rendering a graph by AfterGlow Cloud. 
+    '''
     
     #The CSV data file submitted by the user.
     dataFile = forms.FileField(required=False)
@@ -59,27 +61,35 @@ class renderForm(forms.Form):
     #Boolean - Whether to save the settings as a configuration cookie.
     saveConfigCookie = forms.BooleanField(required=False, initial=True)
     
-    #---------------------------------------------------------------
+    #Regular expression field (custom) for the RegEx used as the parser.
     regEx = forms.CharField(required=False)
     
+    #Dropdown of RegEx types.
     regExTypes = (('1', 'Custom',), ('2', 'Predefined',))
-    
     regExType = forms.ChoiceField(widget=forms.RadioSelect, choices=regExTypes)
-        
+    
+    #A dropdown of predefined RegExs saved by different users imported from the
+    #database.
     regExChoices = forms.ModelChoiceField(queryset = Expressions.objects.all(),\
                                           empty_label = None)
     
+    #Boolean - Whether to save the regular expression to the database.
     saveRegEx = forms.BooleanField(required=False, initial=False)
     
+    #Name of the regular expression to be saved.
     saveRegExName = forms.CharField(required=False)
     
+    #Description of the regular expression.
     saveRegExDescription = forms.CharField(widget=forms.Textarea, required=False)
     
+    #Subdomain field for Loggly.com's API access.
     logglySubdomain = forms.CharField(required=False)
     
     def clean_textLabel(self):
-        ''' Validate the textLabel input to see if it has a valid HEX colour
-        format. Raise an error if not. '''
+        '''
+        Validate the textLabel input to see if it has a valid HEX colour
+        format. Raise an error if not.
+        '''
         
         textLabel = self.cleaned_data['textLabel']
         
@@ -90,6 +100,11 @@ class renderForm(forms.Form):
         return textLabel
     
     def clean_saveRegExName(self):
+        '''
+        Validate the saveRegExName field if the user chooses to save the custom
+        expression they input. Validation constraint is: A string length of at
+        least two characters. Raise an error if not.
+        '''
         
         if self.cleaned_data['saveRegEx']:
             
@@ -99,6 +114,11 @@ class renderForm(forms.Form):
                 raise forms.ValidationError("Should be at least two characters")
             
     def clean_saveRegExDescription(self):
+        '''
+        Validate the saveRegDescription field if the user chooses to save the 
+        custom expression they input. Validation constraint is: A string length
+        of at least ten characters. Raise an error if not.        
+        '''
         
         if self.cleaned_data['saveRegEx']:
             
@@ -110,9 +130,10 @@ class renderForm(forms.Form):
     
 
 class contactForm(forms.Form):
-    '''  '''
+    '''
+    Generate an instance of contact form used at /contact.
+    '''
     
-    #The CSV data file submitted by the user.
     userName = forms.CharField(min_length = 2, max_length = 20)
     
     userEmail = forms.EmailField()
@@ -125,6 +146,10 @@ class contactForm(forms.Form):
     userMessage = forms.CharField(widget=forms.Textarea)
     
 class logglySearchForm(forms.Form):
+    '''
+    Generate an instance of the search form required to search and import logs
+    from a Loggly.com account once authenticated.
+    '''
     
     query = forms.CharField(min_length = 1)
 
@@ -138,8 +163,16 @@ class logglySearchForm(forms.Form):
     
     
 class gallerySubmitForm(forms.ModelForm):
+    '''
+    Generate an instance of a form used to submit a rendered image to the
+    gallery. This form is linked to the class-model 'Images' in models.py.
+    '''
+    
     class Meta:
+        
         model = Images
+        
+        #'image' field is hidden and is prepopulated by the view.
         widgets = {
                     'image': forms.HiddenInput(),
                 }        

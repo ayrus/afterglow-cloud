@@ -27,41 +27,51 @@
 		{% endif %}	
 	
 		<div id="contactLabel">Search for logs: </div>	<br/>
+		
+		<span class="smallText">A search guide detailing different syntax available can be found <a href="http://wiki.loggly.com/searchguide" target="_blank">here</a>.</span>
 	
 		<form enctype="multipart/form-data" method="post" action="search" id="renderMainForm">
 			{% csrf_token %}
 			
+			<br/>
+			
 			<div class="field">
+			
 				{{ form.query.errors }}
 				<label>Search Query:</label>
 				{{ form.query }}
 			</div>
 			
 			<div class="field">
+			
 				{{ form.dateFrom.errors }}
 				<label>From:</label>
 				{{ form.dateFrom }}
 			</div>
 			
 			<div class="field">
+			
 				{{ form.dateUntil.errors }}
 				<label>Until:</label>
 				{{ form.dateUntil }}
 			</div>
 			
 			<div class="field">
+			
 				{{ form.rows.errors }}
 				<label>Rows:</label>
 				{{ form.rows }}
 			</div>
 			
 			<div class="field">
+			
 				{{ form.start.errors }}
 				<label>Start:</label>
 				{{ form.start }}
 			</div>
 			
 			<input type="submit" value="Import & Render" id="xContactProcess">
+			
 		</form>
 	{% endif %}
 	
