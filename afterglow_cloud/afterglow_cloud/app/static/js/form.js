@@ -890,7 +890,7 @@ function populateProperty(){
         for (var i = 0; i <= configCount; i++){
         
             if ($("#configLine" + i).length > 0){ //if exists.
-                value += document.getElementById("configLine" + i).innerHTML + "\n"; 
+                value += $("#configLine" + i).text() + "\n"; 
             }
         }
         
