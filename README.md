@@ -36,6 +36,7 @@ to run the application.
  * mod_wsgi
  * MySQL (or an alternate, see above)
  * Python MySQL bindings (or an alternate, see above)
+ * Python Imaging Library (PIL)
  * Django 1.4.0
  * GraphViz Library
  * Perl Text::CSV package
@@ -56,7 +57,7 @@ are installed. It's also assumed that you'd want to install the application
 in your home folder, merely as an example (throughout the document):
 
 <code>~$ sudo apt-get install git apache2 libapache2-mod-wsgi mysql-server libmysqlclient-dev </code><br/>
-<code>~$ sudo apt-get install python-pip python-mysqldb libtext-csv-perl graphviz</code>
+<code>~$ sudo apt-get install python-pip python-mysqldb libtext-csv-perl graphviz python-imaging</code>
 
 2) Install Django 1.4.0 and the libraries AfterGlow requires:
 
