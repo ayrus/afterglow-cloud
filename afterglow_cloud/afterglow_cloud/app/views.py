@@ -1,7 +1,7 @@
 from django.shortcuts import render_to_response, redirect, HttpResponseRedirect
 from django.template import RequestContext
 from django.core.mail import send_mail, BadHeaderError
-from django.conf import settings
+from afterglow_cloud import settings
 from recaptcha.client import captcha
 from hashlib import md5
 from datetime import datetime, timedelta
