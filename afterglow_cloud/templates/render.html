@@ -22,11 +22,7 @@
 		{% endifequal %}
 		
 		{% ifequal retVal 2 %}
-				Error: An invalid regular expression has been input which does not generate the required groupings for the file given to parse.
-		{% endifequal %}
-		
-		{% ifequal retVal 3 %}
-				Error: An invalid regular expression has been input which does not generate the required groupings for the file given to parse. Please remember to check "Two Node Mode" on the settings pane; if you are attemping to parse a two column CSV file.
+				Error: An invalid regular expression has been input which does not generate the required groupings for the file given to parse. If your expression has three groups, three columns will be attempted to be written.
 		{% endifequal %}
 		
 		<br/><br/>

@@ -362,6 +362,9 @@ def _parseToCsv(f, requestID, POSTdata, loggly=False):
     else:
 	
 	pat = re.compile(Expressions.objects.all().get(id=POSTdata['regExChoices']).regex)
+	
+    # Get the number of groups present in the expression.
+    numGroups = pat.groups
     
     # Parse the data using the regular expression compiled and write as a CSV 
     # file.
@@ -377,22 +380,14 @@ def _parseToCsv(f, requestID, POSTdata, loggly=False):
 	    match = match.groups()
 	    
 	    try:
-            
-            	string = match[0] + "," + match[1]   
+		string = match[0] + "," + match[1]
+
+		if numGroups == 3:
+		    string += "," + match[2]
 	    
 	    except IndexError:
 		# Grouping error.
 		return 2
-	    
-	    try:
-		
-	    	if 'twoNodeMode' not in POSTdata: 
-		    #We get the third group (column) as well.
-		    string += "," + match[2]
-		    
-	    except IndexError:
-		# Grouping / wrong number of columns - error.
-		return 3
                 
             string += "\n"
             
