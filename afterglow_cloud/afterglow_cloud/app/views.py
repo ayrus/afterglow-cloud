@@ -371,7 +371,7 @@ def _parseToCsv(f, requestID, POSTdata, loggly=False):
     with open(os.path.join(settings.PROJECT_PATH, '../user_logs_parsed/') + fileName, 'wb+') as dest:
         
         for line in open(os.path.join(settings.PROJECT_PATH, '../user_logs/') + fileName):
-            match = pat.match(line)
+            match = pat.match(line.rstrip())
 	    
 	    # Error - no match found.
 	    if not match:
