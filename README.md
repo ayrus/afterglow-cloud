@@ -4,13 +4,13 @@ AfterGlow-Cloud
 About
 -----
 
-AfterGlow Cloud is a security visualization tool which lets users upload data 
-and visualize the data as graphs on-the-fly. This project is a part of 
+AfterGlow Cloud is a visualization tool which lets users upload data 
+and visualize the data as graphs on-the-fly. This project was part of 
 [Google's Summer of Code](http://www.google-melange.com/gsoc/homepage/google/gsoc2012) 
-2012 under [The Honeynet Project](https://honeynet.org/gsoc/slot6). 
+2012 under the [The Honeynet Project](https://honeynet.org/gsoc/slot6). 
 
-The core of this tool is derived from its command-line predecessor [AfterGlow](http://afterglow.sourceforge.net/). 
-AfterGlow Cloud runs primarily on Django. A live demo can be found [here](http://andromeda.ayrus.net:8080).
+The core of this tool is based on the command-line tool [AfterGlow](http://afterglow.sourceforge.net/). 
+AfterGlow Cloud runs primarily on Django. A live demo can be found [here](http://afterglow.secviz.org).
 
 Installation
 ------------
@@ -159,15 +159,10 @@ http://localhost ).
 Links
 -----
 
-A first version of this application (development version) can be found in a
-seperate tree <code>first-version</code> 
-
-Commit: ayrus/afterglow-cloud@86e55a923edcd0461137a81a2a6ea13f6d58b9fb
-
 Blog post detailing the features available in the first version can be viewed
 [here](http://honeynet.org/node/890).
 
 Contacts / Bugs
 ---------------
 
-You can reach or report a bug using the contact form available on the [demo](http://andromeda.ayrus.net:8080).
+Questions / Comments? Email us at afterglow@secviz.org.
