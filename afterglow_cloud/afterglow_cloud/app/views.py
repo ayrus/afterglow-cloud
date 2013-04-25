@@ -17,6 +17,7 @@ import urlparse
 import base64
 import urllib
 import simplejson as json
+import csv
 
 def index(request):
     ''' 
@@ -268,7 +269,7 @@ def _render(request, parsedData, loggly=False, logglyData=None):
 	# A CSV file has been uploaded, write it as-is to the server.
 	
         _writeDataFile(request.FILES['dataFile'], requestID)
-    
+
     # If retVal has been changed from 0 to any other value from its point of
     # declaration we have an error. Alert the user.
     if retVal:
@@ -293,6 +294,11 @@ def _render(request, parsedData, loggly=False, logglyData=None):
 	afPath = "../afterglow/src/afterglow.pl"
 	
 	#Try rendering a graph, store the return code from the shell script.
+
+        if (get_number_of_columns(dataFile) == 2) and (not "-t" in param):
+        	param += "-t "
+
+
 	status = _renderGraph(dataFile, propertyFile, outputFile, afPath,
 	                   POSTdata['renderingFilter'], param)
 	
@@ -480,7 +486,7 @@ def _buildParameters(options):
     
     # Append '-a' by default to disable text on the footer.
     param = "-a "
-    
+
     if 'twoNodeMode' in options:
         param += "-t "
         
@@ -954,6 +960,7 @@ def showGallery(request):
     '''
     Show an image gallery with all the rendered graphs users have submitted.
     
+    :param request:
     Keyword arguments:
     request -- the request object.
     
@@ -996,3 +1003,13 @@ def showGallery(request):
 	
     return render_to_response('gallery.html', locals(), 
 	                              context_instance=RequestContext(request))
+
+
+def get_number_of_columns(filename):
+    '''
+        Returns number of columns in CSV file
+    '''
+    csv_file = open(filename,'r')
+
+    reader = csv.reader(csv_file, delimiter=',')
+    return len(next(reader))
