@@ -381,14 +381,9 @@ def _parseToCsv(f, requestID, POSTdata, loggly=False):
             if not match:
                 return 1
 
-            match = match.groups()
 
             try:
-                string = match[0] + "," + match[1]
-
-                if numGroups == 3:
-                    string += "," + match[2]
-
+                string = generate_csv_line(match, numGroups)
             except IndexError:
                 # Grouping error.
                 return 2
@@ -398,6 +393,28 @@ def _parseToCsv(f, requestID, POSTdata, loggly=False):
             dest.write(string)
 
     return 0
+
+
+def generate_csv_line(match, num_groups):
+    line = ''
+    group_dict = match.groupdict()
+    if num_groups == 2:
+        if ('source' in group_dict) and ('destination' in group_dict):
+            line = group_dict['source'] + ',' + group_dict['destination']
+        else:
+            line = match.group(1) + ',' + match.group(2)
+
+    elif num_groups == 3:
+        if ('source' in group_dict) and ('destination' in group_dict) and ('event' in group_dict):
+            line = group_dict['source'] + ',' + group_dict['event'] + ',' + group_dict['destination']
+        else:
+            line = match.group(1) + ',' + match.group(2) + ',' + match.group(3)
+
+    else:
+        raise IndexError
+
+    line += '\n'
+    return line
 
 
 def _cleanFiles():
