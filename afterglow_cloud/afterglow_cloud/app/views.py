@@ -372,7 +372,13 @@ def _parseToCsv(f, requestID, POSTdata, loggly=False):
 
     # Parse the data using the regular expression compiled and write as a CSV 
     # file.
+    first_line = True
+    string = ''
     with open(os.path.join(settings.PROJECT_PATH, '../user_logs_parsed/') + fileName, 'wb+') as dest:
+        if first_line:
+            first_line = False
+        else:
+            string = '\n'
 
         for line in open(os.path.join(settings.PROJECT_PATH, '../user_logs/') + fileName):
             match = pat.match(line.rstrip())
@@ -383,12 +389,10 @@ def _parseToCsv(f, requestID, POSTdata, loggly=False):
 
 
             try:
-                string = generate_csv_line(match, numGroups)
+                string += generate_csv_line(match, numGroups)
             except IndexError:
                 # Grouping error.
                 return 2
-
-            string += "\n"
 
             dest.write(string)
 
