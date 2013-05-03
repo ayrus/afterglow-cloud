@@ -295,9 +295,6 @@ def _render(request, parsedData, loggly=False, logglyData=None):
 
         #Try rendering a graph, store the return code from the shell script.
 
-        if (get_number_of_columns(dataFile) == 2) and (not "-t" in param):
-            param += "-t "
-
         status = _renderGraph(dataFile, propertyFile, outputFile, afPath,
                               POSTdata['renderingFilter'], param)
 
@@ -638,6 +635,9 @@ def _renderGraph(dataFile, propertyFile, outputFile, afPath, rFilter, afArgs):
     afPath = os.path.join(settings.PROJECT_PATH, '../' + afPath)
 
     filters = {'1': 'neato', '2': 'dot', '3': 'sfdp'}
+
+    if (get_number_of_columns(dataFile) == 2) and (not "-t" in afArgs):
+        afArgs += "-t "
 
     return call(os.path.join(settings.PROJECT_PATH, "../../afterglow.sh") + " " + dataFile + " " + propertyFile + " " +
                 outputFile + " " + afPath + " " + filters[rFilter] + " " + afArgs, shell=True)
