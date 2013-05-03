@@ -375,18 +375,18 @@ def _parseToCsv(f, requestID, POSTdata, loggly=False):
     first_line = True
     string = ''
     with open(os.path.join(settings.PROJECT_PATH, '../user_logs_parsed/') + fileName, 'wb+') as dest:
-        if first_line:
-            first_line = False
-        else:
-            string = '\n'
+
 
         for line in open(os.path.join(settings.PROJECT_PATH, '../user_logs/') + fileName):
+            if first_line:
+                first_line = False
+            else:
+                string = '\n'
             match = pat.match(line.rstrip())
 
             # Error - no match found.
             if not match:
                 return 1
-
 
             try:
                 string += generate_csv_line(match, numGroups)
@@ -416,8 +416,6 @@ def generate_csv_line(match, num_groups):
 
     else:
         raise IndexError
-
-    line += '\n'
     return line
 
 
