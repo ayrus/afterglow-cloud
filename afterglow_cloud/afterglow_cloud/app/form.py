@@ -102,13 +102,6 @@ class renderForm(forms.Form):
             raise forms.ValidationError("Not valid HEX colour format")
         
         return textLabel
-
-    def clean_dataFile(self):
-        file = self.cleaned_data['dataFile']
-        if not file.content_type in ['text/csv', 'text/plain']:
-            raise forms.ValidationError("File type should be csv or plain text")
-
-
     
     def clean_saveRegExName(self):
         '''
